@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Ezol Tasks</title>
+<style>
+body{font-family:Arial;padding:20px;background:#f5f5f5}
+.card{background:white;padding:20px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 2px 10px rgba(0,0,0,0.1)}
+input{width:100%;padding:12px;margin:8px 0;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
+button{width:100%;padding:12px;background:blue;color:white;border:none;border-radius:8px;font-weight:bold;margin-top:10px}
+.task{background:#eef;padding:10px;margin:8px 0;border-radius:8px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="card">
+<h2 style="color:blue;text-align:center">Admin Panel</h2>
+<p>Welcome Ezol! Add tasks here:</p>
+<input id="title" placeholder="Task title e.g. Watch video">
+<input id="reward" type="number" placeholder="Reward UGX e.g. 500">
+<button onclick="addTask()">Add Task</button>
+<h3>Current Tasks:</h3>
+<div id="list"></div>
+<br>
+<a href="index.html" style="text-align:center;display:block">Go to Wallet</a>
+</div>
+<script>
+function getTasks(){return JSON.parse(localStorage.getItem('ezol_tasks')||'[]')}
+function saveTasks(t){localStorage.setItem('ezol_tasks',JSON.stringify(t)); show()}
+function addTask(){
+let t=document.getElementById('title').value;
+let r=document.getElementById('reward').value;
+if(!t||!r)return alert('Fill all');
+let tasks=getTasks();
+tasks.push({id:Date.now(),title:t,reward:parseInt(r)});
+saveTasks(tasks);
+document.getElementById('title').value='';
+document.getElementById('reward').value='';
+}
+function deleteTask(id){
+let tasks=getTasks().filter(x=>x.id!=id);
+saveTasks(tasks);
+}
+function show(){
+let tasks=getTasks();
+let html='';
+tasks.forEach(x=>{
+html+=`<div class="task"><span>${x.title} - ${x.reward} UGX</span><span onclick="deleteTask(${x.id})" style="color:red;cursor:pointer">❌</span></div>`
+});
+document.getElementById('list').innerHTML=html||'No tasks yet';
+}
+show();
+</script>
+</body>
+</html>
