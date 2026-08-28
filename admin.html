@@ -1,33 +1,88 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol CEO Admin V3</title>
-<style>body{font-family:sans-serif;background:#111;color:#fff;padding:12px} .card{background:#222;padding:12px;border-radius:12px;margin-bottom:12px} input,button{padding:10px;border-radius:8px;border:none} button{background:#22c55e;color:#fff;font-weight:800}</style></head><body>
-<h2>👑 Ezol CEO Admin V3 - Invest & Withdraw</h2>
-<div class="card">WhatsApp Number: <input id="waNum" value="256795143386" style="width:180px"><button onclick="saveWa()">Save</button> <p style="font-size:11px">All withdraw/invest go to this WhatsApp</p></div>
-<div class="card"><h3>👥 Users</h3><button onclick="loadUsers()">🔄 Refresh Users</button><div id="users"></div></div>
-<div class="card" style="border:2px solid #f59e0b"><h3>📈 Investments - Pending</h3><button onclick="loadInvests()">🔄 Refresh Invests</button><div id="invests"></div></div>
-<div class="card"><h3>➕ Add Task</h3><input id="tTitle" placeholder="Title"><input id="tReward" placeholder="Reward e.g 500"><input id="tLink" placeholder="Link https://"><button onclick="addTask()">Add Task</button><div id="taskList"></div></div>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol CEO Admin V4</title>
+<style>body{background:#111;color:#fff;font-family:sans-serif;padding:10px;margin:0}.card{background:#222;padding:14px;border-radius:12px;margin-bottom:12px}.btn{padding:10px 14px;border:none;border-radius:8px;font-weight:700;cursor:pointer}.user{border:1px solid #333;padding:8px;border-radius:8px;margin:4px 0;font-size:13px;background:#1a1a1a}</style></head><body>
+<h2>👑 Ezol CEO Admin V4 - Multi-User</h2>
+<div class="card">
+WhatsApp Number: <input id="waNum" value="256795143386" style="padding:8px;border-radius:8px;border:none;width:180px">
+<button onclick="saveWA()" class="btn" style="background:#22c55e">Save</button><br>
+<small>All withdraw/invest go to this WhatsApp</small>
+</div>
+
+<div class="card">
+<h3>👥 Users (<span id="userCount">0</span>)</h3>
+<button onclick="loadUsers()" class="btn" style="background:#22c55e">🔄 Refresh Users</button>
+<button onclick="clearUsers()" class="btn" style="background:#ef4444;margin-left:6px">🗑️ Clear All</button>
+<div id="userList" style="margin-top:10px"></div>
+</div>
+
+<div class="card" style="border:2px solid orange">
+<h3>📈 Investments - All Phones</h3>
+<button onclick="loadInvests()" class="btn" style="background:#22c55e">🔄 Refresh Invests</button>
+<div id="investList" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+<h3>📋 Tasks Control</h3>
+<input id="tTitle" placeholder="Task title e.g Join WhatsApp" style="width:100%;padding:8px;margin:4px 0;border-radius:6px">
+<input id="tReward" placeholder="Reward e.g 500" type="number" style="width:100%;padding:8px;margin:4px 0;border-radius:6px">
+<input id="tLink" placeholder="Task link https://" style="width:100%;padding:8px;margin:4px 0;border-radius:6px">
+<button onclick="addTask()" class="btn" style="background:#3b82f6;color:#fff;width:100%">Add Task</button>
+<div id="taskAdminList"></div>
+</div>
+
 <script>
-function saveWa(){localStorage.setItem('ezol_wa',document.getElementById('waNum').value);alert('Saved '+document.getElementById('waNum').value)}
+function saveWA(){ localStorage.setItem('ezol_wa',document.getElementById('waNum').value); alert('Saved!'); }
 function loadUsers(){
  let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- let html=''; for(let p in users){html+=`<div style="border-bottom:1px solid #444;padding:6px">${p} - Bal: ${users[p].balance} UGX - Refs: ${users[p].refs||0} - Tasks: ${users[p].tasksDone.length} <button onclick="payUser('${p}')">Pay/Reset</button></div>`}
- document.getElementById('users').innerHTML=html||'No users';
+ let keys=Object.keys(users);
+ document.getElementById('userCount').innerText=keys.length;
+ if(keys.length==0){ document.getElementById('userList').innerHTML='<p style="color:#888">No users yet. Ask friends to register with?ref=0783228690</p>'; return; }
+ document.getElementById('userList').innerHTML=keys.map(phone=>{
+  let u=users[phone];
+  let done=JSON.parse(localStorage.getItem('ezol_done_'+phone)||'[]').length;
+  let invests=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]').length;
+  return `<div class="user">📱 <b>${phone}</b> - ${u.name||'No name'}<br>💰 Balance: <b style="color:#22c55e">${u.balance||0} UGX</b> | 👥 Refs: ${u.refs||0} | ✅ Tasks: ${done} | 📈 Invests: ${invests}<br><small>Joined: ${u.joined?new Date(u.joined).toLocaleString():''}</small><br>
+  <button onclick="addBal('${phone}')" style="background:#f59e0b;border:none;padding:4px 8px;border-radius:4px;margin-top:4px">+ Add Balance</button>
+  <button onclick="delUser('${phone}')" style="background:#ef4444;color:#fff;border:none;padding:4px 8px;border-radius:4px">Delete</button></div>`;
+ }).join('');
 }
-function payUser(p){let amt=prompt('Enter amount paid to '+p+' or new balance'); if(amt===null) return; let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[p].balance=parseInt(amt); localStorage.setItem('ezol_users',JSON.stringify(users)); loadUsers();}
+function addBal(phone){
+ let amt=prompt('Add how much to '+phone+'?'); if(!amt) return;
+ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[phone].balance=(users[phone].balance||0)+parseInt(amt);
+ localStorage.setItem('ezol_users',JSON.stringify(users)); loadUsers(); alert('Added!');
+}
+function delUser(phone){
+ if(!confirm('Delete '+phone+'?')) return;
+ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); delete users[phone]; localStorage.setItem('ezol_users',JSON.stringify(users));
+ localStorage.removeItem('ezol_done_'+phone); localStorage.removeItem('ezol_invests_'+phone); loadUsers();
+}
+function clearUsers(){ if(confirm('Clear ALL users?')){ localStorage.removeItem('ezol_users'); loadUsers(); } }
+
 function loadInvests(){
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); let out='';
- for(let phone in users){let inv=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); inv.forEach((it,idx)=>{out+=`<div style="border:1px solid #555;padding:8px;margin:4px;border-radius:8px">${phone} - ${it.plan} ${it.invest}→${it.return} - ${it.status} - ${new Date(it.date).toLocaleDateString()} <button onclick="approveInvest('${phone}',${idx})" style="background:#f59e0b">Approve</button> <button onclick="completeInvest('${phone}',${idx})" style="background:#22c55e">Mark Paid</button></div>`})}
- document.getElementById('invests').innerHTML=out||'No invests';
+ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
+ let html='';
+ Object.keys(users).forEach(phone=>{
+  let invs=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]');
+  invs.forEach((inv,i)=>{
+   html+=`<div class="user">${phone} - ${inv.plan} ${inv.invest}→${inv.return} - ${inv.status} - ${new Date().toLocaleDateString()} <button onclick="approveInv('${phone}',${i})" style="background:orange;border:none;padding:4px 8px;border-radius:4px">Approve</button> <button onclick="markPaid('${phone}',${i})" style="background:#22c55e;border:none;padding:4px 8px;border-radius:4px">Mark Paid</button></div>`;
+  });
+ });
+ document.getElementById('investList').innerHTML=html||'No invests';
 }
-function approveInvest(phone,idx){
- let inv=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); inv[idx].status='Active'; localStorage.setItem('ezol_invests_'+phone,JSON.stringify(inv)); alert('Approved! Remember to collect MoMo '+inv[idx].invest); loadInvests();
+function approveInv(phone,i){ let invs=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); invs[i].status='Active'; localStorage.setItem('ezol_invests_'+phone,JSON.stringify(invs)); loadInvests(); }
+function markPaid(phone,i){ let invs=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); invs[i].status='Paid'; localStorage.setItem('ezol_invests_'+phone,JSON.stringify(invs)); let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[phone].balance+=invs[i].return; localStorage.setItem('ezol_users',JSON.stringify(users)); loadInvests(); loadUsers(); }
+
+function loadTasksAdmin(){
+ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[]');
+ document.getElementById('taskAdminList').innerHTML=tasks.map((t,i)=>`<div class="user">${t.title} - ${t.reward} UGX - <a href="${t.link}" target="_blank" style="color:#60a5fa">Link</a> <button onclick="delTask(${i})" style="background:red;color:#fff;border:none;padding:2px 6px;border-radius:4px">X</button></div>`).join('');
 }
-function completeInvest(phone,idx){
- let inv=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- let ret=inv[idx].return; users[phone].balance=(users[phone].balance||0)+ret; inv[idx].status='Paid '+ret;
- localStorage.setItem('ezol_users',JSON.stringify(users)); localStorage.setItem('ezol_invests_'+phone,JSON.stringify(inv)); alert('Paid '+ret+' to '+phone); loadInvests(); loadUsers();
+function addTask(){
+ let title=document.getElementById('tTitle').value; let reward=parseInt(document.getElementById('tReward').value); let link=document.getElementById('tLink').value;
+ if(!title||!reward||!link) return alert('Fill all');
+ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); tasks.push({title,reward,link}); localStorage.setItem('ezol_tasks',JSON.stringify(tasks));
+ document.getElementById('tTitle').value=''; document.getElementById('tReward').value=''; document.getElementById('tLink').value=''; loadTasksAdmin();
 }
-function addTask(){let t=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); t.push({title:document.getElementById('tTitle').value,reward:parseInt(document.getElementById('tReward').value),link:document.getElementById('tLink').value}); localStorage.setItem('ezol_tasks',JSON.stringify(t)); alert('Task added'); showTasks();}
-function showTasks(){let t=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); document.getElementById('taskList').innerHTML=t.map((x,i)=>`${i}: ${x.title} ${x.reward} <button onclick="delTask(${i})">Del</button>`).join('<br>')}
-function delTask(i){let t=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); t.splice(i,1); localStorage.setItem('ezol_tasks',JSON.stringify(t)); showTasks();}
-document.getElementById('waNum').value=localStorage.getItem('ezol_wa')||'256795143386'; loadUsers(); loadInvests(); showTasks();
+function delTask(i){ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); tasks.splice(i,1); localStorage.setItem('ezol_tasks',JSON.stringify(tasks)); loadTasksAdmin(); }
+
+document.getElementById('waNum').value=localStorage.getItem('ezol_wa')||'256795143386';
+loadUsers(); loadInvests(); loadTasksAdmin();
 </script></body></html>
