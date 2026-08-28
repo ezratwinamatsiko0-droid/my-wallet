@@ -1,80 +1,150 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol Wallet V8 Firebase</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ezol Wallet V8.2 - Firebase</title>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<style>*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:linear-gradient(135deg,#d946ef,#a21caf);min-height:100vh;padding:10px}
-.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px}.balance{background:linear-gradient(135deg,#581c87,#7e22ce);color:#fff;text-align:center;padding:20px;border-radius:20px}
-.btn{padding:12px;border:none;border-radius:12px;font-weight:700;width:100%;cursor:pointer}.task{display:flex;justify-content:space-between;align-items:center;background:#f3f4f6;padding:10px;border-radius:12px;margin:6px 0}
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:linear-gradient(135deg,#d946ef,#a21caf);min-height:100vh;padding:10px}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
+.balance{background:linear-gradient(135deg,#581c87,#7e22ce);color:#fff;text-align:center;padding:20px;border-radius:20px}
+.balance h1{margin:5px 0;font-size:32px}.btn{padding:12px;border:none;border-radius:12px;font-weight:700;width:100%;cursor:pointer}
+.task{display:flex;justify-content:space-between;align-items:center;background:#f3f4f6;padding:10px;border-radius:12px;margin:6px 0}
 #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#581c87,#d946ef);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 input{width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin-top:8px}
-#waCare{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:9999;cursor:pointer}
+#waCare{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 14px #0005;z-index:9999;cursor:pointer}
 </style></head><body>
+
 <div id="loginScreen"><div class="card" style="width:100%;max-width:360px;text-align:center">
-<h2 style="color:#7e22ce">🇺🇬 EZOL WALLET V8</h2><p id="inviteInfo" style="font-size:11px;background:#fef3c7;padding:6px;border-radius:8px;display:none"></p>
-<div style="display:flex;gap:6px"><button id="tL" onclick="sw('l')" style="flex:1;padding:10px;background:#7c3aed;color:#fff;border:none;border-radius:8px">Login</button><button id="tR" onclick="sw('r')" style="flex:1;padding:10px;background:#e5e7eb;border:none;border-radius:8px">Register</button></div>
-<div id="fL"><input id="lP" placeholder="Phone 076..."><input id="lPa" type="password" placeholder="Password"><button onclick="login()" class="btn" style="background:#7c3aed;color:#fff;margin-top:10px">Login</button></div>
-<div id="fR" style="display:none"><input id="rN" placeholder="Full Name"><input id="rP" placeholder="Phone"><input id="rPa" type="password" placeholder="Password min 4"><input id="rPa2" type="password" placeholder="Confirm"><button onclick="reg()" class="btn" style="background:#22c55e;color:#fff;margin-top:10px">Create Account</button></div>
+<h2 style="margin:0;color:#7e22ce">🇺🇬 EZOL WALLET V8.2</h2><p style="font-size:11px">Secure Firebase Wallet</p>
+<p id="inviteInfo" style="font-size:11px;background:#fef3c7;padding:6px;border-radius:8px;display:none"></p>
+<div style="display:flex;gap:6px;margin-top:10px"><button id="tabL" onclick="switchTab('login')" style="flex:1;padding:10px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-weight:700">Login</button><button id="tabR" onclick="switchTab('reg')" style="flex:1;padding:10px;background:#e5e7eb;border:none;border-radius:8px;font-weight:700">Register</button></div>
+<div id="loginForm"><input id="loginPhone" placeholder="Phone e.g 0795143386"><input id="loginPass" type="password" placeholder="Password"><button onclick="doLogin()" class="btn" style="background:#7c3aed;color:#fff;margin-top:10px">🔓 Login</button></div>
+<div id="regForm" style="display:none"><input id="regName" placeholder="Full Name e.g Ezra Twinamatsiko"><input id="regPhone" placeholder="Phone e.g 0795143386"><input id="regPass" type="password" placeholder="Create Password min 4"><input id="regPass2" type="password" placeholder="Confirm Password"><button onclick="doRegister()" class="btn" style="background:#22c55e;color:#fff;margin-top:10px">🚀 Create Account</button></div>
+<p style="font-size:10px;color:#fff;margin-top:10px">Forgot? WhatsApp Admin 0795143386</p>
 </div></div>
 
-<div class="balance card"><div>Total Balance</div><h1><span id="bal">0</span> UGX</h1><div id="ph" style="font-size:12px"></div><span onclick="logout()" style="font-size:10px;text-decoration:underline;cursor:pointer">Logout</span></div>
-<div class="card" style="border:2px dashed #3b82f6"><h3 style="margin:0">👥 Invite & Earn 500</h3><p>Your Code: <b id="myRef"></b> | Invited: <span id="rc">0</span></p>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><button onclick="share('wa')" style="padding:10px;background:#25D366;color:#fff;border:none;border-radius:10px">WhatsApp</button><button onclick="share('fb')" style="padding:10px;background:#1877F2;color:#fff;border:none;border-radius:10px">Facebook</button></div></div>
-<div class="card"><h3>💰 Tasks</h3><div id="tList"></div></div>
-<div class="card" style="border:2px solid #22c55e"><h3>💵 Withdraw</h3><input id="wA" type="number" placeholder="Amount"><button onclick="wd()" class="btn" style="background:#22c55e;color:#fff;margin-top:6px">Withdraw via WhatsApp</button></div>
-<div id="waCare" onclick="care()">💬</div>
+<div class="balance card"><div style="font-size:14px;opacity:.9">Total Balance</div><h1><span id="bal">0</span> UGX</h1><div style="font-size:12px" id="phoneShow"></div><div style="font-size:10px;margin-top:4px"><span onclick="logout()" style="text-decoration:underline;cursor:pointer">Logout</span></div></div>
+
+<div class="card" style="border:2px dashed #3b82f6"><h3 style="margin:0">👥 Invite & Earn 500 UGX</h3><p style="font-size:12px">Your Code: <b id="myRef"></b> | Invited: <b id="refCount">0</b></p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+<button onclick="shareWA()" style="padding:10px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:700">WhatsApp</button>
+<button onclick="shareFB()" style="padding:10px;background:#1877F2;color:#fff;border:none;border-radius:10px;font-weight:700">Facebook</button>
+</div><button onclick="copyRef()" style="width:100%;margin-top:6px;padding:8px;background:#e5e7eb;border:none;border-radius:8px;font-size:12px">🔗 Copy Invite Link</button></div>
+
+<div class="card"><h3 style="margin:0">💰 Tasks - Earn UGX</h3><div id="taskList"></div></div>
+
+<div class="card" style="background:#fef3c7;border:2px solid #f59e0b"><h3 style="margin:0">📈 Invest & Earn</h3>
+<div class="task"><div><b>STARTER</b> - 10k → 15k in 7 days</div><button onclick="invest('STARTER',10000,15000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
+<div class="task"><div><b>PRO</b> - 25k → 40k in 7 days</div><button onclick="invest('PRO',25000,40000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
+<div id="myInvests" style="font-size:11px;margin-top:8px"></div></div>
+
+<div class="card" style="border:2px solid #22c55e"><h3 style="margin:0">💵 Withdraw</h3><input id="withAmt" placeholder="Amount e.g 1000" type="number"><button onclick="withdraw()" class="btn" style="background:#22c55e;color:#fff;margin-top:8px">🚀 Withdraw via WhatsApp</button></div>
+
+<div id="waCare" onclick="customerCare()">💬</div>
 
 <script>
-// ==== REPLACE WITH YOUR FIREBASE CONFIG ====
+// ==================== PASTE YOUR FIREBASE CONFIG HERE ====================
 const firebaseConfig = {
-  apiKey: "AIzaSyD-XXXX-REPLACE-ME",
+  apiKey: "AIzaSyD-XXXX-REPLACE-ME-WITH-YOURS",
   authDomain: "ezol-wallet.firebaseapp.com",
   projectId: "ezol-wallet",
   storageBucket: "ezol-wallet.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abcdef123456"
 };
-// ==========================================
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-let cur=null, curData=null;
+// ========================================================================
+let db;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+}catch(e){ alert('Firebase config error! Replace firebaseConfig with real one from console.firebase.google.com'); }
+
 let TASKS=[
  {title:"Join WhatsApp Channel",reward:500,link:"https://whatsapp.com/channel/0029Vb6h2X6J3jvqU0Q9Zg0z"},
- {title:"Follow TikTok",reward:500,link:"https://tiktok.com"},
- {title:"Follow Facebook",reward:500,link:"https://facebook.com"},
- {title:"YouTube Subscribe",reward:500,link:"https://youtube.com"},
- {title:"Instagram Follow",reward:500,link:"https://instagram.com"},
- {title:"Invite Friend",reward:500,link:"whatsapp://"}
+ {title:"Follow TikTok",reward:500,link:"https://www.tiktok.com"},
+ {title:"Follow Facebook",reward:500,link:"https://www.facebook.com"},
+ {title:"Subscribe YouTube",reward:500,link:"https://www.youtube.com"},
+ {title:"Follow Instagram",reward:500,link:"https://www.instagram.com"},
+ {title:"Invite 1 Friend",reward:500,link:"whatsapp://"}
 ];
-function sw(t){document.getElementById('fL').style.display=t=='l'?'block':'none';document.getElementById('fR').style.display=t=='r'?'block':'none';document.getElementById('tL').style.background=t=='l'?'#7c3aed':'#e5e7eb';document.getElementById('tR').style.background=t=='r'?'#22c55e':'#e5e7eb';}
-async function reg(){
- let n=document.getElementById('rN').value.trim(), p=document.getElementById('rP').value.trim(), a=document.getElementById('rPa').value, b=document.getElementById('rPa2').value;
- if(!n||p.length<9) return alert('Name & phone required'); if(a.length<4) return alert('Pass min 4'); if(a!=b) return alert('Pass mismatch');
- let ref=new URLSearchParams(location.search).get('ref');
- let docRef=db.collection('users').doc(p); let snap=await docRef.get(); if(snap.exists) return alert('Phone exists, login!');
- let data={name:n,phone:p,pass:a,balance:0,refs:0,joined:new Date().toISOString(),done:[]};
- await docRef.set(data);
- if(ref && ref!=p){ let rRef=db.collection('users').doc(ref); let rSnap=await rRef.get(); if(rSnap.exists){ await rRef.update({balance: firebase.firestore.FieldValue.increment(500), refs: firebase.firestore.FieldValue.increment(1)}); } }
- localStorage.setItem('ezol_cur',p); location.href=location.pathname;
+let curPhone=null;
+
+function switchTab(t){
+ document.getElementById('loginForm').style.display=t=='login'?'block':'none';
+ document.getElementById('regForm').style.display=t=='reg'?'block':'none';
+ document.getElementById('tabL').style.background=t=='login'?'#7c3aed':'#e5e7eb';
+ document.getElementById('tabL').style.color=t=='login'?'#fff':'#000';
+ document.getElementById('tabR').style.background=t=='reg'?'#22c55e':'#e5e7eb';
+ document.getElementById('tabR').style.color=t=='reg'?'#fff':'#000';
 }
-async function login(){
- let p=document.getElementById('lP').value.trim(), pa=document.getElementById('lPa').value;
- let snap=await db.collection('users').doc(p).get(); if(!snap.exists) return alert('Not found, register'); if(snap.data().pass!=pa) return alert('Wrong pass');
- localStorage.setItem('ezol_cur',p); location.href=location.pathname;
+
+async function doRegister(){
+ try{
+  let name=document.getElementById('regName').value.trim();
+  let phone=document.getElementById('regPhone').value.trim();
+  let p1=document.getElementById('regPass').value;
+  let p2=document.getElementById('regPass2').value;
+  if(!name) return alert('Enter Name'); if(phone.length<9) return alert('Enter valid Phone'); if(p1.length<4) return alert('Password min 4'); if(p1!=p2) return alert('Passwords not match');
+  let ref=new URLSearchParams(window.location.search).get('ref');
+  let docRef=db.collection('users').doc(phone);
+  let snap=await docRef.get(); if(snap.exists) return alert('Phone already registered! Click Login tab');
+  await docRef.set({name:name,phone:phone,pass:p1,balance:0,refs:0,joined:new Date().toISOString(),done:[]});
+  if(ref && ref!=phone){
+   let rDoc=db.collection('users').doc(ref); let rSnap=await rDoc.get();
+   if(rSnap.exists){ await rDoc.update({balance: firebase.firestore.FieldValue.increment(500), refs: firebase.firestore.FieldValue.increment(1)}); }
+  }
+  localStorage.setItem('ezol_cur',phone);
+  alert('✅ Account Created! Welcome '+name); location.href=location.pathname;
+ }catch(e){ alert('ERROR: '+e.message+'\n\nDid you replace firebaseConfig? Also enable Firestore in Firebase Console > Build > Firestore Database > Test Mode'); }
 }
-async function check(){
- cur=localStorage.getItem('ezol_cur'); let ref=new URLSearchParams(location.search).get('ref');
- if(ref){document.getElementById('inviteInfo').style.display='block';document.getElementById('inviteInfo').innerHTML='🎉 Invited by '+ref;}
- if(!cur){document.getElementById('loginScreen').style.display='flex'; return;}
- document.getElementById('loginScreen').style.display='none';
- let snap=await db.collection('users').doc(cur).get(); if(!snap.exists){logout(); return;} curData=snap.data();
- document.getElementById('bal').innerText=curData.balance||0; document.getElementById('ph').innerText=curData.phone+' | '+curData.name; document.getElementById('myRef').innerText=curData.phone; document.getElementById('rc').innerText=curData.refs||0;
- document.getElementById('tList').innerHTML=TASKS.map((t,i)=>{let d=(curData.done||[]).includes(i); return `<div class="task"><div><b>${t.title}</b><br><small>${t.reward} UGX</small></div><button ${d?'disabled':''} onclick="doT(${i})" style="background:${d?'#9ca3af':'#7c3aed'};color:#fff;border:none;padding:8px 12px;border-radius:8px">${d?'Done':'Do Task'}</button></div>`}).join('');
+
+async function doLogin(){
+ try{
+  let phone=document.getElementById('loginPhone').value.trim();
+  let pass=document.getElementById('loginPass').value;
+  let snap=await db.collection('users').doc(phone).get();
+  if(!snap.exists) return alert('Account not found! Register first');
+  if(snap.data().pass!=pass) return alert('Wrong password!');
+  localStorage.setItem('ezol_cur',phone); location.href=location.pathname;
+ }catch(e){ alert('LOGIN ERROR: '+e.message); }
 }
-async function doT(i){ if((curData.done||[]).includes(i)) return; let t=TASKS[i]; try{window.open(t.link,'_blank');}catch(e){}
- let newDone=[...(curData.done||[]),i]; await db.collection('users').doc(cur).update({done:newDone,balance: firebase.firestore.FieldValue.increment(t.reward)}); check(); alert('Earned '+t.reward+'!');
+
+async function refreshWallet(){
+ if(!curPhone) return;
+ try{
+  let snap=await db.collection('users').doc(curPhone).get(); let u=snap.data();
+  if(!u) return;
+  document.getElementById('bal').innerText=u.balance||0;
+  document.getElementById('phoneShow').innerText=u.phone+' | '+u.name;
+  document.getElementById('myRef').innerText=u.phone;
+  document.getElementById('refCount').innerText=u.refs||0;
+  let done=u.done||[];
+  document.getElementById('taskList').innerHTML=TASKS.map((t,i)=>{ let isDone=done.includes(i); return `<div class="task"><div><b>${t.title}</b><br><small>${t.reward} UGX</small></div><button ${isDone?'disabled':''} onclick="doTask(${i})" style="background:${isDone?'#9ca3af':'#7c3aed'};color:#fff;border:none;padding:8px 12px;border-radius:8px">${isDone?'Done':'Do Task'}</button></div>`; }).join('');
+ }catch(e){ console.log(e); }
 }
-function logout(){localStorage.removeItem('ezol_cur');location.reload();}
-function share(t){let url=`https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${cur}`; if(t=='wa') window.open('https://wa.me/?text='+encodeURIComponent('EZOL WALLET 🇺🇬 Earn 500! '+url),'_blank'); else window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(url),'_blank');}
-function wd(){let a=parseInt(document.getElementById('wA').value); if(!a||a<500) return alert('Min 500'); if(a>(curData.balance||0)) return alert('Low bal'); db.collection('users').doc(cur).update({balance: firebase.firestore.FieldValue.increment(-a)}); let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*WITHDRAW* '+cur+' '+a,'_blank'); setTimeout(check,1000);}
-function care(){let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=Help '+cur,'_blank');}
-check();
+
+async function doTask(i){
+ try{
+  let snap=await db.collection('users').doc(curPhone).get(); let u=snap.data(); if((u.done||[]).includes(i)) return;
+  let t=TASKS[i]; try{ if(t.link.startsWith('http')) window.open(t.link,'_blank'); }catch(e){}
+  let newDone=[...(u.done||[]),i];
+  await db.collection('users').doc(curPhone).update({done:newDone,balance: firebase.firestore.FieldValue.increment(t.reward)});
+  await refreshWallet(); alert('✅ You earned '+t.reward+' UGX for '+t.title);
+ }catch(e){ alert(e.message); }
+}
+
+function logout(){ localStorage.removeItem('ezol_cur'); location.reload(); }
+function getLink(){ return `https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${curPhone}`; }
+function copyRef(){ navigator.clipboard.writeText(getLink()).then(()=>alert('Link copied!')); }
+function shareWA(){ let url=getLink(); window.open('https://wa.me/?text='+encodeURIComponent(`*EZOL WALLET UGANDA* 🇺🇬\n💰 Earn 500 per task!\nJoin: ${url}`),'_blank'); }
+function shareFB(){ window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(getLink()),'_blank'); }
+function customerCare(){ let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*HELP* '+curPhone,'_blank'); }
+async function invest(plan,a,b){ await db.collection('invests').add({phone:curPhone,plan:plan,invest:a,return:b,status:'Pending',time:new Date().toISOString()}); let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*INVEST* '+curPhone+' '+plan,'_blank'); }
+async function withdraw(){ let amt=parseInt(document.getElementById('withAmt').value); if(!amt||amt<500) return alert('Min 500'); let snap=await db.collection('users').doc(curPhone).get(); if(amt>snap.data().balance) return alert('Low balance'); await db.collection('users').doc(curPhone).update({balance: firebase.firestore.FieldValue.increment(-amt)}); let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*WITHDRAW* '+curPhone+' '+amt,'_blank'); refreshWallet(); }
+
+(function init(){
+ curPhone=localStorage.getItem('ezol_cur');
+ let ref=new URLSearchParams(window.location.search).get('ref');
+ if(ref){ document.getElementById('inviteInfo').style.display='block'; document.getElementById('inviteInfo').innerHTML='🎉 Invited by <b>'+ref+'</b>! You get bonus!'; }
+ if(curPhone){ document.getElementById('loginScreen').style.display='none'; refreshWallet(); } else { document.getElementById('loginScreen').style.display='flex'; }
+})();
 </script></body></html>
