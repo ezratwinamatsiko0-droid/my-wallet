@@ -1,149 +1,105 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ezol Wallet Uganda</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol Wallet - Uganda</title>
 <style>
-body{font-family:sans-serif;background:#f5ff;margin:0;padding:12px}
-.card{background:#fff;padding:14px;border-radius:14px;margin-bottom:12px;box-shadow:0 2px 8px #0001}
-.balance{background:linear-gradient(135deg,#7c3aed,#3b82f6);color:#fff;padding:18px;border-radius:16px;text-align:center}
-button{cursor:pointer}
-</style>
-</head>
-<body>
-<div class="card balance">
-<h2 style="margin:0">Ezol Wallet 🇺🇬</h2>
-<h1 id="bal">0 UGX</h1>
-<p id="phoneDisplay" style="margin:0;font-size:12px"></p>
+*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:#c026d3;background:linear-gradient(135deg,#d946ef,#a21caf);min-height:100vh;padding:10px}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
+.balance{background:linear-gradient(135deg,#581c87,#7e22ce);color:#fff;text-align:center;padding:20px;border-radius:20px}
+.balance h1{margin:5px 0;font-size:32px}.btn{padding:12px;border:none;border-radius:12px;font-weight:700;width:100%;cursor:pointer}
+.task{display:flex;justify-content:space-between;align-items:center;background:#f3f4f6;padding:10px;border-radius:12px;margin:6px 0}
+#waCare{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 14px #0005;z-index:9999;cursor:pointer}
+</style></head><body>
+
+<div class="balance card">
+<div style="font-size:14px;opacity:.9">Total Balance</div>
+<h1><span id="bal">0</span> UGX</h1>
+<div style="font-size:12px" id="phoneShow"></div>
 </div>
 
-<div id="loginBox" class="card">
-<h3>Login / Register</h3>
-<input id="phone" placeholder="Phone e.g 0795143386" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-<input id="refInput" placeholder="Referral Code (optional)" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:6px">
-<button onclick="login()" style="width:100%;margin-top:8px;padding:12px;background:#7c3aed;color:#fff;border:none;border-radius:10px;font-weight:800">Login</button>
-</div>
-
-<div class="card">
-<h3>💰 Tasks - Earn UGX</h3>
-<div id="tasks"></div>
-</div>
-
-<div class="card" style="background:#f0f9ff;border:2px dashed #3b82f6">
+<div class="card" style="border:2px dashed #3b82f6">
 <h3 style="margin:0">👥 Invite & Earn 500 UGX</h3>
 <p style="font-size:12px">Your Referral Code: <b id="myRef"></b></p>
-<button onclick="shareRef()" style="padding:8px 12px;background:#3b82f6;color:#fff;border:none;border-radius:8px">Share Link</button>
 <p id="refCount" style="font-size:12px"></p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+<button onclick="shareWA()" style="padding:10px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:700">📲 WhatsApp</button>
+<button onclick="shareFB()" style="padding:10px;background:#1877F2;color:#fff;border:none;border-radius:10px;font-weight:700">📘 Facebook</button>
+<button onclick="shareIG()" style="padding:10px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff;border:none;border-radius:10px;font-weight:700">📸 Instagram</button>
+<button onclick="shareTT()" style="padding:10px;background:#000;color:#fff;border:none;border-radius:10px;font-weight:700">🎵 TikTok</button>
+</div>
+<button onclick="copyRef()" style="width:100%;margin-top:6px;padding:8px;background:#e5e7eb;border:none;border-radius:8px;font-size:12px">🔗 Copy Link</button>
 </div>
 
-<div class="card" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b">
-<h3 style="margin:0">📈 Invest & Earn - Double Money!</h3>
-<p style="font-size:11px;margin:4px 0">Invest today, earn in 7 days</p>
-<div style="display:grid;gap:8px;margin-top:10px">
-<div style="background:#fff;padding:10px;border-radius:10px;border:1px solid #f59e0b">
-<b>STARTER</b> - 10k → 15k in 7 days <button onclick="investNow('STARTER',10000,15000)" style="float:right;background:#f59e0b;color:#fff;border:none;padding:6px 12px;border-radius:6px">Invest</button>
-</div>
-<div style="background:#fff;padding:10px;border-radius:10px;border:1px solid #f59e0b">
-<b>PRO</b> - 25k → 40k in 7 days <button onclick="investNow('PRO',25000,40000)" style="float:right;background:#f59e0b;color:#fff;border:none;padding:6px 12px;border-radius:6px">Invest</button>
-</div>
-<div style="background:#fff;padding:10px;border-radius:10px;border:1px solid #000">
-<b>VIP</b> - 50k → 90k in 10 days <button onclick="investNow('VIP',50000,90000)" style="float:right;background:#000;color:#fff;border:none;padding:6px 12px;border-radius:6px">Invest 🔥</button>
-</div>
-</div>
-<div id="myInvests" style="margin-top:10px;font-size:12px"></div>
+<div class="card"><h3 style="margin:0">💰 Tasks - Earn UGX</h3><div id="taskList"></div></div>
+
+<div class="card" style="background:#fef3c7;border:2px solid #f59e0b">
+<h3 style="margin:0">📈 Invest & Earn</h3>
+<p style="font-size:11px;margin:4px 0">Invest today, earn in 7-10 days. Business risk applies.</p>
+<div class="task"><div><b>STARTER</b> - 10k → 15k in 7 days</div><button onclick="invest('STARTER',10000,15000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
+<div class="task"><div><b>PRO</b> - 25k → 40k in 7 days</div><button onclick="invest('PRO',25000,40000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div>
+<div class="task"><div><b>VIP</b> - 50k → 90k in 10 days</div><button onclick="invest('VIP',50000,90000)" style="background:#000;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest 🔥</button></div>
+<div id="myInvests" style="font-size:11px;margin-top:8px"></div>
 </div>
 
-<div class="card" style="background:#f0fdf4;border:2px solid #22c55e">
-<h3 style="margin:0 0 8px">💸 Withdraw - WhatsApp Pay</h3>
-<p style="font-size:12px;margin:0 0 8px">Min: 500 UGX | Instant via CEO</p>
-<input id="withdrawAmount" type="number" placeholder="Amount e.g 1000" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-bottom:8px">
-<button onclick="withdraw()" style="width:100%;padding:12px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;border:none;border-radius:10px;font-weight:800">🚀 Withdraw via WhatsApp</button>
-<div id="withdrawStatus" style="font-size:12px;margin-top:8px"></div>
+<div class="card" style="border:2px solid #22c55e">
+<h3 style="margin:0">💵 Withdraw - WhatsApp Pay</h3>
+<p style="font-size:12px">Min: 500 UGX | Instant via CEO</p>
+<input id="withAmt" placeholder="Amount e.g 1000" type="number" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc">
+<button onclick="withdraw()" class="btn" style="background:#22c55e;color:#fff;margin-top:8px">🚀 Withdraw via WhatsApp</button>
 </div>
+
+<div id="waCare" onclick="customerCare()">💬</div>
 
 <script>
-let TASKS = JSON.parse(localStorage.getItem('ezol_tasks')||'[{"title":"Follow TikTok","reward":500,"link":"https://tiktok.com"},{"title":"Join Telegram","reward":700,"link":"https://t.me"},{"title":"Watch Video","reward":500,"link":"https://youtube.com"}]');
-function login(){
- let p=document.getElementById('phone').value.trim();
- let r=document.getElementById('refInput').value.trim();
- if(!p){alert('Enter phone');return}
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- if(!users[p]){
-   users[p]={balance:0,tasksDone:[],refBy:r||null,refs:0};
-   if(r && users[r]){users[r].balance+=500;users[r].refs=(users[r].refs||0)+1}
- }
- localStorage.setItem('ezol_users',JSON.stringify(users));
- localStorage.setItem('ezol_current',p);
- location.reload();
+let currentPhone=localStorage.getItem('ezol_current')||'0783228690';
+let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
+if(!users[currentPhone]) users[currentPhone]={balance:5000,tasksDone:[],refs:0};
+let ref= new URLSearchParams(window.location.search).get('ref');
+if(ref && ref!=currentPhone &&!localStorage.getItem('ezol_referred')){
+ if(users[ref]){ users[ref].balance+=500; users[ref].refs=(users[ref].refs||0)+1; alert('You were invited by '+ref+'! They got 500 UGX'); localStorage.setItem('ezol_referred',ref); }
 }
-function updateUI(){
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- let phone=localStorage.getItem('ezol_current');
- if(!phone) return;
- document.getElementById('loginBox').style.display='none';
- document.getElementById('phoneDisplay').innerText=phone;
- document.getElementById('myRef').innerText=phone;
- document.getElementById('bal').innerText=(users[phone]?.balance||0)+' UGX';
- document.getElementById('refCount').innerText='Invited: '+(users[phone]?.refs||0)+' friends';
- let tDiv=document.getElementById('tasks');
- tDiv.innerHTML='';
- TASKS.forEach((t,i)=>{
-   let done=users[phone].tasksDone.includes(i);
-   tDiv.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border-bottom:1px solid #eee"><span>${t.title} - ${t.reward} UGX</span> ${done?'<span style=color:green>✓ Done</span>':`<button onclick="doTask(${i})" style="background:#7c3aed;color:#fff;border:none;padding:6px 10px;border-radius:6px">Do Task</button>`}</div>`;
- });
- showInvests();
+localStorage.setItem('ezol_users',JSON.stringify(users));
+localStorage.setItem('ezol_current',currentPhone);
+function getBal(){ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); return (u[currentPhone]?.balance||0); }
+function refresh(){
+ document.getElementById('bal').innerText=getBal();
+ document.getElementById('phoneShow').innerText=currentPhone;
+ document.getElementById('myRef').innerText=currentPhone;
+ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}');
+ document.getElementById('refCount').innerText='Invited: '+(u[currentPhone]?.refs||0)+' friends';
+ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[{"title":"Join WhatsApp Channel","reward":500,"link":"https://whatsapp.com"},{"title":"Follow TikTok","reward":500,"link":"https://tiktok.com"}]');
+ let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]');
+ document.getElementById('taskList').innerHTML=tasks.map((t,i)=>{
+  let isDone=done.includes(i); return `<div class="task"><div><b>${t.title}</b><br><small>${t.reward} UGX</small></div><button ${isDone?'disabled':''} onclick="doTask(${i})" style="background:${isDone?'#9ca3af':'#7c3aed'};color:#fff;border:none;padding:8px 12px;border-radius:8px">${isDone?'Done':'Do Task'}</button></div>`
+ }).join('');
+ let inv=JSON.parse(localStorage.getItem('ezol_invests_'+currentPhone)||'[]');
+ document.getElementById('myInvests').innerHTML=inv.length?'My Invests:<br>'+inv.map(x=>`${x.plan} ${x.invest}→${x.return} - ${x.status}`).join('<br>'):'';
 }
 function doTask(i){
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- let phone=localStorage.getItem('ezol_current');
- if(users[phone].tasksDone.includes(i)) return;
- window.open(TASKS[i].link,'_blank');
- users[phone].tasksDone.push(i);
- users[phone].balance+=TASKS[i].reward;
- localStorage.setItem('ezol_users',JSON.stringify(users));
- setTimeout(updateUI,1000);
+ let tasks=JSON.parse(localStorage.getItem('ezol_tasks')||'[]'); let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]');
+ if(done.includes(i)) return; window.open(tasks[i].link,'_blank');
+ done.push(i); localStorage.setItem('ezol_done_'+currentPhone,JSON.stringify(done));
+ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance+=tasks[i].reward; u[currentPhone].tasksDone=done;
+ localStorage.setItem('ezol_users',JSON.stringify(u)); refresh(); alert('You earned '+tasks[i].reward+' UGX!');
 }
-function shareRef(){
- let phone=localStorage.getItem('ezol_current');
- let url=`https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${phone}`;
- navigator.clipboard.writeText(url+' Referral: '+phone);
- alert('Link copied! '+url);
+function getRefLink(){ return `https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${currentPhone}`; }
+function copyRef(){ navigator.clipboard.writeText(getRefLink()); alert('Link copied! '+getRefLink()); }
+function shareWA(){ let url=getRefLink(); let text=`*EZOL WALLET UGANDA* 🇺🇬%0A💰 Earn 500 UGX per task + 500 per invite!%0A%0AJoin now: ${url}%0A%0AMy Code: ${currentPhone}`; window.open('https://wa.me/?text='+text,'_blank'); }
+function shareFB(){ let url=encodeURIComponent(getRefLink()); window.open('https://www.facebook.com/sharer/sharer.php?u='+url,'_blank'); }
+function shareIG(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open Instagram and paste in Story / Bio'); window.open('https://instagram.com','_blank'); }
+function shareTT(){ let url=getRefLink(); navigator.clipboard.writeText(url); alert('Link copied! Open TikTok and paste in caption'); window.open('https://tiktok.com','_blank'); }
+function customerCare(){ let wa=localStorage.getItem('ezol_wa')||'256795143386'; let msg=`*EZOL CUSTOMER CARE*%0APhone: ${currentPhone}%0A%0AHello CEO, I need help with my wallet`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); }
+function invest(plan,investAmt,returnAmt){
+ let inv=JSON.parse(localStorage.getItem('ezol_invests_'+currentPhone)||'[]');
+ inv.push({plan,invest:investAmt,return:returnAmt,status:'Pending',date:new Date().toISOString()});
+ localStorage.setItem('ezol_invests_'+currentPhone,JSON.stringify(inv));
+ let wa=localStorage.getItem('ezol_wa')||'256795143386';
+ let msg=`*EZOL INVEST REQUEST*%0APhone: ${currentPhone}%0APlan: ${plan}%0AInvest: ${investAmt}%0AReturn: ${returnAmt}%0A%0ASend MoMo to CEO`;
+ window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); refresh();
 }
 function withdraw(){
- let amt=parseInt(document.getElementById('withdrawAmount').value);
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- let phone=localStorage.getItem('ezol_current');
- let bal=users[phone]?.balance||0;
- if(!amt||amt<500){alert('Min 500');return}
- if(amt>bal){alert('Low balance '+bal);return}
- users[phone].balance=bal-amt;
- localStorage.setItem('ezol_users',JSON.stringify(users));
- updateUI();
- document.getElementById('withdrawStatus').innerHTML='⏳ Request sent! CEO will pay in 5 mins';
+ let amt=parseInt(document.getElementById('withAmt').value); if(!amt||amt<500) return alert('Min 500 UGX');
+ if(amt>getBal()) return alert('Insufficient balance');
+ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance-=amt; localStorage.setItem('ezol_users',JSON.stringify(u));
  let wa=localStorage.getItem('ezol_wa')||'256795143386';
- let msg=`*EZOL WITHDRAW*%0APhone: ${phone}%0AAmount: ${amt} UGX%0ABal Left: ${users[phone].balance}`;
- setTimeout(()=>{window.open('https://wa.me/'+wa+'?text='+msg,'_blank')},800);
+ let msg=`*EZOL WITHDRAW*%0APhone: ${currentPhone}%0AAmount: ${amt} UGX%0A%0APlease pay me`; window.open('https://wa.me/'+wa+'?text='+msg,'_blank'); refresh();
 }
-function investNow(plan,invest,ret){
- let phone=localStorage.getItem('ezol_current');
- let wa=localStorage.getItem('ezol_wa')||'256795143386';
- if(!confirm(`Invest ${invest} UGX in ${plan} to get ${ret} UGX?`)) return;
- let msg=`*EZOL INVEST REQUEST*%0APhone: ${phone}%0APlan: ${plan}%0AInvest: ${invest} UGX%0AReturn: ${ret} UGX%0A%0AI have sent MoMo to 0795143386`;
- window.open('https://wa.me/'+wa+'?text='+msg,'_blank');
- let inv=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]');
- inv.push({plan,invest,return:ret,date:Date.now(),status:'Pending'});
- localStorage.setItem('ezol_invests_'+phone,JSON.stringify(inv));
- alert('✅ Sent! Send '+invest+' UGX via MTN to 0795143386, CEO confirms');
- showInvests();
-}
-function showInvests(){
- let phone=localStorage.getItem('ezol_current');
- if(!phone) return;
- let inv=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]');
- let html=inv.map(i=>`📈 ${i.plan}: ${i.invest}→${i.return} - <b>${i.status}</b>`).join('<br>');
- let el=document.getElementById('myInvests'); if(el) el.innerHTML=html;
-}
-updateUI();
-</script>
-</body>
-</html>
+refresh();
+</script></body></html>
