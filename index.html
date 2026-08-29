@@ -25,8 +25,7 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:7p
 <input id="refInput" placeholder="Referral Code (Optional)">
 <button class="btn" onclick="register()">Register & Get 500 UGX</button>
 <p id="refMsg" style="color:green;font-size:12px;margin-top:8px"></p>
-</div>
-<div class="balance" id="loggedIn" style="display:none">
+</div><div class="balance" id="loggedIn" style="display:none">
 <p>Hi <b id="uName"></b> - <span id="uPhone"></span></p>
 <h1><span id="bal">0</span> UGX</h1>
 <div style="display:flex;gap:10px;margin-top:12px">
@@ -45,8 +44,7 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:7p
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo", authDomain: "ezol-wallet.firebaseapp.com", projectId: "ezol-wallet", storageBucket: "ezol-wallet.firebasestorage.app", messagingSenderId: "33518327685", appId: "1:33518327685:web:a932ecbbba8501cd2c96ec" };
-const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+const firebaseConfig = { apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo", authDomain: "ezol-wallet.firebaseapp.com", projectId: "ezol-wallet", storageBucket: "ezol-wallet.firebasestorage.app", messagingSenderId: "33518327685const app = initializeApp(firebaseConfig); const db = getFirestore(app);
 let currentPhone = localStorage.getItem('ezol_phone');
 const $ = id=>document.getElementById(id);
 function getRefFromUrl(){ const p=new URLSearchParams(window.location.search); return p.get('ref'); }
@@ -85,4 +83,4 @@ function liveProofs(){ const q=query(collection(db,"proofs"),orderBy("createdAt"
 liveProofs(); loadUser();
 </script>
 </body>
-</html>
+</html>", appId: "1:33518327685:web:a932ecbbba8501cd2c96ec" };
