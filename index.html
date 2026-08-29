@@ -1,12 +1,72 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Ezol Wallet - Earn UGX</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#f5f7ff;padding-bottom:80px}.header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:20px;border-radius:0 0 25px 25px;text-align:center}.balance{background:#fff;margin:-30px 15px 15px;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.1);text-align:center}.balance h1{color:#4f46e5;font-size:36px}.btn{background:#4f46e5;color:#fff;border:none;padding:14px 20px;border-radius:12px;width:100%;font-weight:700;font-size:16px;margin-top:10px;cursor:pointer}.card{background:#fff;margin:12px 15px;padding:16px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.06)}.proof{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:30px;z-index:9999;display:none}input{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;margin:8px 0}.badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:12px}</style></head><body><div class="header"><h2>Ezol Wallet</h2><p>Real Money - Real Withdraw - MTN/Airtel</p></div><div class="balance" id="loggedOut"><h3>Welcome! 🎉</h3><p>Get <b>500 UGX BONUS</b> instantly!</p><input id="phone" placeholder="Enter Phone: 07XXXXXXXX"><input id="name" placeholder="Full Name"><button class="btn" onclick="register()">Register & Get 500 UGX</button></div><div class="balance" id="loggedIn" style="display:none"><p>Welcome, <b id="uName"></b> <span class="badge" id="uPhone"></span></p><h1><span id="bal">0</span> UGX</h1><p>Available Balance</p><div style="display:flex;gap:10px;margin-top:15px"><button class="btn" style="background:#10b981" onclick="withdraw()">Withdraw</button><button class="btn" style="background:#111" onclick="logout()">Logout</button></div><div style="margin-top:12px;background:#fef3c7;padding:10px;border-radius:10px;font-size:13px">📢 Min Withdraw: 20,000 UGX - Paid via Mobile Money in 2 mins!</div></div><div class="card"><h3>🔥 Live Withdrawal Proof</h3><div id="proofList">Loading...</div></div><div class="card"><h3>💰 How to Earn</h3><p style="font-size:14px;line-height:1.6">1. Register = 500 UGX<br>2. Daily check-in = 1000 UGX<br>3. Invite = 2000 UGX<br>4. Ads = 500 UGX</p><button class="btn" onclick="dailyCheckin()">Daily Check-in (+1000 UGX)</button></div><div class="popup" id="popup"></div><script type="module">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ezol Wallet - Earn UGX</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#f5f7ff;padding-bottom:80px}
+.header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:20px;border-radius:0 0 25px 25px;text-align:center}
+.balance{background:#fff;margin:-30px 15px 15px;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.1);text-align:center}
+.balance h1{color:#4f46e5;font-size:36px}
+.btn{background:#4f46e5;color:#fff;border:none;padding:14px 20px;border-radius:12px;width:100%;font-weight:700;font-size:16px;margin-top:10px;cursor:pointer}
+.card{background:#fff;margin:12px 15px;padding:16px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+.proof{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:30px;z-index:9999;display:none}
+input{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;margin:8px 0}
+.badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="header"><h2>Ezol Wallet</h2><p>Real Money - Real Withdraw - MTN/Airtel</p></div>
+<div class="balance" id="loggedOut"><h3>Welcome! 🎉</h3><p>Get <b>500 UGX BONUS</b> instantly!</p><input id="phone" placeholder="07XXXXXXXX"><input id="name" placeholder="Full Name"><button class="btn" onclick="register()">Register & Get 500</button></div>
+<div class="balance" id="loggedIn" style="display:none"><p>Welcome, <b id="uName"></b> <span class="badge" id="uPhone"></span></p><h1><span id="bal">0</span> UGX</h1><div style="display:flex;gap:10px;margin-top:15px"><button class="btn" style="background:#10b981" onclick="withdraw()">Withdraw</button><button class="btn" style="background:#111" onclick="logout()">Logout</button></div></div>
+<div class="card"><h3>🔥 Live Proof</h3><div id="proofList"></div></div>
+<div class="card"><h3>💰 Earn</h3><button class="btn" onclick="dailyCheckin()">Daily Check-in (+1000)</button></div>
+<div class="popup" id="popup"></div>
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo", authDomain: "ezol-wallet.firebaseapp.com", projectId: "ezol-wallet", storageBucket: "ezol-wallet.firebasestorage.app", messagingSenderId: "33518327685", appId: "1:33518327685:web:a932ecbbba8501cd2c96ec" };
-const app = initializeApp(firebaseConfig); const db = getFirestore(app);
-let currentPhone = localStorage.getItem('ezol_phone'); const $ = id=>document.getElementById(id);
-async function loadUser(){ if(!currentPhone) return; const snap = await getDoc(doc(db,"users",currentPhone)); if(snap.exists()){ const d=snap.data(); $('loggedOut').style.display='none';$('loggedIn').style.display='block'; $('uName').innerText=d.name;$('uPhone').innerText=d.phone; $('bal').innerText=(d.balance||0).toLocaleString(); } }
-window.register = async ()=>{ const phone=$('phone').value.trim();const name=$('name').value.trim(); if(phone.length<10||!name) return alert('Enter valid phone & name'); const ref=doc(db,"users",phone);const snap=await getDoc(ref); if(snap.exists()){currentPhone=phone;localStorage.setItem('ezol_phone',phone);loadUser();return;} await setDoc(ref,{phone,name,balance:500,createdAt:serverTimestamp()}); await addDoc(collection(db,"proofs"),{phone:phone.slice(0,4)+'****'+phone.slice(-4),amount:500,msg:"New user bonus",createdAt:serverTimestamp()}); currentPhone=phone;localStorage.setItem('ezol_phone',phone);alert('500 UGX Bonus Added!');loadUser(); };
-window.withdraw=async()=>{ const snap=await getDoc(doc(db,"users",currentPhone));const bal=snap.data().balance||0; if(bal<20000) return alert('Min 20,000 UGX'); const amount=prompt('Enter amount (Min 20000):');if(!amount||isNaN(amount)||Number(amount)>bal||Number(amount)<20000) return alert('Invalid'); await updateDoc(doc(db,"users",currentPhone),{balance:increment(-Number(amount))}); await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()}); await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:Number(amount),msg:"withdraw request",createdAt:serverTimestamp()}); alert('Withdraw sent to '+currentPhone);loadUser(); };
+const firebaseConfig = {
+  apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.firebasestorage.app",
+  messagingSenderId: "33518327685",
+  appId: "1:33518327685:web:a932ecbbba8501cd2c96ec"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let currentPhone = localStorage.getItem('ezol_phone');
+const $ = id=>document.getElementById(id);
+async function loadUser(){
+ if(!currentPhone) return;
+ const snap = await getDoc(doc(db,"users",currentPhone));
+ if(snap.exists()){
+  const d=snap.data();
+  $('loggedOut').style.display='none';$('loggedIn').style.display='block';
+  $('uName').innerText=d.name;$('uPhone').innerText=d.phone;
+  $('bal').innerText=(d.balance||0).toLocaleString();
+ }
+}
+window.register = async ()=>{
+ const phone=$('phone').value.trim();const name=$('name').value.trim();
+ if(phone.length<10||!name) return alert('Enter phone & name');
+ const ref=doc(db,"users",phone);const snap=await getDoc(ref);
+ if(snap.exists()){currentPhone=phone;localStorage.setItem('ezol_phone',phone);loadUser();return;}
+ await setDoc(ref,{phone,name,balance:500,createdAt:serverTimestamp()});
+ await addDoc(collection(db,"proofs"),{phone:phone.slice(0,4)+'****'+phone.slice(-4),amount:500,msg:"New bonus",createdAt:serverTimestamp()});
+ currentPhone=phone;localStorage.setItem('ezol_phone',phone);alert('500 Added!');loadUser();
+};
+window.withdraw=async()=>{
+ const snap=await getDoc(doc(db,"users",currentPhone));const bal=snap.data().balance||0;
+ if(bal<20000) return alert('Min 20000');
+ const amount=prompt('Amount Min 20000:');if(!amount||isNaN(amount)||Number(amount)>bal) return alert('Invalid');
+ await updateDoc(doc(db,"users",currentPhone),{balance:increment(-Number(amount))});
+ await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()});
+ alert('Withdraw sent!');loadUser();
+};
 window.dailyCheckin=async()=>{
  if(!currentPhone) return alert('Register first');
  const userRef=doc(db,"users",currentPhone);
@@ -17,15 +77,22 @@ window.dailyCheckin=async()=>{
   const diff=Date.now()-last.getTime();
   if(diff<24*60*60*1000){
    const hrs=Math.ceil((24*60*60*1000-diff)/3600000);
-   return alert('Already checked in! Come back in '+hrs+' hours ⏰');
+   return alert('Already checked! Back in '+hrs+' hrs');
   }
  }
  await updateDoc(userRef,{balance:increment(1000),lastCheckin:serverTimestamp()});
  await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:1000,msg:"daily bonus",createdAt:serverTimestamp()});
- alert('+1000 Added! See you tomorrow!');loadUser();
+ alert('+1000 Added!');loadUser();
 };
 window.logout=()=>{localStorage.removeItem('ezol_phone');location.reload();};
-function liveProofs(){ const q=query(collection(db,"proofs"),orderBy("createdAt","desc"),limit(10)); onSnapshot(q,snap=>{ const list=$('proofList');list.innerHTML=''; snap.forEach(d=>{const v=d.data();list.innerHTML+=`<div class="proof"><span>${v.phone} - ${v.msg}</span><b style="color:green">${(v.amount||0).toLocaleString()} UGX</b></div>`}); });}
-function fakePopups(){ const pops=["07****4521 withdrew 22,000 UGX","07****0656 withdrew 15,000 UGX","New user got 500 bonus!","07****1122 withdrew 45,000 UGX"]; setInterval(()=>{const el=$('popup');el.innerText='💸 '+pops[Math.floor(Math.random()*pops.length)];el.style.display='block';setTimeout(()=>el.style.display='none',3000)},8000);}
-loadUser();liveProofs();fakePopups();
-</script></body></html>
+function liveProofs(){
+ const q=query(collection(db,"proofs"),orderBy("createdAt","desc"),limit(10));
+ onSnapshot(q,snap=>{
+  const list=$('proofList');list.innerHTML='';
+  snap.forEach(d=>{const v=d.data();list.innerHTML+=`<div class="proof"><span>${v.phone} - ${v.msg}</span><b>${v.amount} UGX</b></div>`});
+ });
+}
+liveProofs();loadUser();
+</script>
+</body>
+</html>
