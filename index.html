@@ -38,3 +38,140 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:6px
 </div>
 <div class="card"><h3>Live Proof</h3><div id="proofList"></div></div>
 <div class="card"><button class="btn" onclick="dailyCheckin()">Daily +1000</button></div>
+<p>Hi <b id="uName"></b> <span id="uPhone"></span></p>
+<h1><span id="bal">0</span> UGX</h1>
+<button class="btn" style="background:#10b981" onclick="withdraw()">Withdraw</button>
+<button class="btn" style="background:#111" onclick="logout()">Logout</button>
+<div style="background:#ede9fe;padding:10px;border-radius:8px;margin-top:10px">
+<b>Invite Link (2000 per friend):</b>
+<div id="myLink" style="color:#4f46e5;font-weight:700;word-break:break-all"></div>
+<button class="btn" style="background:#7c3aed" onclick="shareLink()">Share WhatsApp</button>
+<p>Invited: <b id="invCount">0</b></p>
+</div>
+</div>
+<div class="card"><h3>Live Proof</h3><div id="proofList"></div></div>
+<div class="card"><button class="btn" onclick="dailyCheckin()">Daily +1000</button></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.firebasestorage.app",
+  messagingSenderId: "33518327685",
+  appId: "1:33518327685:web:a932ecbbba8501cd2c96ec"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let currentPhone = localStorage.getItem('ezol_phone');
+const $ = id=>document.getElementById(id);
+function getRefFromUrl(){
+  const p=new URLSearchParams(window.location.search);
+  return p.get('ref');
+}
+const urlRef=getRefFromUrl();
+if(urlRef){
+  setTimeout(()=>{
+    const el=$('refInput');
+    if(el) el.value=urlRef;
+    const m=$('refMsg');
+    if(m) m.innerText='Referred by '+urlRef+' - You both get 2000!';
+  },500);
+}
+async function loadUser(){
+  if(!currentPhone) return;
+  const snap = await getDoc(doc(db,"users",currentPhone));
+  if(snap.exists()){
+    const d=snap.data();
+    $('loggedOut').style.display='none';
+    $('loggedIn').style.display='block';
+    $('uName').innerText=d.name;
+    $('uPhone').innerText=d.phone;
+    $('bal').innerText=(d.balance||0).toLocaleString();
+    const link=window.location.origin+window.location.pathname+'?ref='+d.phone;
+    $('myLink').innerText=link;
+    $('invCount').innerText=d.invites||0;
+  }
+}
+window.register = async ()=>{
+  const phone=$('phone').value.trim();
+  const name=$('name').value.trim();
+  let ref=$('refInput').value.trim()||urlRef;
+  if(phone.length<10||!name) return alert('Enter phone & name');
+  if(ref && ref==phone) return alert('Cant refer yourself');
+  const refDoc=doc(db,"users",phone);
+  const snap=await getDoc(refDoc);
+  if(snap.exists()){
+    currentPhone=phone;
+    localStorage.setItem('ezol_phone',phone);
+    loadUser();
+    return;
+  }
+  let bonus=500;
+  if(ref){
+    const refSnap=await getDoc(doc(db,"users",ref));
+    if(refSnap.exists()){
+      bonus=2500;
+      await updateDoc(doc(db,"users",ref),{balance:increment(2000),invites:increment(1)});
+      await addDoc(collection(db,"proofs"),{phone:ref.slice(0,4)+'****'+ref.slice(-4),amount:2000,msg:"referral bonus",createdAt:serverTimestamp()});
+    }
+  }
+  await setDoc(refDoc,{phone,name,balance:bonus,invites:0,createdAt:serverTimestamp(),referredBy:ref||null});
+  await addDoc(collection(db,"proofs"),{phone:phone.slice(0,4)+'****'+phone.slice(-4),amount:bonus,msg:ref?"joined via referral":"new bonus",createdAt:serverTimestamp()});
+  currentPhone=phone;
+  localStorage.setItem('ezol_phone',phone);
+  alert(bonus+' UGX Added!');
+  loadUser();
+};
+window.withdraw=async()=>{
+  const snap=await getDoc(doc(db,"users",currentPhone));
+  const bal=snap.data().balance||0;
+  if(bal<20000) return alert('Min 20000');
+  const amount=prompt('Amount:');
+  if(!amount||isNaN(amount)||Number(amount)>bal||Number(amount)<20000) return alert('Invalid');
+  await updateDoc(doc(db,"users",currentPhone),{balance:increment(-Number(amount))});
+  await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()});
+  alert('Withdraw sent!');
+  loadUser();
+};
+window.dailyCheckin=async()=>{
+  if(!currentPhone) return alert('Register first');
+  const userRef=doc(db,"users",currentPhone);
+  const userSnap=await getDoc(userRef);
+  const data=userSnap.data();
+  const last=data.lastCheckin ? (data.lastCheckin.toDate ? data.lastCheckin.toDate() : new Date(data.lastCheckin)) : null;
+  if(last){
+    const diff=Date.now()-last.getTime();
+    if(diff<24*60*60*1000){
+      const hrs=Math.ceil((24*60*60*1000-diff)/3600000);
+      return alert('Already checked! Back in '+hrs+' hrs');
+    }
+  }
+  await updateDoc(userRef,{balance:increment(1000),lastCheckin:serverTimestamp()});
+  await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:1000,msg:"daily bonus",createdAt:serverTimestamp()});
+  alert('+1000 Added!');
+  loadUser();
+};
+window.shareLink=()=>{
+  const link=document.getElementById('myLink').innerText;
+  const text=encodeURIComponent('Join Ezol Wallet! Get 500 UGX FREE + 2000 when you invite! '+link);
+  window.open('https://wa.me/?text='+text,'_blank');
+};
+window.logout=()=>{localStorage.removeItem('ezol_phone');location.reload();};
+function liveProofs(){
+  const q=query(collection(db,"proofs"),orderBy("createdAt","desc"),limit(10));
+  onSnapshot(q,snap=>{
+    const list=$('proofList');
+    list.innerHTML='';
+    snap.forEach(d=>{
+      const v=d.data();
+      list.innerHTML+=`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee"><span>${v.phone} - ${v.msg}</span><b>${v.amount} UGX</b></div>`;
+    });
+  });
+}
+liveProofs();
+loadUser();
+</script>
+</body>
+</html>
