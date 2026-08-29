@@ -1,116 +1,79 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol Wallet Uganda</title>
-<style>*{box-sizing:border-box}body{margin:0;font-family:sans-serif;background:linear-gradient(135deg,#d946ef,#a21caf);min-height:100vh;padding:10px}
-.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 4px 12px #0002}
-.balance{background:linear-gradient(135deg,#581c87,#7e22ce);color:#fff;text-align:center;padding:20px;border-radius:20px}
-.balance h1{margin:5px 0;font-size:32px}.btn{padding:12px;border:none;border-radius:12px;font-weight:700;width:100%;cursor:pointer}
-.task{display:flex;justify-content:space-between;align-items:center;background:#f3f4f6;padding:10px;border-radius:12px;margin:6px 0}
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#581c87,#d946ef);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px}
-#waCare{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 14px #0005;z-index:9999;cursor:pointer}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #ccc;margin-top:8px}
-</style></head><body>
-
-<div id="loginScreen"><div class="card" style="width:100%;max-width:360px;text-align:center">
-<h2 style="margin:0;color:#7e22ce">🇺🇬 EZOL WALLET</h2><p style="font-size:12px">Secure Login</p>
-<p id="inviteInfo" style="font-size:11px;background:#fef3c7;padding:6px;border-radius:8px;display:none"></p>
-<div style="display:flex;gap:6px;margin-top:10px"><button id="tabLogin" onclick="switchTab('login')" style="flex:1;padding:10px;background:#7c3aed;color:#fff;border:none;border-radius:8px;font-weight:700">Login</button><button id="tabReg" onclick="switchTab('reg')" style="flex:1;padding:10px;background:#e5e7eb;border:none;border-radius:8px;font-weight:700">Register</button></div>
-<div id="loginForm">
-<input id="loginPhone" placeholder="Phone e.g 0765330656">
-<input id="loginPass" type="password" placeholder="Password">
-<button onclick="doLogin()" class="btn" style="background:#7c3aed;color:#fff;margin-top:10px">🔓 Login</button>
-</div>
-<div id="regForm" style="display:none">
-<input id="regName" placeholder="Full Name">
-<input id="regPhone" placeholder="Phone e.g 0765330656">
-<input id="regPass" type="password" placeholder="Create Password (min 4)">
-<input id="regPass2" type="password" placeholder="Confirm Password">
-<button onclick="doRegister()" class="btn" style="background:#22c55e;color:#fff;margin-top:10px">🚀 Create Account</button>
-</div>
-<p style="font-size:10px;color:#fff;margin-top:8px">Forgot? Contact Admin 0795143386</p>
-</div></div>
-
-<div class="balance card"><div style="font-size:14px;opacity:.9">Total Balance</div><h1><span id="bal">0</span> UGX</h1><div style="font-size:12px" id="phoneShow"></div><div style="font-size:10px;margin-top:4px"><span onclick="logout()" style="text-decoration:underline;cursor:pointer">Logout</span></div></div>
-
-<div class="card" style="border:2px dashed #3b82f6"><h3 style="margin:0">👥 Invite & Earn 500 UGX</h3><p style="font-size:12px">Your Code: <b id="myRef"></b></p><p id="refCount" style="font-size:12px"></p>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
-<button onclick="shareWA()" style="padding:10px;background:#25D366;color:#fff;border:none;border-radius:10px;font-weight:700">WhatsApp</button>
-<button onclick="shareFB()" style="padding:10px;background:#1877F2;color:#fff;border:none;border-radius:10px;font-weight:700">Facebook</button>
-<button onclick="shareIG()" style="padding:10px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);color:#fff;border:none;border-radius:10px;font-weight:700">Instagram</button>
-<button onclick="shareTT()" style="padding:10px;background:#000;color:#fff;border:none;border-radius:10px;font-weight:700">TikTok</button></div>
-<button onclick="copyRef()" style="width:100%;margin-top:6px;padding:8px;background:#e5e7eb;border:none;border-radius:8px;font-size:12px">🔗 Copy Link</button></div>
-
-<div class="card"><h3 style="margin:0">💰 Tasks - Earn UGX</h3><div id="taskList"></div></div>
-
-<div class="card" style="background:#fef3c7;border:2px solid #f59e0b"><h3 style="margin:0">📈 Invest & Earn</h3><div class="task"><div><b>STARTER</b> - 10k → 15k</div><button onclick="invest('STARTER',10000,15000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div><div class="task"><div><b>PRO</b> - 25k → 40k</div><button onclick="invest('PRO',25000,40000)" style="background:#f59e0b;color:#fff;border:none;padding:8px 14px;border-radius:8px">Invest</button></div><div id="myInvests" style="font-size:11px;margin-top:8px"></div></div>
-
-<div class="card" style="border:2px solid #22c55e"><h3 style="margin:0">💵 Withdraw</h3><input id="withAmt" placeholder="Amount" type="number"><button onclick="withdraw()" class="btn" style="background:#22c55e;color:#fff;margin-top:8px">🚀 Withdraw via WhatsApp</button></div>
-
-<div id="waCare" onclick="customerCare()">💬</div>
-
-<script>
-let DEFAULT_TASKS=[
- {title:"Join WhatsApp Channel",reward:500,link:"https://whatsapp.com/channel/0029Vb6h2X6J3jvqU0Q9Zg0z"},
- {title:"Follow TikTok",reward:500,link:"https://www.tiktok.com"},
- {title:"Follow Facebook",reward:500,link:"https://www.facebook.com"},
- {title:"Subscribe YouTube",reward:500,link:"https://www.youtube.com"},
- {title:"Follow Instagram",reward:500,link:"https://www.instagram.com"},
- {title:"Invite 1 Friend",reward:500,link:"whatsapp://"}
-];
-let currentPhone=null;
-function switchTab(t){
- document.getElementById('loginForm').style.display=t=='login'?'block':'none';
- document.getElementById('regForm').style.display=t=='reg'?'block':'none';
- document.getElementById('tabLogin').style.background=t=='login'?'#7c3aed':'#e5e7eb';
- document.getElementById('tabLogin').style.color=t=='login'?'#fff':'#000';
- document.getElementById('tabReg').style.background=t=='reg'?'#22c55e':'#e5e7eb';
- document.getElementById('tabReg').style.color=t=='reg'?'#fff':'#000';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ezol Wallet - Earn UGX</title>
+<style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#f5f7ff;padding-bottom:80px}.header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:20px;border-radius:0 0 25px 25px;text-align:center}.balance{background:#fff;margin:-30px 15px 15px;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.1);text-align:center}.balance h1{color:#4f46e5;font-size:36px}.btn{background:#4f46e5;color:#fff;border:none;padding:14px 20px;border-radius:12px;width:100%;font-weight:700;font-size:16px;margin-top:10px;cursor:pointer}.card{background:#fff;margin:12px 15px;padding:16px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.06)}.proof{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.popup{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:30px;z-index:9999;display:none}input{width:100%;padding:13px;border:1px solid #ddd;border-radius:10px;margin:8px 0}.badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:12px}</style>
+</head>
+<body>
+<div class="header"><h2>Ezol Wallet</h2><p>Real Money - Real Withdraw - MTN/Airtel</p></div>
+<div class="balance" id="loggedOut"><h3>Welcome! 🎉</h3><p>Get <b>500 UGX BONUS</b> instantly!</p><input id="phone" placeholder="Enter Phone: 07XXXXXXXX"><input id="name" placeholder="Full Name"><button class="btn" onclick="register()">Register & Get 500 UGX</button></div>
+<div class="balance" id="loggedIn" style="display:none"><p>Welcome, <b id="uName"></b> <span class="badge" id="uPhone"></span></p><h1><span id="bal">0</span> UGX</h1><p>Available Balance</p><div style="display:flex;gap:10px;margin-top:15px"><button class="btn" style="background:#10b981" onclick="withdraw()">Withdraw</button><button class="btn" style="background:#111" onclick="logout()">Logout</button></div><div style="margin-top:12px;background:#fef3c7;padding:10px;border-radius:10px;font-size:13px">📢 Min Withdraw: 20,000 UGX - Paid via Mobile Money in 2 mins!</div></div>
+<div class="card"><h3>🔥 Live Withdrawal Proof</h3><div id="proofList">Loading...</div></div>
+<div class="card"><h3>💰 How to Earn</h3><p style="font-size:14px;line-height:1.6">1. Register = 500 UGX<br>2. Daily check-in = 1000 UGX<br>3. Invite = 2000 UGX<br>4. Ads = 500 UGX</p><button class="btn" onclick="dailyCheckin()">Daily Check-in (+1000 UGX)</button></div>
+<div class="popup" id="popup"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.firebasestorage.app",
+  messagingSenderId: "33518327685",
+  appId: "1:33518327685:web:a932ecbbba8501cd2c96ec"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+let currentPhone = localStorage.getItem('ezol_phone');
+const $ = id=>document.getElementById(id);
+async function loadUser(){
+ if(!currentPhone) return;
+ const snap = await getDoc(doc(db,"users",currentPhone));
+ if(snap.exists()){
+  const d=snap.data();
+  $('loggedOut').style.display='none';$('loggedIn').style.display='block';
+  $('uName').innerText=d.name;$('uPhone').innerText=d.phone;
+  $('bal').innerText=(d.balance||0).toLocaleString();
+ }
 }
-function checkLogin(){
- currentPhone=localStorage.getItem('ezol_current');
- let ref=new URLSearchParams(window.location.search).get('ref');
- if(ref){ document.getElementById('inviteInfo').style.display='block'; document.getElementById('inviteInfo').innerHTML='🎉 Invited by <b>'+ref+'</b>!'; }
- if(currentPhone){ document.getElementById('loginScreen').style.display='none'; refresh(); } else { document.getElementById('loginScreen').style.display='flex'; }
+window.register = async ()=>{
+ const phone=$('phone').value.trim();const name=$('name').value.trim();
+ if(phone.length<10||!name) return alert('Enter valid phone & name');
+ const ref=doc(db,"users",phone);const snap=await getDoc(ref);
+ if(snap.exists()){currentPhone=phone;localStorage.setItem('ezol_phone',phone);loadUser();return;}
+ await setDoc(ref,{phone,name,balance:500,createdAt:serverTimestamp()});
+ await addDoc(collection(db,"proofs"),{phone:phone.slice(0,4)+'****'+phone.slice(-4),amount:500,msg:"New user bonus",createdAt:serverTimestamp()});
+ currentPhone=phone;localStorage.setItem('ezol_phone',phone);alert('500 UGX Bonus Added!');loadUser();
+};
+window.withdraw=async()=>{
+ const snap=await getDoc(doc(db,"users",currentPhone));const bal=snap.data().balance||0;
+ if(bal<20000) return alert('Min 20,000 UGX');
+ const amount=prompt('Enter amount (Min 20000):');if(!amount||isNaN(amount)||Number(amount)>bal||Number(amount)<20000) return alert('Invalid');
+ await updateDoc(doc(db,"users",currentPhone),{balance:increment(-Number(amount))});
+ await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()});
+ await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:Number(amount),msg:"withdraw request",createdAt:serverTimestamp()});
+ alert('Withdraw sent to '+currentPhone);loadUser();
+};
+window.dailyCheckin=async()=>{
+ if(!currentPhone) return alert('Register first');
+ await updateDoc(doc(db,"users",currentPhone),{balance:increment(1000)});
+ await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:1000,msg:"daily bonus",createdAt:serverTimestamp()});
+ alert('+1000 Added!');loadUser();
+};
+window.logout=()=>{localStorage.removeItem('ezol_phone');location.reload();};
+function liveProofs(){
+ const q=query(collection(db,"proofs"),orderBy("createdAt","desc"),limit(10));
+ onSnapshot(q,snap=>{
+  const list=$('proofList');list.innerHTML='';
+  snap.forEach(d=>{const v=d.data();list.innerHTML+=`<div class="proof"><span>${v.phone} - ${v.msg}</span><b style="color:green">${(v.amount||0).toLocaleString()} UGX</b></div>`});
+ });
 }
-function doRegister(){
- let name=document.getElementById('regName').value.trim(); let phone=document.getElementById('regPhone').value.trim(); let p1=document.getElementById('regPass').value; let p2=document.getElementById('regPass2').value;
- if(!name||phone.length<9) return alert('Enter name & valid phone'); if(p1.length<4) return alert('Password min 4 chars'); if(p1!=p2) return alert('Passwords not match');
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- if(users[phone]) return alert('Phone already registered! Please Login');
- let ref=new URLSearchParams(window.location.search).get('ref');
- users[phone]={balance:0,name:name,pass:p1,refs:0,joined:new Date().toISOString()};
- if(ref && ref!=phone && users[ref]){ users[ref].balance=(users[ref].balance||0)+500; users[ref].refs=(users[ref].refs||0)+1; }
- localStorage.setItem('ezol_users',JSON.stringify(users)); localStorage.setItem('ezol_current',phone); location.href=location.pathname;
+function fakePopups(){
+ const pops=["07****4521 withdrew 22,000 UGX","07****0656 withdrew 15,000 UGX","New user got 500 bonus!","07****1122 withdrew 45,000 UGX"];
+ setInterval(()=>{const el=$('popup');el.innerText='💸 '+pops[Math.floor(Math.random()*pops.length)];el.style.display='block';setTimeout(()=>el.style.display='none',3000)},8000);
 }
-function doLogin(){
- let phone=document.getElementById('loginPhone').value.trim(); let pass=document.getElementById('loginPass').value;
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}');
- // Migration for old users without password - allow first login then set pass
- if(users[phone] &&!users[phone].pass){ users[phone].pass=pass; localStorage.setItem('ezol_users',JSON.stringify(users)); }
- if(!users[phone]) return alert('Account not found! Register first'); if(users[phone].pass!=pass) return alert('Wrong password!');
- localStorage.setItem('ezol_current',phone); location.href=location.pathname;
-}
-function logout(){ localStorage.removeItem('ezol_current'); location.reload(); }
-function getBal(){ let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); return (u[currentPhone]?.balance||0); }
-function refresh(){
- if(!currentPhone) return; document.getElementById('bal').innerText=getBal(); document.getElementById('phoneShow').innerText=currentPhone+' | '+(JSON.parse(localStorage.getItem('ezol_users')||'{}')[currentPhone]?.name||''); document.getElementById('myRef').innerText=currentPhone;
- let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); document.getElementById('refCount').innerText='Invited: '+(u[currentPhone]?.refs||0)+' friends';
- let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]');
- document.getElementById('taskList').innerHTML=DEFAULT_TASKS.map((t,i)=>{ let isDone=done.includes(i); return `<div class="task"><div><b>${t.title}</b><br><small>${t.reward} UGX</small></div><button ${isDone?'disabled':''} onclick="doTask(${i})" style="background:${isDone?'#9ca3af':'#7c3aed'};color:#fff;border:none;padding:8px 12px;border-radius:8px">${isDone?'Done':'Do Task'}</button></div>`; }).join('');
- let inv=JSON.parse(localStorage.getItem('ezol_invests_'+currentPhone)||'[]'); document.getElementById('myInvests').innerHTML=inv.length?'My Invests:<br>'+inv.map(x=>`${x.plan} ${x.invest}→${x.return} - ${x.status}`).join('<br>'):'';
-}
-function doTask(i){
- let done=JSON.parse(localStorage.getItem('ezol_done_'+currentPhone)||'[]'); if(done.includes(i)) return;
- let t=DEFAULT_TASKS[i]; try{ if(t.link.startsWith('http')) window.open(t.link,'_blank'); }catch(e){}
- done.push(i); localStorage.setItem('ezol_done_'+currentPhone,JSON.stringify(done));
- let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance=(u[currentPhone].balance||0)+t.reward; localStorage.setItem('ezol_users',JSON.stringify(u)); refresh(); alert('✅ Earned '+t.reward+' UGX!');
-}
-function getRefLink(){ return `https://ezratwinamatsiko0-droid.github.io/my-wallet/?ref=${currentPhone}`; }
-function copyRef(){ navigator.clipboard.writeText(getRefLink()).then(()=>alert('Link copied!')); }
-function shareWA(){ let url=getRefLink(); window.open('https://wa.me/?text='+encodeURIComponent(`*EZOL WALLET UGANDA* 🇺🇬\nEarn 500 per task!\nJoin: ${url}`),'_blank'); }
-function shareFB(){ window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(getRefLink()),'_blank'); }
-function shareIG(){ navigator.clipboard.writeText(getRefLink()); alert('Link copied!'); window.open('https://instagram.com','_blank'); }
-function shareTT(){ navigator.clipboard.writeText(getRefLink()); alert('Link copied!'); window.open('https://tiktok.com','_blank'); }
-function customerCare(){ let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text='+encodeURIComponent(`*EZOL CARE*\nPhone: ${currentPhone}`),'_blank'); }
-function invest(a,b,c){ let inv=JSON.parse(localStorage.getItem('ezol_invests_'+currentPhone)||'[]'); inv.push({plan:a,invest:b,return:c,status:'Pending'}); localStorage.setItem('ezol_invests_'+currentPhone,JSON.stringify(inv)); let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*INVEST* '+currentPhone+' '+a,'_blank'); refresh(); }
-function withdraw(){ let amt=parseInt(document.getElementById('withAmt').value); if(!amt||amt<500) return alert('Min 500'); if(amt>getBal()) return alert('Low balance'); let u=JSON.parse(localStorage.getItem('ezol_users')||'{}'); u[currentPhone].balance-=amt; localStorage.setItem('ezol_users',JSON.stringify(u)); let wa=localStorage.getItem('ezol_wa')||'256795143386'; window.open('https://wa.me/'+wa+'?text=*WITHDRAW* '+currentPhone+' '+amt,'_blank'); refresh(); }
-checkLogin();
-</script></body></html>
+loadUser();liveProofs();fakePopups();
+</script>
+</body>
+</html>
