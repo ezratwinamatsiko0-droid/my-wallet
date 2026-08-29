@@ -44,7 +44,7 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:7p
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo", authDomain: "ezol-wallet.firebaseapp.com", projectId: "ezol-wallet", storageBucket: "ezol-wallet.firebasestorage.app", messagingSenderId: "33518327685const app = initializeApp(firebaseConfig); const db = getFirestore(app);
+const firebaseConfig = { apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo", authDomain: "ezol-wallet.firebaseapp.com", projectId: "ezol-wallet", storageBucket: "ezol-wallet.firebasestorage.app", messagingSenderId: "const app = initializeApp(firebaseConfig); const db = getFirestore(app);
 let currentPhone = localStorage.getItem('ezol_phone');
 const $ = id=>document.getElementById(id);
 function getRefFromUrl(){ const p=new URLSearchParams(window.location.search); return p.get('ref'); }
