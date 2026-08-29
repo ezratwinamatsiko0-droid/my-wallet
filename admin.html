@@ -1,38 +1,55 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ezol CEO Admin V5 - Password</title>
-<style>body{background:#111;color:#fff;font-family:sans-serif;padding:10px;margin:0}.card{background:#222;padding:14px;border-radius:12px;margin-bottom:12px}.btn{padding:8px 12px;border:none;border-radius:6px;font-weight:700;cursor:pointer;font-size:12px}.user{border:1px solid #333;padding:10px;border-radius:8px;margin:6px 0;font-size:12px;background:#1a1a1a;line-height:1.6}</style></head><body>
-<h2>👑 Ezol CEO Admin V5 - Password Manager</h2>
-<div class="card">WhatsApp: <input id="waNum" value="256795143386" style="padding:6px;border-radius:6px;border:none;width:160px"><button onclick="saveWA()" class="btn" style="background:#22c55e">Save</button></div>
-
-<div class="card"><h3>👥 Users (<span id="userCount">0</span>)</h3>
-<button onclick="loadUsers()" class="btn" style="background:#22c55e">🔄 Refresh</button>
-<button onclick="clearUsers()" class="btn" style="background:#ef4444">Clear All</button>
-<input id="searchUser" placeholder="Search phone/name" oninput="loadUsers()" style="width:100%;padding:8px;border-radius:6px;border:none;margin-top:8px;background:#333;color:#fff">
-<div id="userList" style="margin-top:10px"></div></div>
-
-<div class="card" style="border:2px solid orange"><h3>📈 Investments</h3><button onclick="loadInvests()" class="btn" style="background:#22c55e">Refresh Invests</button><div id="investList" style="margin-top:10px"></div></div>
-
-<script>
-function saveWA(){ localStorage.setItem('ezol_wa',document.getElementById('waNum').value); alert('Saved!'); }
-function loadUsers(){
- let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); let keys=Object.keys(users); let search=(document.getElementById('searchUser').value||'').toLowerCase();
- let filtered=keys.filter(p=>{ let u=users[p]; return p.includes(search) || (u.name||'').toLowerCase().includes(search); });
- document.getElementById('userCount').innerText=filtered.length+'/'+keys.length;
- if(filtered.length==0){ document.getElementById('userList').innerHTML='<p style="color:#888">No users. Share?ref=0783228690</p>'; return; }
- document.getElementById('userList').innerHTML=filtered.map(phone=>{
-  let u=users[phone]; let done=JSON.parse(localStorage.getItem('ezol_done_'+phone)||'[]').length; let invests=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]').length;
-  return `<div class="user">📱 <b>${phone}</b> | 👤 ${u.name||'No name'}<br>🔑 Pass: <b style="color:#fbbf24">${u.pass||'NO PASS (old user)'}</b> | 💰 <b style="color:#22c55e">${u.balance||0} UGX</b><br>👥 Refs: ${u.refs||0} | ✅ Tasks: ${done}/6 | 📈 Invests: ${invests}<br><small>Joined: ${u.joined?new Date(u.joined).toLocaleString():''}</small><br>
-  <button onclick="addBal('${phone}')" class="btn" style="background:#f59e0b;margin-top:4px">+ Add Bal</button>
-  <button onclick="resetPass('${phone}')" class="btn" style="background:#3b82f6;color:#fff;margin-left:4px">🔑 Reset Pass</button>
-  <button onclick="copyLogin('${phone}')" class="btn" style="background:#a855f7;color:#fff;margin-left:4px">📋 Copy Login</button>
-  <button onclick="delUser('${phone}')" class="btn" style="background:#ef4444;color:#fff;margin-left:4px">Delete</button></div>`;
- }).join('');
-}
-function addBal(phone){ let amt=prompt('Add amount to '+phone+':'); if(!amt) return; let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[phone].balance=(users[phone].balance||0)+parseInt(amt); localStorage.setItem('ezol_users',JSON.stringify(users)); loadUsers(); alert('Added '+amt+' to '+phone); }
-function resetPass(phone){ let np=prompt('New password for '+phone+':'); if(!np) return; let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[phone].pass=np; localStorage.setItem('ezol_users',JSON.stringify(users)); loadUsers(); alert('Password reset! New pass: '+np+' - Send to user'); }
-function copyLogin(phone){ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); let u=users[phone]; let txt=`Ezol Wallet Login:\nPhone: ${phone}\nPass: ${u.pass}\nLink: https://ezratwinamatsiko0-droid.github.io/my-wallet/`; navigator.clipboard.writeText(txt).then(()=>alert('Copied login details!')); }
-function delUser(phone){ if(!confirm('Delete '+phone+'?')) return; let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); delete users[phone]; localStorage.setItem('ezol_users',JSON.stringify(users)); localStorage.removeItem('ezol_done_'+phone); localStorage.removeItem('ezol_invests_'+phone); loadUsers(); }
-function clearUsers(){ if(confirm('Clear ALL users? This deletes everyone!')){ localStorage.removeItem('ezol_users'); loadUsers(); } }
-function loadInvests(){ let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); let html=''; Object.keys(users).forEach(phone=>{ let invs=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); invs.forEach((inv,i)=>{ html+=`<div class="user">${phone} - ${inv.plan} ${inv.invest}→${inv.return} - ${inv.status} <button onclick="markPaid('${phone}',${i})" class="btn" style="background:#22c55e">Paid</button></div>`; }); }); document.getElementById('investList').innerHTML=html||'No invests'; }
-function markPaid(phone,i){ let invs=JSON.parse(localStorage.getItem('ezol_invests_'+phone)||'[]'); invs[i].status='Paid'; localStorage.setItem('ezol_invests_'+phone,JSON.stringify(invs)); let users=JSON.parse(localStorage.getItem('ezol_users')||'{}'); users[phone].balance+=invs[i].return; localStorage.setItem('ezol_users',JSON.stringify(users)); loadInvests(); loadUsers(); }
-document.getElementById('waNum').value=localStorage.getItem('ezol_wa')||'256795143386'; loadUsers(); loadInvests();
-</script></body></html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ezol Admin</title>
+<style>body{font-family:system-ui;background:#f1f5f9;padding:15px} .card{background:#fff;padding:15px;border-radius:12px;margin-bottom:12px} table{width:100%;border-collapse:collapse;font-size:14px} th,td{padding:10px;border-bottom:1px solid #eee;text-align:left} th{background:#f8fafc} .btn{padding:6px 10px;border:none;border-radius:6px;color:#fff;cursor:pointer} .btn-green{background:#10b981} .btn-red{background:#ef4444} .btn-blue{background:#4f46e5} .stats{display:flex;gap:10px} .stat{flex:1;background:#fff;padding:15px;border-radius:12px;text-align:center}</style>
+</head>
+<body>
+<h2>🔐 Ezol Admin - LIVE</h2>
+<div class="stats"><div class="stat"><h3 id="totalUsers">0</h3><p>Users</p></div><div class="stat"><h3 id="totalWithdraw">0</h3><p>Withdraws</p></div><div class="stat"><h3 id="totalBal">0 UGX</h3><p>Total Bal</p></div></div>
+<div class="card"><h3>👥 Users</h3><table><thead><tr><th>Phone</th><th>Name</th><th>Balance</th><th>Action</th></tr></thead><tbody id="usersTable"></tbody></table></div>
+<div class="card"><h3>💸 Withdraw Requests</h3><table><thead><tr><th>Phone</th><th>Name</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead><tbody id="wdTable"></tbody></table></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, increment, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.firebasestorage.app",
+  messagingSenderId: "33518327685",
+  appId: "1:33518327685:web:a932ecbbba8501cd2c96ec"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+onSnapshot(collection(db,"users"),snap=>{
+ let total=0; let html='';
+ snap.forEach(d=>{
+  const u=d.data(); total+=u.balance||0;
+  html+=`<tr><td>${u.phone}</td><td>${u.name}</td><td>${(u.balance||0).toLocaleString()}</td><td><button class="btn btn-green" onclick="addBal('${u.phone}',5000)">+5k</button> <button class="btn btn-blue" onclick="addBal('${u.phone}',20000)">+20k</button> <button class="btn btn-red" onclick="addBal('${u.phone}',-5000)">-5k</button></td></tr>`;
+ });
+ document.getElementById('usersTable').innerHTML=html;
+ document.getElementById('totalUsers').innerText=snap.size;
+ document.getElementById('totalBal').innerText=total.toLocaleString()+' UGX';
+});
+onSnapshot(query(collection(db,"withdrawals"),orderBy("createdAt","desc")),snap=>{
+ let html='';
+ snap.forEach(d=>{
+  const w=d.data();
+  html+=`<tr><td>${w.phone}</td><td>${w.name}</td><td>${w.amount} UGX</td><td>${w.status}</td><td>${w.status=='pending'?`<button class="btn btn-green" onclick="approve('${d.id}')">Approve</button>`:'Done'}</td></tr>`;
+ });
+ document.getElementById('wdTable').innerHTML=html;
+ document.getElementById('totalWithdraw').innerText=snap.size;
+});
+window.addBal=async(phone,amt)=>{
+ await updateDoc(doc(db,"users",phone),{balance:increment(amt)});
+ alert(amt+' UGX for '+phone);
+};
+window.approve=async(id)=>{
+ await updateDoc(doc(db,"withdrawals",id),{status:"approved"});
+ alert('Approved!');
+};
+</script>
+</body>
+</html>
