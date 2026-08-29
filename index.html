@@ -54,8 +54,23 @@ window.withdraw=async()=>{
  await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()});
  await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:Number(amount),msg:"withdraw request",createdAt:serverTimestamp()});
  alert('Withdraw sent to '+currentPhone);loadUser();
+};window.dailyCheckin=async()=>{
+ if(!currentPhone) return alert('Register first');
+ const userRef=doc(db,"users",currentPhone);
+ const userSnap=await getDoc(userRef);
+ const last = userSnap.data().lastCheckin?.toDate ? userSnap.data().lastCheckin.toDate() : null;
+ if(last){
+   const diff = Date.now() - last.getTime();
+   if(diff < 24*60*60*1000){
+     const hrs = Math.ceil((24*60*60*1000 - diff)/3600000);
+     return alert('You already checked in! Come back in '+hrs+' hours ⏰');
+   }
+ }
+ await updateDoc(userRef,{balance:increment(1000),lastCheckin:serverTimestamp()});
+ await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:1000,msg:"daily bonus",createdAt:serverTimestamp()});
+ alert('+1000 Added! Come back tomorrow!');
+ loadUser();
 };
-window.dailyCheckin=async()=>{
  if(!currentPhone) return alert('Register first');
  await updateDoc(doc(db,"users",currentPhone),{balance:increment(1000)});
  await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:1000,msg:"daily bonus",createdAt:serverTimestamp()});
