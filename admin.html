@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ezol Admin PRO - @ezol256</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ezol Admin PRO @ezol256</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial}
 body{background:#f5f7fb;padding:14px;padding-bottom:40px}
-.header{background:linear-gradient(135deg,#0f0f0f 0%,#2d1b69 50%,#7c3aed 100%);color:#fff;padding:20px;border-radius:28px;text-align:center;border:1px solid rgba(255,255,255,0.15);box-shadow:0 10px 25px rgba(124,58,237,0.3)}
+.header{background:linear-gradient(135deg,#0f0f0f 0%,#2d1b69 50%,#7c3aed 100%);color:#fff;padding:20px;border-radius:28px;text-align:center}
 .live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:6px;animation:pulse 1.5s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
 .card{background:#fff;border-radius:24px;padding:16px;margin-top:14px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid #f1f1f1}
@@ -19,191 +18,59 @@ body{background:#f5f7fb;padding:14px;padding-bottom:40px}
 .btn-black{background:#111;color:#fff}
 .small{font-size:12px;color:#6b7280}
 .item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f3f4f6;gap:10px}
-input,select{width:100%;padding:12px 14px;border-radius:100px;border:1px solid #e5e7eb;margin-top:8px;background:#f9fafb;font-size:14px}
+input,select{width:100%;padding:12px 14px;border-radius:100px;border:1px solid #e5e7eb;margin-top:8px;background:#f9fafb}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .stat{background:rgba(255,255,255,0.15);padding:12px;border-radius:16px;text-align:center}
 </style>
 </head>
 <body>
-
-<div class="header">
-<h2>👑 Ezol Admin PRO</h2>
-<p style="font-size:12px;opacity:0.9;margin-top:6px"><span class="live-dot"></span>Owner: 0795143386 • <span id="liveClock">Live</span> • <span id="onlineNow">127</span> online</p>
-<p style="font-size:11px;opacity:0.6;margin-top:4px">MTN: 0795143386 - Ezra Twinamatsiko | @ezol256</p>
-</div>
-
-<div class="card" id="loginCard">
-<h3>🔐 Owner Login</h3>
-<input id="adminPass" type="password" placeholder="Password = @ezol256">
-<button class="btn btn-black" onclick="loginAdmin()" style="width:100%;margin-top:12px">Login as Owner @ezol256</button>
-<p class="small" id="loginStatus" style="text-align:center;margin-top:8px">Secure: Only you</p>
-</div>
-
+<div class="header"><h2>👑 Ezol Admin PRO</h2><p style="font-size:12px;opacity:0.9;margin-top:6px"><span class="live-dot"></span>0795143386 • <span id="liveClock">Live</span> • <span id="onlineNow">134</span> online</p><p style="font-size:11px;opacity:0.6">Password @ezol256</p></div>
+<div class="card" id="loginCard"><h3>🔐 Owner Login</h3><input id="adminPass" type="password" placeholder="Password @ezol256"><button class="btn btn-black" onclick="loginAdmin()" style="width:100%;margin-top:12px">Login</button><p class="small" id="loginStatus" style="text-align:center;margin-top:8px">Only you</p></div>
 <div id="adminContent" style="display:none">
-
-<div class="card" style="background:linear-gradient(135deg,#111,#4f46e5);color:#fff">
-<h3>📊 Live Dashboard</h3>
-<div class="stat-grid">
-<div class="stat">Users<br><b id="totalUsers" style="font-size:20px">0</b></div>
-<div class="stat">Balance<br><b id="totalBal" style="font-size:18px">0 UGX</b></div>
-<div class="stat">VIP Req<br><b id="vipCount" style="font-size:20px">0</b></div>
-<div class="stat">Withdraw<br><b id="withdrawCount" style="font-size:20px">0</b></div>
+<div class="card" style="background:linear-gradient(135deg,#111,#4f46e5);color:#fff"><h3>📊 Dashboard</h3><div class="stat-grid"><div class="stat">Users<br><b id="totalUsers" style="font-size:20px">0</b></div><div class="stat">Balance<br><b id="totalBal" style="font-size:18px">0</b></div><div class="stat">VIP<br><b id="vipCount">0</b></div><div class="stat">Withdraw<br><b id="withdrawCount">0</b></div></div></div>
+<div class="card" style="border:2px solid #7c3aed"><h3>💰 Add Bonus</h3><input id="bonusPhone" placeholder="Phone"><input id="bonusAmount" type="number" placeholder="Amount"><button class="btn btn-green" style="width:100%" onclick="addBonus()">➕ Add Bonus</button><div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-green" style="flex:1" onclick="quickBonus(1000)">+1k</button><button class="btn btn-green" style="flex:1" onclick="quickBonus(5000)">+5k</button><button class="btn btn-blue" style="flex:1" onclick="quickBonus(10000)">+10k</button></div></div>
+<div class="card"><h3>👥 Users</h3><div id="usersList"></div></div>
+<div class="card" style="border:2px solid #f59e0b"><h3>💎 VIP Requests</h3><div id="vipList"><p class="small">No VIP reqs</p></div><select id="vipLevelSelect"><option value="0">VIP 0 - 1k/day</option><option value="1">VIP 1 - 5k/day</option><option value="2">VIP 2 - 12k/day</option><option value="3">VIP 3 - 25k/day</option><option value="4">VIP 4 - 50k/day</option></select><input id="vipPhone" placeholder="User phone"><button class="btn btn-orange" style="width:100%" onclick="setVIP()">👉 Set VIP Level</button></div>
+<div class="card" style="border:2px solid #22c55e"><h3>💸 Withdrawals - Pending</h3><div id="withdrawsList"><p class="small">No withdrawals</p></div><button class="btn btn-blue" onclick="clearWithdraws()" style="width:100%">Clear All</button></div>
+<div class="card"><h3>🔴 Live Online</h3><p>Online: <b id="liveUsersDetail">0</b> • Total: <b id="totalEver">5,247+</b></p></div>
+<div class="card" style="background:#f0fdf4;text-align:center;border:2px solid #22c55e"><button class="btn btn-green" onclick="window.open('https://wa.me/256795143386','_blank')" style="width:100%">WhatsApp 0795143386</button></div>
 </div>
-</div>
-
-<div class="card" style="border:2px solid #7c3aed">
-<h3>💰 Add Bonus to User</h3>
-<p class="small">Select user & add bonus instantly</p>
-<input id="bonusPhone" placeholder="Phone e.g. 0783228690">
-<input id="bonusAmount" type="number" placeholder="Amount e.g. 5000">
-<button class="btn btn-green" style="width:100%" onclick="addBonus()">➕ Add Bonus Now</button>
-</div>
-
-<div class="card">
-<h3>👥 Registered Users (This Device)</h3>
-<div id="usersList"><p class="small">No users</p></div>
-</div>
-
-<div class="card" style="border:2px solid #f59e0b">
-<h3>💎 VIP Requests - Approve</h3>
-<div id="vipList"><p class="small">No VIP requests. When user clicks Buy VIP, it comes to WhatsApp. You manually approve below.</p></div>
-<select id="vipLevelSelect">
-<option value="0">Set VIP 0 - Free (1k/day)</option>
-<option value="1">Set VIP 1 - 15k (5k/day)</option>
-<option value="2">Set VIP 2 - 30k (12k/day)</option>
-<option value="3">Set VIP 3 - 60k (25k/day)</option>
-<option value="4">Set VIP 4 - 100k (50k/day)</option>
-</select>
-<input id="vipPhone" placeholder="User phone to set VIP">
-<button class="btn btn-orange" style="width:100%" onclick="setVIP()">👉 Approve & Set VIP Level</button>
-</div>
-
-<div class="card" style="border:2px solid #22c55e">
-<h3>💸 Real Withdrawals - Approve</h3>
-<div id="withdrawsList"><p class="small">No withdrawals yet</p></div>
-<button class="btn btn-blue" onclick="clearWithdraws()" style="width:100%">Clear All Withdrawals</button>
-</div>
-
-<div class="card">
-<h3>🔴 Live Online Now</h3>
-<p class="small">Shows live count + activity</p>
-<p style="margin-top:8px">Online Now: <b id="liveUsersDetail">0</b> • Total Ever: <b id="totalEver">5247+</b></p>
-<div id="activityList" style="margin-top:10px"><p class="small">No activity yet</p></div>
-</div>
-
-<div class="card" style="background:#f0fdf4;text-align:center;border:2px solid #22c55e">
-<h3>📱 Customer Support</h3>
-<button class="btn btn-green" onclick="window.open('https://wa.me/256795143386','_blank')" style="width:100%">Open WhatsApp 0795143386</button>
-<button class="btn btn-red" onclick="resetAll()" style="width:100%;margin-top:8px">⚠️ Reset All Data (This Phone)</button>
-</div>
-
-</div>
-
 <script>
 var ADMIN_PASS="@ezol256";
-var onlineNow=127+Math.floor(Math.random()*30);
-function loginAdmin(){
-  var p=document.getElementById('adminPass').value.trim();
-  if(p===ADMIN_PASS){
-    document.getElementById('loginCard').style.display='none';
-    document.getElementById('adminContent').style.display='block';
-    loadData();
-    setInterval(()=>{ document.getElementById('liveClock').innerText=new Date().toLocaleTimeString(); onlineNow+=Math.floor(Math.random()*3)-1; document.getElementById('onlineNow').innerText=onlineNow; document.getElementById('liveUsersDetail').innerText=onlineNow; },2000);
-  } else { alert('Wrong! Password is @ezol256'); }
-}
+var onlineNow=134;
+function loginAdmin(){ var p=document.getElementById('adminPass').value.trim(); if(p===ADMIN_PASS){ document.getElementById('loginCard').style.display='none'; document.getElementById('adminContent').style.display='block'; loadData(); setInterval(()=>{ document.getElementById('liveClock').innerText=new Date().toLocaleTimeString(); onlineNow+=Math.floor(Math.random()*3)-1; if(onlineNow<90) onlineNow=90; document.getElementById('onlineNow').innerText=onlineNow; document.getElementById('liveUsersDetail').innerText=onlineNow; },2000); } else { alert('Wrong! Use @ezol256'); } }
 function loadData(){
   var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
   var balance=parseInt(localStorage.getItem('ezol_balance')||0);
   var vipLevel=parseInt(localStorage.getItem('ezol_vip_level')||0);
   var withdraws=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
-  var vipReqs=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
-
-  document.getElementById('totalUsers').innerText=user?1:0;
-  document.getElementById('totalBal').innerText=balance;
-  document.getElementById('withdrawCount').innerText=withdraws.length;
-  document.getElementById('vipCount').innerText=vipReqs.length;
-  document.getElementById('totalEver').innerText=(5247+ (user?1:0)).toLocaleString()+'+';
-  document.getElementById('onlineNow').innerText=onlineNow;
-  document.getElementById('liveUsersDetail').innerText=onlineNow;
-
+  document.getElementById('totalUsers').innerText=user?1:0; document.getElementById('totalBal').innerText=balance; document.getElementById('withdrawCount').innerText=withdraws.length; document.getElementById('vipCount').innerText=0;
+  document.getElementById('totalEver').innerText=(5247+(user?1:0)).toLocaleString()+'+'; document.getElementById('onlineNow').innerText=onlineNow; document.getElementById('liveUsersDetail').innerText=onlineNow;
   var uBox=document.getElementById('usersList');
-  if(user){
-    uBox.innerHTML='<div class="item"><div><b>'+(user.name||'Boss')+'</b><br><span class="small">'+user.phone+' | VIP '+vipLevel+'</span></div><div style="text-align:right"><b>'+balance+' UGX</b><br><span class="small">VIP '+vipLevel+'</span></div></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-green" style="flex:1" onclick="quickBonus(1000)">+1k</button><button class="btn btn-green" style="flex:1" onclick="quickBonus(5000)">+5k</button><button class="btn btn-blue" style="flex:1" onclick="quickBonus(10000)">+10k</button></div>';
-    document.getElementById('bonusPhone').value=user.phone;
-    document.getElementById('vipPhone').value=user.phone;
-  } else { uBox.innerHTML='<p class="small">No user on this phone</p>'; }
-
+  if(user){ uBox.innerHTML='<div class="item"><div><b>'+(user.name||'Boss')+'</b><br><span class="small">'+user.phone+' VIP '+vipLevel+'</span></div><div><b>'+balance+' UGX</b></div></div>'; document.getElementById('bonusPhone').value=user.phone; document.getElementById('vipPhone').value=user.phone; }
   var wBox=document.getElementById('withdrawsList');
-  if(withdraws.length>0){
-    wBox.innerHTML='';
-    withdraws.slice().reverse().forEach((w,idx)=>{
-      var d=document.createElement('div'); d.className='item';
-      d.innerHTML='<div><b>'+w.phone+'</b><br><span class="small">'+w.amount+' UGX • '+new Date(w.time).toLocaleString()+'</span></div><div><button class="btn btn-green" onclick="approveW('+idx+')">Approve</button> <button class="btn btn-red" onclick="rejectW('+idx+')">Reject</button></div>';
-      wBox.appendChild(d);
-    });
-  }
-  var vBox=document.getElementById('vipList');
-  if(vipReqs.length>0){
-    vBox.innerHTML='';
-    vipReqs.slice().reverse().forEach((v,idx)=>{
-      var d=document.createElement('div'); d.className='item';
-      d.innerHTML='<div><b>VIP '+v.level+' - '+v.amount+' UGX</b><br><span class="small">'+v.phone+' | '+v.name+'</span></div><div><button class="btn btn-orange" onclick="approveVIPReq('+idx+')">Approve</button></div>';
-      vBox.appendChild(d);
-    });
-  }
+  if(withdraws.length>0){ wBox.innerHTML=''; withdraws.slice().reverse().forEach((w,i)=>{ var idx=withdraws.length-1-i; var d=document.createElement('div'); d.className='item'; d.innerHTML='<div><b>'+w.phone+'</b><br><span class="small">Full: '+(w.fullPhone||'hidden')+'<br>'+w.amount+' UGX • '+new Date(w.time).toLocaleString()+' • '+w.status+'</span></div><div><button class="btn btn-green" onclick="approveW('+i+')">Approve</button><button class="btn btn-red" onclick="rejectW('+i+')">Reject</button></div>'; wBox.appendChild(d); }); }
 }
-function addBonus(){
-  var phone=document.getElementById('bonusPhone').value.trim();
-  var amt=parseInt(document.getElementById('bonusAmount').value);
-  if(!phone ||!amt){ alert('Enter phone and amount'); return; }
-  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
-  if(!user || user.phone!==phone){ alert('User not found on this device. Only this device user: '+(user?user.phone:'none')); return; }
-  var bal=parseInt(localStorage.getItem('ezol_balance')||0);
-  bal+=amt; localStorage.setItem('ezol_balance',bal);
-  alert('Added '+amt+' UGX to '+phone+'! New balance: '+bal);
-  loadData();
-}
+function addBonus(){ var ph=document.getElementById('bonusPhone').value.trim(); var amt=parseInt(document.getElementById('bonusAmount').value); if(!ph||!amt){alert('Enter phone amount');return;} var u=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(!u||u.phone!==ph){alert('Not on this device');return;} var bal=parseInt(localStorage.getItem('ezol_balance')||0); bal+=amt; localStorage.setItem('ezol_balance',bal); alert('Added '+amt+' new bal '+bal); loadData(); }
 function quickBonus(a){ document.getElementById('bonusAmount').value=a; addBonus(); }
-function setVIP(){
-  var phone=document.getElementById('vipPhone').value.trim();
-  var level=parseInt(document.getElementById('vipLevelSelect').value);
-  if(!phone){ alert('Enter phone'); return; }
-  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
-  if(!user || user.phone!==phone){ alert('User not on this device'); return; }
-  localStorage.setItem('ezol_vip_level',level);
-  var list=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
-  list.push({phone:phone,name:user.name||'Boss',level:level,amount:[0,15000,30000,60000,100000][level],time:Date.now()});
-  localStorage.setItem('ezol_vip_reqs',JSON.stringify(list));
-  alert('VIP '+level+' set for '+phone+'! User now earns '+(level==0?1000:level==1?5000:level==2?12000:level==3?25000:50000)+' daily');
-  loadData();
-}
+function setVIP(){ var ph=document.getElementById('vipPhone').value.trim(); var lev=parseInt(document.getElementById('vipLevelSelect').value); if(!ph){alert('phone');return;} localStorage.setItem('ezol_vip_level',lev); alert('VIP '+lev+' set for '+ph); loadData(); }
 function approveW(realIdx){
   var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
-  var idx=list.length-1-realIdx;
-  var w=list[idx];
-  if(confirm('Approve '+w.amount+' to '+w.phone+'? Make sure you sent MoMo!')){
-    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); loadData(); alert('Approved ✔');
+  var idx=list.length-1-realIdx; var w=list[idx];
+  if(confirm('Approve '+w.amount+' to '+w.fullPhone+'? Did you send MoMo?')){
+    var bal=parseInt(localStorage.getItem('ezol_balance')||0); bal=bal-w.amount; if(bal<0) bal=0; localStorage.setItem('ezol_balance',bal);
+    localStorage.removeItem('ezol_pending_withdraw');
+    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); loadData(); alert('Approved! Balance now '+bal);
   }
 }
 function rejectW(realIdx){
   var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
   var idx=list.length-1-realIdx;
-  if(confirm('Reject this withdrawal? Money will return to user balance')){
-    var w=list[idx];
-    var bal=parseInt(localStorage.getItem('ezol_balance')||0); bal+=w.amount; localStorage.setItem('ezol_balance',bal);
-    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); loadData();
+  if(confirm('Reject? Money will stay')){
+    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); localStorage.removeItem('ezol_pending_withdraw'); loadData();
   }
 }
-function approveVIPReq(idx){
-  var list=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
-  var realIdx=list.length-1-idx;
-  var v=list[realIdx];
-  localStorage.setItem('ezol_vip_level',v.level);
-  alert('VIP '+v.level+' approved for '+v.phone);
-  loadData();
-}
-function clearWithdraws(){ if(confirm('Clear all withdrawals?')){ localStorage.removeItem('ezol_real_withdraws'); loadData(); } }
-function resetAll(){ if(confirm('RESET ALL DATA on this phone? Cannot undo!')){ localStorage.clear(); alert('Cleared!'); location.reload(); } }
+function clearWithdraws(){ if(confirm('Clear all?')){ localStorage.removeItem('ezol_real_withdraws'); localStorage.removeItem('ezol_pending_withdraw'); loadData(); } }
 </script>
 </body>
 </html>
