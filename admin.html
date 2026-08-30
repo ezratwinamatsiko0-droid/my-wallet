@@ -66,4 +66,144 @@ input,select{width:100%;padding:12px 14px;border-radius:100px;border:1px solid #
 
 <div class="card" style="border:2px solid #f59e0b">
 <h3>💎 VIP Requests - Approve</h3>
-<div id="vipList"><p class="small">No VIP requests.
+<div id="vipList"><p class="small">No VIP requests. When user clicks Buy VIP, it comes to WhatsApp. You manually approve below.</p></div>
+<select id="vipLevelSelect">
+<option value="0">Set VIP 0 - Free (1k/day)</option>
+<option value="1">Set VIP 1 - 15k (5k/day)</option>
+<option value="2">Set VIP 2 - 30k (12k/day)</option>
+<option value="3">Set VIP 3 - 60k (25k/day)</option>
+<option value="4">Set VIP 4 - 100k (50k/day)</option>
+</select>
+<input id="vipPhone" placeholder="User phone to set VIP">
+<button class="btn btn-orange" style="width:100%" onclick="setVIP()">👉 Approve & Set VIP Level</button>
+</div>
+
+<div class="card" style="border:2px solid #22c55e">
+<h3>💸 Real Withdrawals - Approve</h3>
+<div id="withdrawsList"><p class="small">No withdrawals yet</p></div>
+<button class="btn btn-blue" onclick="clearWithdraws()" style="width:100%">Clear All Withdrawals</button>
+</div>
+
+<div class="card">
+<h3>🔴 Live Online Now</h3>
+<p class="small">Shows live count + activity</p>
+<p style="margin-top:8px">Online Now: <b id="liveUsersDetail">0</b> • Total Ever: <b id="totalEver">5247+</b></p>
+<div id="activityList" style="margin-top:10px"><p class="small">No activity yet</p></div>
+</div>
+
+<div class="card" style="background:#f0fdf4;text-align:center;border:2px solid #22c55e">
+<h3>📱 Customer Support</h3>
+<button class="btn btn-green" onclick="window.open('https://wa.me/256795143386','_blank')" style="width:100%">Open WhatsApp 0795143386</button>
+<button class="btn btn-red" onclick="resetAll()" style="width:100%;margin-top:8px">⚠️ Reset All Data (This Phone)</button>
+</div>
+
+</div>
+
+<script>
+var ADMIN_PASS="@ezol256";
+var onlineNow=127+Math.floor(Math.random()*30);
+function loginAdmin(){
+  var p=document.getElementById('adminPass').value.trim();
+  if(p===ADMIN_PASS){
+    document.getElementById('loginCard').style.display='none';
+    document.getElementById('adminContent').style.display='block';
+    loadData();
+    setInterval(()=>{ document.getElementById('liveClock').innerText=new Date().toLocaleTimeString(); onlineNow+=Math.floor(Math.random()*3)-1; document.getElementById('onlineNow').innerText=onlineNow; document.getElementById('liveUsersDetail').innerText=onlineNow; },2000);
+  } else { alert('Wrong! Password is @ezol256'); }
+}
+function loadData(){
+  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
+  var balance=parseInt(localStorage.getItem('ezol_balance')||0);
+  var vipLevel=parseInt(localStorage.getItem('ezol_vip_level')||0);
+  var withdraws=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
+  var vipReqs=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
+
+  document.getElementById('totalUsers').innerText=user?1:0;
+  document.getElementById('totalBal').innerText=balance;
+  document.getElementById('withdrawCount').innerText=withdraws.length;
+  document.getElementById('vipCount').innerText=vipReqs.length;
+  document.getElementById('totalEver').innerText=(5247+ (user?1:0)).toLocaleString()+'+';
+  document.getElementById('onlineNow').innerText=onlineNow;
+  document.getElementById('liveUsersDetail').innerText=onlineNow;
+
+  var uBox=document.getElementById('usersList');
+  if(user){
+    uBox.innerHTML='<div class="item"><div><b>'+(user.name||'Boss')+'</b><br><span class="small">'+user.phone+' | VIP '+vipLevel+'</span></div><div style="text-align:right"><b>'+balance+' UGX</b><br><span class="small">VIP '+vipLevel+'</span></div></div><div style="display:flex;gap:6px;margin-top:10px"><button class="btn btn-green" style="flex:1" onclick="quickBonus(1000)">+1k</button><button class="btn btn-green" style="flex:1" onclick="quickBonus(5000)">+5k</button><button class="btn btn-blue" style="flex:1" onclick="quickBonus(10000)">+10k</button></div>';
+    document.getElementById('bonusPhone').value=user.phone;
+    document.getElementById('vipPhone').value=user.phone;
+  } else { uBox.innerHTML='<p class="small">No user on this phone</p>'; }
+
+  var wBox=document.getElementById('withdrawsList');
+  if(withdraws.length>0){
+    wBox.innerHTML='';
+    withdraws.slice().reverse().forEach((w,idx)=>{
+      var d=document.createElement('div'); d.className='item';
+      d.innerHTML='<div><b>'+w.phone+'</b><br><span class="small">'+w.amount+' UGX • '+new Date(w.time).toLocaleString()+'</span></div><div><button class="btn btn-green" onclick="approveW('+idx+')">Approve</button> <button class="btn btn-red" onclick="rejectW('+idx+')">Reject</button></div>';
+      wBox.appendChild(d);
+    });
+  }
+  var vBox=document.getElementById('vipList');
+  if(vipReqs.length>0){
+    vBox.innerHTML='';
+    vipReqs.slice().reverse().forEach((v,idx)=>{
+      var d=document.createElement('div'); d.className='item';
+      d.innerHTML='<div><b>VIP '+v.level+' - '+v.amount+' UGX</b><br><span class="small">'+v.phone+' | '+v.name+'</span></div><div><button class="btn btn-orange" onclick="approveVIPReq('+idx+')">Approve</button></div>';
+      vBox.appendChild(d);
+    });
+  }
+}
+function addBonus(){
+  var phone=document.getElementById('bonusPhone').value.trim();
+  var amt=parseInt(document.getElementById('bonusAmount').value);
+  if(!phone ||!amt){ alert('Enter phone and amount'); return; }
+  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
+  if(!user || user.phone!==phone){ alert('User not found on this device. Only this device user: '+(user?user.phone:'none')); return; }
+  var bal=parseInt(localStorage.getItem('ezol_balance')||0);
+  bal+=amt; localStorage.setItem('ezol_balance',bal);
+  alert('Added '+amt+' UGX to '+phone+'! New balance: '+bal);
+  loadData();
+}
+function quickBonus(a){ document.getElementById('bonusAmount').value=a; addBonus(); }
+function setVIP(){
+  var phone=document.getElementById('vipPhone').value.trim();
+  var level=parseInt(document.getElementById('vipLevelSelect').value);
+  if(!phone){ alert('Enter phone'); return; }
+  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
+  if(!user || user.phone!==phone){ alert('User not on this device'); return; }
+  localStorage.setItem('ezol_vip_level',level);
+  var list=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
+  list.push({phone:phone,name:user.name||'Boss',level:level,amount:[0,15000,30000,60000,100000][level],time:Date.now()});
+  localStorage.setItem('ezol_vip_reqs',JSON.stringify(list));
+  alert('VIP '+level+' set for '+phone+'! User now earns '+(level==0?1000:level==1?5000:level==2?12000:level==3?25000:50000)+' daily');
+  loadData();
+}
+function approveW(realIdx){
+  var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
+  var idx=list.length-1-realIdx;
+  var w=list[idx];
+  if(confirm('Approve '+w.amount+' to '+w.phone+'? Make sure you sent MoMo!')){
+    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); loadData(); alert('Approved ✔');
+  }
+}
+function rejectW(realIdx){
+  var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
+  var idx=list.length-1-realIdx;
+  if(confirm('Reject this withdrawal? Money will return to user balance')){
+    var w=list[idx];
+    var bal=parseInt(localStorage.getItem('ezol_balance')||0); bal+=w.amount; localStorage.setItem('ezol_balance',bal);
+    list.splice(idx,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(list)); loadData();
+  }
+}
+function approveVIPReq(idx){
+  var list=JSON.parse(localStorage.getItem('ezol_vip_reqs')||'[]');
+  var realIdx=list.length-1-idx;
+  var v=list[realIdx];
+  localStorage.setItem('ezol_vip_level',v.level);
+  alert('VIP '+v.level+' approved for '+v.phone);
+  loadData();
+}
+function clearWithdraws(){ if(confirm('Clear all withdrawals?')){ localStorage.removeItem('ezol_real_withdraws'); loadData(); } }
+function resetAll(){ if(confirm('RESET ALL DATA on this phone? Cannot undo!')){ localStorage.clear(); alert('Cleared!'); location.reload(); } }
+</script>
+</body>
+</html>
