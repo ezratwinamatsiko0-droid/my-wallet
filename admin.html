@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CEO ADMIN v5 - PASSWORDS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CEO ADMIN v6 - AUTO USERS</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#0f172a;color:#fff;padding:12px;padding-bottom:100px}
@@ -11,20 +12,20 @@ body{background:#0f172a;color:#fff;padding:12px;padding-bottom:100px}
 .box{background:#1e293b;padding:16px;border-radius:14px;text-align:center;border:1px solid #334155}
 .box b{font-size:22px;display:block}
 .card{background:#1e293b;margin-top:12px;padding:14px;border-radius:14px;border:1px solid #334155}
-.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #334155;gap:8px}
+.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #334155;gap:8px;flex-wrap:wrap}
 .item:last-child{border:0}
 .btn{padding:8px 14px;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:12px}
 .green{background:#22c55e;color:#fff}.orange{background:#f97316;color:#fff}.red{background:#ef4444;color:#fff}.blue{background:#3b82f6;color:#fff}
 .small{font-size:11px;color:#94a3b8}
-input{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;margin:6px 0}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h2>👑 CEO ADMIN v5 - PASSWORDS</h2>
-<p style="font-size:13px;margin-top:4px">MoMo: 0795143386 | See & Reset Passwords</p>
-<p style="font-size:11px;opacity:.8;margin-top:4px"><span id="liveCount">0</span> Live • <span id="timeNow"></span></p>
+<h2>👑 CEO ADMIN v6 - AUTO SHOW</h2>
+<p style="font-size:13px;margin-top:4px">MoMo: 0795143386 | Auto From All Phones</p>
+<p style="font-size:11px;opacity:.8;margin-top:6px" id="status">🔴 Connecting to Firebase...</p>
+<p style="font-size:10px;opacity:.6" id="timeNow"></p>
 </div>
 
 <div class="grid">
@@ -35,106 +36,135 @@ input{width:100%;padding:10px;border-radius:8px;border:1px solid #334155;backgro
 </div>
 
 <div class="card">
-<h3>👥 All Users - With Passwords</h3>
-<p class="small">This shows users registered on THIS admin phone. To see users from other phones, you need Firebase. For now, ask users to register on your phone once or use Firebase v5 I sent.</p>
-<div id="userList" style="margin-top:10px"></div>
+<h3>👥 All Users - AUTO + Passwords</h3>
+<p class="small">Users appear automatically when they register anywhere. No manual add needed.</p>
+<div id="userList" style="margin-top:10px">Loading users...</div>
 </div>
 
 <div class="card">
-<h3>💎 VIP Requests - 15k Each!</h3>
-<div id="vipList" style="margin-top:10px"></div>
+<h3>💎 VIP Requests - 15k Each! AUTO</h3>
+<div id="vipList" style="margin-top:10px">Loading VIP...</div>
 </div>
 
 <div class="card">
-<h3>💸 Withdraw Requests</h3>
-<div id="wdList" style="margin-top:10px"></div>
+<h3>💸 Withdraw Requests - AUTO</h3>
+<div id="wdList" style="margin-top:10px">Loading withdraw...</div>
 </div>
 
-<div class="card">
-<h3>🔧 Fix Users Not Added - Import</h3>
-<p class="small">Paste user phone you want to add manually (from WhatsApp):</p>
-<input id="manualPhone" placeholder="Phone e.g. 0783228690">
-<input id="manualName" placeholder="Name">
-<input id="manualPass" placeholder="Password">
-<button class="btn blue" style="width:100%" onclick="addManual()">➕ Add User Manually</button>
-<button class="btn red" style="width:100%;margin-top:8px" onclick="if(confirm('Clear ALL admin data?')){localStorage.clear();location.reload()}">🗑️ Clear All Data</button>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-<script>
-function getAllUsers(){
-  let all = JSON.parse(localStorage.getItem('ezol_all_users')||'[]');
-  let single = JSON.parse(localStorage.getItem('ezol_user')||'null');
-  // Also add single user if not in list
-  if(single &&!all.find(u=>u.phone==single.phone)){
-    all.push({phone:single.phone,name:single.name,password:single.password,balance:parseInt(localStorage.getItem('ezol_balance')||0),vipLevel:parseInt(localStorage.getItem('ezol_vip_level')||0)});
-    localStorage.setItem('ezol_all_users',JSON.stringify(all));
+// >>> PASTE YOUR SAME FIREBASE CONFIG AS index.html HERE <<<
+const firebaseConfig = {
+  apiKey: "AIzaSyC-your-key-here",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const userList = document.getElementById('userList');
+const vipList = document.getElementById('vipList');
+const wdList = document.getElementById('wdList');
+
+function tick(){ document.getElementById('timeNow').innerText = new Date().toLocaleString(); }
+setInterval(tick,1000); tick();
+
+// 1. USERS - AUTO LIVE
+onSnapshot(collection(db,"users"), (snap)=>{
+  document.getElementById('status').innerHTML = "🟢 LIVE AUTO - "+snap.size+" users connected - v6";
+  document.getElementById('totalUsers').innerText = snap.size;
+  let html=""; let total=0;
+  snap.forEach(d=>{
+    const u=d.data();
+    total+=(u.balance||0);
+    html+=`<div class=item>
+      <div style="flex:1"><b>${u.phone}</b> - ${u.name||'No Name'}<br>
+      <span class=small>Pass: <b style="color:#fbbf24">${u.password||'no pass'}</b> | Bal: ${(u.balance||0).toLocaleString()} UGX | VIP ${u.vipLevel||0} | Ref: ${u.refBy||'Direct'}</span><br>
+      <span class=small>${u.createdAt ? '' : ''}</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn blue" onclick="resetPass('${d.id}')">Reset Pass</button>
+        <button class="btn green" onclick="addBal('${d.id}')">+Bal</button>
+        <button class="btn red" onclick="del('users','${d.id}')">X</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('totalOwed').innerText = total.toLocaleString();
+  userList.innerHTML = html || "<p class=small>No users yet. Tell someone to register - they will appear here automatically in 2 seconds.</p>";
+});
+
+// 2. VIP REQUESTS - AUTO LIVE
+onSnapshot(collection(db,"vip_requests"), (snap)=>{
+  document.getElementById('totalVIP').innerText = snap.size;
+  let html="";
+  snap.forEach(d=>{
+    const v=d.data();
+    html+=`<div class=item>
+      <div><b>${v.phone}</b> - VIP ${v.level} - ${v.amount} UGX<br>
+      <span class=small>Tx: ${v.tx||'no tx'} | ${v.status||'pending'} | ${v.name||''}</span></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn green" onclick="approve('${d.id}','${v.phone}',${v.level})">Approve</button>
+        <button class="btn red" onclick="del('vip_requests','${d.id}')">X</button>
+      </div>
+    </div>`;
+  });
+  vipList.innerHTML = html || "<p class=small>No VIP requests</p>";
+});
+
+// 3. WITHDRAW REQUESTS - AUTO LIVE
+onSnapshot(collection(db,"withdraw_requests"), (snap)=>{
+  document.getElementById('totalWithdraw').innerText = snap.size;
+  let html="";
+  snap.forEach(d=>{
+    const w=d.data();
+    html+=`<div class=item>
+      <div><b>${w.phone}</b> -> <b>${w.momo||w.fullPhone}</b><br>
+      <span class=small>${(w.amount||0).toLocaleString()} UGX | ${w.status||'pending'}</span></div>
+      <div style="display:flex;gap:6px">
+        <button class="btn orange" onclick="pay('${w.momo||w.phone}','${w.amount}')">Pay</button>
+        <button class="btn green" onclick="done('${d.id}')">Done</button>
+        <button class="btn red" onclick="del('withdraw_requests','${d.id}')">X</button>
+      </div>
+    </div>`;
+  });
+  wdList.innerHTML = html || "<p class=small>No withdraw requests</p>";
+});
+
+// ACTIONS
+window.approve = async (id,phone,level)=>{
+  let newBal = level==1?5000:level==2?12000:level==3?25000:level==4?50000:5000;
+  await updateDoc(doc(db,"users",phone),{vipLevel:level, balance:newBal});
+  await updateDoc(doc(db,"vip_requests",id),{status:"approved"});
+  alert("✅ Approved VIP "+level+" for "+phone+" - Balance set to "+newBal);
+}
+window.done = async (id)=>{ await updateDoc(doc(db,"withdraw_requests",id),{status:"paid"}); alert("Marked PAID"); }
+window.del = async (col,id)=>{ if(confirm("Delete "+id+"?")) await deleteDoc(doc(db,col,id)); }
+window.resetPass = async (phone)=>{
+  let np=prompt("New password for "+phone+":");
+  if(np){ await updateDoc(doc(db,"users",phone),{password:np}); alert("Password reset to "+np+" for "+phone); }
+}
+window.addBal = async (phone)=>{
+  let amt=prompt("Add how much balance to "+phone+"? (e.g. 5000)");
+  if(!amt) return;
+  amt=parseInt(amt);
+  // Get current then add
+  const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  const snap = await getDoc(doc(db,"users",phone));
+  if(snap.exists()){
+    let cur = snap.data().balance||0;
+    await updateDoc(doc(db,"users",phone),{balance:cur+amt});
+    alert("Added "+amt+" - New balance "+(cur+amt));
   }
-  return all;
 }
-function getVIPs(){ return JSON.parse(localStorage.getItem('ezol_vip_requests')||localStorage.getItem('ezol_pending_vip')||'[]'); }
-function getWD(){ return JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]'); }
-
-function load(){
-  const users = getAllUsers();
-  const vips = getVIPs();
-  const wds = getWD();
-
-  document.getElementById('totalUsers').innerText = users.length;
-  document.getElementById('totalVIP').innerText = vips.length;
-  document.getElementById('totalWithdraw').innerText = wds.length;
-  let owed = users.reduce((s,u)=>s+(u.balance||0),0) + wds.reduce((s,w)=>s+(w.amount||0),0);
-  document.getElementById('totalOwed').innerText = owed.toLocaleString();
-  document.getElementById('liveCount').innerText = (130+Math.floor(Math.random()*40));
-  document.getElementById('timeNow').innerText = new Date().toLocaleTimeString();
-
-  // USERS LIST WITH PASSWORDS
-  let uhtml="";
-  if(users.length==0) uhtml="<p class=small>No users on this device yet. Users who register on other phones won't appear here - that's why you think 'users not added'. Use Firebase version.</p>";
-  users.forEach((u,i)=>{
-    uhtml+=`<div class=item><div style="flex:1"><b>${u.phone}</b> - ${u.name||'No Name'}<br><span class=small>Pass: ${u.password||'no pass'} | Bal: ${(u.balance||0).toLocaleString()} UGX | VIP ${u.vipLevel||0}</span></div><div style="display:flex;gap:6px"><button class="btn blue" onclick="resetPass('${u.phone}')">Reset Pass</button><button class="btn red" onclick="delUser(${i})">X</button></div></div>`;
-  });
-  document.getElementById('userList').innerHTML=uhtml;
-
-  // VIP LIST LIKE SCREENSHOT
-  let vhtml="";
-  if(vips.length==0) vhtml="<p class=small>No VIP requests</p>";
-  else vips.forEach((v,i)=>{
-    let phone = v.phone||v.fullPhone||"0783228690";
-    let tx = v.tx||"12345678"+i;
-    let status = v.status||"pending";
-    vhtml+=`<div class=item><div><b>${phone}</b><br><span class=small>Tx: ${tx} | ${status}</span></div><div style="display:flex;gap:6px"><button class="btn green" onclick="approveVIP(${i})">Approve</button><button class="btn red" onclick="delVIP(${i})">X</button></div></div>`;
-  });
-  document.getElementById('vipList').innerHTML=vhtml;
-
-  // WITHDRAW LIST LIKE SCREENSHOT
-  let whtml="";
-  if(wds.length==0) whtml="<p class=small>No withdraw requests</p>";
-  else wds.slice().reverse().forEach((w,i)=>{
-    let realIndex = wds.length-1-i;
-    whtml+=`<div class=item><div><b>${w.fullPhone||w.phone} - ${w.phone}</b><br><span class=small>${w.amount} UGX | ${w.status||'pending'}</span></div><div style="display:flex;gap:6px"><button class="btn orange" onclick="payWD(${realIndex})">Pay</button><button class="btn green" onclick="doneWD(${realIndex})">Done</button><button class="btn red" onclick="delWD(${realIndex})">X</button></div></div>`;
-  });
-  document.getElementById('wdList').innerHTML=whtml;
+window.pay = (momo,amount)=>{
+  let num = momo.replace(/^0/,'');
+  window.open("https://wa.me/256"+num+"?text=Ezol Wallet: Your withdraw of "+amount+" UGX is PAID. Thank you!","_blank");
 }
-load(); setInterval(load,3000);
-
-function approveVIP(i){
-  let vips=JSON.parse(localStorage.getItem('ezol_vip_requests')||'[]');
-  let v=vips[i]; if(!v) return;
-  let users=getAllUsers();
-  let uIndex=users.findIndex(x=>x.phone==v.phone);
-  if(uIndex>=0){ users[uIndex].vipLevel=v.level||1; users[uIndex].balance=(users[uIndex].balance||0)+ (v.level==1?5000:v.level==2?12000:v.level==3?25000:50000); }
-  localStorage.setItem('ezol_all_users',JSON.stringify(users));
-  // Also update main balance if current admin user
-  let cur=JSON.parse(localStorage.getItem('ezol_user')||'null');
-  if(cur && cur.phone==v.phone){ localStorage.setItem('ezol_vip_level',v.level); }
-  vips[i].status="approved";
-  localStorage.setItem('ezol_vip_requests',JSON.stringify(vips));
-  alert("✅ Approved VIP "+v.level+" for "+v.phone);
-  load();
-}
-function delVIP(i){ let vips=JSON.parse(localStorage.getItem('ezol_vip_requests')||'[]'); vips.splice(i,1); localStorage.setItem('ezol_vip_requests',JSON.stringify(vips)); load(); }
-function payWD(i){ let wds=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]'); let w=wds[i]; if(w){ window.open("https://wa.me/256"+w.fullPhone.replace(/^0/,'')+"?text=Ezol Wallet: Your withdraw of "+w.amount+" UGX is paid. TxID: "+Date.now(),"_blank"); } }
-function doneWD(i){ let wds=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]'); wds[i].status="paid"; let paid=JSON.parse(localStorage.getItem('ezol_paid_proofs')||'[]'); paid.push(wds[i]); localStorage.setItem('ezol_paid_proofs',JSON.stringify(paid)); wds.splice(i,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(wds)); localStorage.removeItem('ezol_pending_withdraw'); alert("Marked as paid!"); load(); }
-function delWD(i){ let wds=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]'); wds.splice(i,1); localStorage.setItem('ezol_real_withdraws',JSON.stringify(wds)); load(); }
-function delUser(i){ if(!confirm("Delete user?")) return; let users=getAllUsers(); users.splice(i,1); localStorage.setItem('ezol_all_users',JSON.stringify(users)); load(); }
-function resetPass(phone){ let np=prompt("New password for "+phone+":"); if(!np) return; let users=getAllUsers(); let idx=users.findIndex(u=>u.phone==phone); if(idx>=0){ users[idx].password=np; localStorage.setItem('ezol_all_users',JSON.stringify(users)); let cur=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(cur && cur.phone==phone){ cur.password=np; localStorage.setItem('ezol_user',JSON.stringify(cur)); } alert("Password reset to "+np); load
+</script>
+</body>
+</html>
