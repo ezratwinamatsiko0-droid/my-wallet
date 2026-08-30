@@ -50,7 +50,6 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <div style="font-size:11px"><span class="live-dot"></span> <span id="onlineTop">5,248</span> online • Live</div>
 </div>
 
-<!-- HOME TAB -->
 <div id="homeTab" class="tab active">
 <div class="hero-card">
 <div class="hero-img">💰<div style="font-size:14px;margin-left:12px;text-align:left"><b style="font-size:16px">EZOL SMART WALLET</b><br><span style="font-size:11px;color:#6b7280">Daily Income up to 50,000 UGX</span><br><span style="font-size:11px;background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:100px"><span id="onlineHero">134</span> earning now</span></div></div>
@@ -65,10 +64,10 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <button class="btn-pill btn-orange" onclick="switchTab('wallet')"><span>✈</span> Withdraw</button>
 </div>
 <div class="card" style="border:2px solid #22c55e"><h4>🔴 Live - <span id="liveUsers">134</span> Online Earning</h4><div id="liveActivity" style="margin-top:8px"></div></div>
-<div class="card"><h4>📈 Daily Check-in</h4><p style="font-size:11px;color:#6b7280">VIP <span id="vipLevelHome">0</span> - Daily <span id="checkAmountHome">1000</span> UGX</p><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="dailyCheck()">Check-in +<span id="checkAmount2Home">1000</span></button></div>
+<div class="card"><h4>📈 Daily Check-in</h4><p style="font-size:11px;color:#6b7280">VIP <span id="vipLevelHome">0</span> - Daily <span id="checkAmountHome">1000</span> UGX</p><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="dailyCheck()">Check-in +<span id="checkAmount2Home">1000</span></button>
+<p style="font-size:10px;color:#9ca3af;margin-top:6px" id="lastCheckText"></p></div>
 </div>
 
-<!-- PRODUCT TAB = VIPs -->
 <div id="productTab" class="tab">
 <div class="hot-title">HOT PRODUCTS • <span id="liveUsersProd">134</span> Online Buying • MTN 0795143386</div>
 <div class="product-card"><div class="prod-img">💼</div><div class="prod-right"><div class="prod-head"><div class="prod-name">EZOL ORDINARY-1</div><div class="prod-percent">400%</div></div><div class="prod-grid"><div>Total Income<br><b>90,000 UGX</b></div><div>Day Income<br><b>3,000 UGX</b></div><div>Cycles<br><b style="color:#16a34a">30</b></div><div>Price<br><b style="color:#16a34a">15,000 UGX</b></div></div><button class="btn-full" style="background:#16a34a;color:#fff;margin-top:8px" onclick="buyVIP(1,15000)">Buy 15,000 - Daily 5k</button></div></div>
@@ -77,20 +76,17 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <div class="product-card" style="background:#fce7f3;border-color:#ec4899"><div class="prod-img">👑</div><div class="prod-right"><div class="prod-head"><div class="prod-name" style="background:#ec4899">EZOL KING-4</div><div class="prod-percent" style="background:#ec4899">1500%</div></div><div class="prod-grid"><div>Total Income<br><b>1,500,000 UGX</b></div><div>Day Income<br><b>50,000 UGX</b></div><div>Cycles<br><b style="color:#16a34a">30</b></div><div>Price<br><b style="color:#16a34a">100,000 UGX</b></div></div><button class="btn-full" style="background:linear-gradient(135deg,#ec4899,#be185d);color:#fff" onclick="buyVIP(4,100000)">👑 Buy 100,000 - 50k Daily</button></div></div>
 </div>
 
-<!-- SHARE TAB = Referral -->
 <div id="shareTab" class="tab">
 <div class="card" style="text-align:center;background:linear-gradient(135deg,#eef2ff,#e0e7ff);border:2px dashed #7c3aed"><h3>🔗 Invite & Earn 2000 UGX</h3><p style="font-size:11px;color:#6b7280;margin-top:6px">Share to WhatsApp, Facebook - Get 2000 per friend</p><div style="background:#fff;padding:10px;border-radius:10px;margin-top:10px;word-break:break-all;font-size:12px;font-weight:700;color:#4f46e5" id="refLinkText"></div><input id="refLink" style="position:absolute;left:-9999px"><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="copyLink()">Share on WhatsApp</button><button class="btn-full" style="background:#fff;border:1px solid #ddd" onclick="navigator.clipboard.writeText(document.getElementById('refLink').value);alert('Copied!')">Copy Link</button><p style="font-size:12px;margin-top:10px;color:#6b7280">Invited: <b><span id="refCount">0</span></b> • Earned: <b><span id="refEarn">0</span> UGX</b> • Online: <b id="onlineFriends">0</b></p></div>
 <div class="card"><h4>📊 My Referrals - Live</h4><div id="referralList" style="margin-top:8px;font-size:12px;color:#6b7280;text-align:center">No referrals yet - Share now!</div></div>
 </div>
 
-<!-- WALLET TAB = Balance -->
 <div id="walletTab" class="tab">
 <div class="card" style="text-align:center;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff"><p style="font-size:11px;opacity:.7">WALLET BALANCE</p><h1 style="margin:10px 0"><span id="balanceWallet">0</span> UGX</h1><p style="font-size:11px;opacity:.7">VIP <span id="vipShowWallet">0</span> • Daily <span id="dailyEarnWallet">1000</span> UGX • <span id="pendingTextWallet" style="color:#fbbf24"></span></p><div style="display:flex;gap:10px;margin-top:14px"><button class="btn-full" style="background:#16a34a;color:#fff;margin:0" onclick="switchTab('product')">Recharge</button><button class="btn-full" style="background:#f97316;color:#fff;margin:0" onclick="withdraw()">Withdraw</button></div></div>
 <div class="card" style="background:#f0fdf4;border:2px solid #22c55e"><h4>✅ Withdrawal Proofs</h4><div id="realWithdraws" style="margin-top:8px"></div></div>
 <div class="card"><h4>💳 Withdraw Info</h4><p style="font-size:12px;color:#6b7280;margin-top:6px">Min: 20,000 UGX<br>MTN MoMo: 0795143386 Ezra Twinamatsiko<br>Admin approves within 5 mins • <span id="onlineWallet">134</span> online withdrawing now</p></div>
 </div>
 
-<!-- MY TAB = Badge + Settings -->
 <div id="myTab" class="tab">
 <div class="my-badge">
 <div class="my-avatar" id="myAvatar">E</div>
@@ -120,7 +116,6 @@ var VIP_NUMBER="0795143386"; var MIN_WITHDRAW=20000;
 var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
 var balance=parseInt(localStorage.getItem('ezol_balance')||0);
 var vipLevel=parseInt(localStorage.getItem('ezol_vip_level')||0);
-var lastCheck=localStorage.getItem('ezol_last_check');
 var refCount=parseInt(localStorage.getItem('ezol_ref_count')||0);
 
 function switchTab(t){
@@ -146,6 +141,9 @@ function checkAuth(){
   document.getElementById('refLink').value="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
   var pend=JSON.parse(localStorage.getItem('ezol_pending_withdraw')||'null');
   if(pend){ document.getElementById('pendingText').innerText='⏳ Pending '+pend.amount; document.getElementById('pendingTextWallet').innerText='⏳ Pending '+pend.amount; }
+  var phoneKey="ezol_last_check_"+user.phone;
+  var last=localStorage.getItem(phoneKey);
+  if(last){ document.getElementById('lastCheckText').innerText="Last check: "+last; }
  }
 }
 checkAuth();
@@ -209,9 +207,9 @@ loadRealWithdraws();
 function doRegister(){
  var n=document.getElementById('regName').value.trim(); var p=document.getElementById('regPhone').value.trim(); var pa=document.getElementById('regPass').value.trim();
  if(n.length<3){alert("Names");return;} if(p.length<10){alert("Phone");return;} if(pa.length<4){alert("Pass min 4");return;}
- user={name:n,phone:p,password:pa}; localStorage.setItem('ezol_user',JSON.stringify(user)); localStorage.setItem('ezol_balance','500'); balance=500; alert("Welcome "+n+"!"); location.reload();
+ user={name:n,phone:p,password:pa}; localStorage.setItem('ezol_user',JSON.stringify(user)); localStorage.setItem('ezol_balance','500'); balance=500; alert("Welcome "+n+"! Daily check-in is now reset for you."); location.reload();
 }
-function doLogin(){ var ph=prompt("Phone:"); var pa=prompt("Password:"); var s=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(s&&s.phone==ph&&s.password==pa){ user=s; location.reload(); } else alert("No account"); }
+function doLogin(){ var ph=prompt("Phone:"); var pa=prompt("Password:"); var s=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(s&&s.phone==ph&&s.password==pa){ user=s; location.reload(); } else alert("No account on this device"); }
 function logout(){ if(confirm("Logout?")){ localStorage.removeItem('ezol_user'); location.reload(); } }
 function saveSettings(){
  var n=document.getElementById('setName').value.trim(); var p=document.getElementById('setPhone').value.trim(); var pa=document.getElementById('setPass').value.trim();
@@ -219,12 +217,28 @@ function saveSettings(){
  localStorage.setItem('ezol_user',JSON.stringify(user)); alert("Saved! New: "+user.name+" "+user.phone); location.reload();
 }
 function changePhone(){ var np=prompt("New MoMo number for withdraw:",user?user.phone:''); if(np){ user.phone=np; localStorage.setItem('ezol_user',JSON.stringify(user)); alert("MoMo changed to "+np); location.reload(); } }
+
+// FIXED DAILY CHECK - PER USER
 function dailyCheck(){
- var t=new Date().toDateString(); var last=localStorage.getItem('ezol_last_check');
- if(last===t){ alert("Already checked today!"); return; }
+ if(!user){ alert("Please register first"); return; }
+ var phoneKey = "ezol_last_check_" + user.phone;
+ var t = new Date().toDateString();
+ var last = localStorage.getItem(phoneKey);
+ if(last === t){
+   alert("⏰ You already checked today ("+t+"). Come back tomorrow! Your daily is "+([1000,5000,12000,25000,50000][vipLevel]||1000)+" UGX");
+   return;
+ }
  var daily=[1000,5000,12000,25000,50000][vipLevel]||1000;
- balance+=daily; localStorage.setItem('ezol_balance',balance); localStorage.setItem('ezol_last_check',t); syncBalances(); alert("+"+daily+" UGX Daily!");
+ balance+=daily;
+ localStorage.setItem('ezol_balance',balance);
+ localStorage.setItem(phoneKey,t);
+ // keep old global for backward compat but don't rely on it
+ localStorage.setItem('ezol_last_check',t);
+ syncBalances();
+ document.getElementById('lastCheckText').innerText="Last check: "+t+" - Success!";
+ alert("✅ +"+daily+" UGX added! New Balance: "+balance+" UGX");
 }
+
 function copyLink(){ navigator.clipboard.writeText(document.getElementById('refLink').value); window.open("https://wa.me/?text="+encodeURIComponent("💰 Join Ezol Wallet "+onlineNow+" online! "+document.getElementById('refLink').value),"_blank"); }
 function openWhatsApp(){ var p=user?user.phone:''; window.open("https://wa.me/256795143386?text=Hello%20Ezol%20my%20phone%20"+p+" VIP "+vipLevel+" Bal "+balance,"_blank"); }
 function buyVIP(l,a){ var p=user?user.phone:''; var n=user?user.name:''; var msg="Hello Ezra I am "+n+" phone "+p+" want Product "+l+" sent "+a+" to MTN 0795143386"; if(confirm("Recharge "+a+" to 0795143386? Earn "+[5000,12000,25000,50000][l-1]+" daily")) window.open("https://wa.me/256795143386?text="+encodeURIComponent(msg),"_blank"); }
