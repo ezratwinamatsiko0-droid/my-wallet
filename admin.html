@@ -3,111 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ezol Admin - Owner</title>
+<title>Ezol Admin PRO - @ezol256</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Arial}
-body{background:#f5f7fb;padding:16px;padding-bottom:40px}
-.header{background:linear-gradient(180deg,#111 0%,#2d1b69 100%);color:#fff;padding:20px;text-align:center;border-radius:24px;margin-bottom:16px}
+body{background:#f5f7fb;padding:14px;padding-bottom:40px}
+.header{background:linear-gradient(135deg,#0f0f0f 0%,#2d1b69 50%,#7c3aed 100%);color:#fff;padding:20px;border-radius:28px;text-align:center;border:1px solid rgba(255,255,255,0.15);box-shadow:0 10px 25px rgba(124,58,237,0.3)}
 .live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;margin-right:6px;animation:pulse 1.5s infinite}
 @keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
 .card{background:#fff;border-radius:24px;padding:16px;margin-top:14px;box-shadow:0 4px 20px rgba(0,0,0,0.06);border:1px solid #f1f1f1}
-.btn{padding:10px 16px;border:none;border-radius:100px;font-weight:700;font-size:12px;cursor:pointer;margin:4px}
+.btn{padding:12px 14px;border:none;border-radius:100px;font-weight:700;font-size:13px;cursor:pointer;margin:4px}
 .btn-green{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff}
 .btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
 .btn-blue{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff}
+.btn-orange{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff}
 .btn-black{background:#111;color:#fff}
 .small{font-size:12px;color:#6b7280}
-.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f3f4f6}
-.item:last-child{border:none}
-input{width:100%;padding:12px;border-radius:100px;border:1px solid #e5e7eb;margin-top:8px;background:#f9fafb}
+.item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f3f4f6;gap:10px}
+input,select{width:100%;padding:12px 14px;border-radius:100px;border:1px solid #e5e7eb;margin-top:8px;background:#f9fafb;font-size:14px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.stat{background:rgba(255,255,255,0.15);padding:12px;border-radius:16px;text-align:center}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h2>👑 Ezol Admin Panel</h2>
-<p class="small" style="color:rgba(255,255,255,0.8)"><span class="live-dot"></span>Owner: 0795143386 • <span id="online">Live</span></p>
-<p class="small" style="color:rgba(255,255,255,0.6);margin-top:6px">MTN MoMo: 0795143386 - Ezra Twinamatsiko</p>
+<h2>👑 Ezol Admin PRO</h2>
+<p style="font-size:12px;opacity:0.9;margin-top:6px"><span class="live-dot"></span>Owner: 0795143386 • <span id="liveClock">Live</span> • <span id="onlineNow">127</span> online</p>
+<p style="font-size:11px;opacity:0.6;margin-top:4px">MTN: 0795143386 - Ezra Twinamatsiko | @ezol256</p>
 </div>
 
-<div class="card">
-<h3>🔐 Admin Login</h3>
-<input id="adminPass" type="password" placeholder="Enter admin password (default: Ezol2025)">
-<button class="btn btn-black" onclick="loginAdmin()" style="width:100%;margin-top:10px">Login as Owner</button>
-<p class="small" id="loginStatus" style="text-align:center;margin-top:8px">Only you with password can see data</p>
+<div class="card" id="loginCard">
+<h3>🔐 Owner Login</h3>
+<input id="adminPass" type="password" placeholder="Password = @ezol256">
+<button class="btn btn-black" onclick="loginAdmin()" style="width:100%;margin-top:12px">Login as Owner @ezol256</button>
+<p class="small" id="loginStatus" style="text-align:center;margin-top:8px">Secure: Only you</p>
 </div>
 
 <div id="adminContent" style="display:none">
+
 <div class="card" style="background:linear-gradient(135deg,#111,#4f46e5);color:#fff">
 <h3>📊 Live Dashboard</h3>
-<p style="margin-top:10px">Total Users on this device: <b id="totalUsers">0</b></p>
-<p>Total Balance to Pay: <b id="totalBal">0</b> UGX</p>
-<p>VIP Requests: <b id="vipCount">0</b></p>
-<p>Withdraw Requests: <b id="withdrawCount">0</b></p>
+<div class="stat-grid">
+<div class="stat">Users<br><b id="totalUsers" style="font-size:20px">0</b></div>
+<div class="stat">Balance<br><b id="totalBal" style="font-size:18px">0 UGX</b></div>
+<div class="stat">VIP Req<br><b id="vipCount" style="font-size:20px">0</b></div>
+<div class="stat">Withdraw<br><b id="withdrawCount" style="font-size:20px">0</b></div>
+</div>
+</div>
+
+<div class="card" style="border:2px solid #7c3aed">
+<h3>💰 Add Bonus to User</h3>
+<p class="small">Select user & add bonus instantly</p>
+<input id="bonusPhone" placeholder="Phone e.g. 0783228690">
+<input id="bonusAmount" type="number" placeholder="Amount e.g. 5000">
+<button class="btn btn-green" style="width:100%" onclick="addBonus()">➕ Add Bonus Now</button>
 </div>
 
 <div class="card">
 <h3>👥 Registered Users (This Device)</h3>
-<div id="usersList"><p class="small">No users yet</p></div>
+<div id="usersList"><p class="small">No users</p></div>
 </div>
 
-<div class="card" style="border:2px solid #22c55e">
-<h3>💸 Real Withdrawals - Approve</h3>
-<div id="withdrawsList"><p class="small">No withdrawals yet</p></div>
-<button class="btn btn-blue" onclick="clearWithdraws()" style="width:100%">Clear All Withdrawals</button>
-</div>
-
-<div class="card">
-<h3>🔴 Live Activity Feed</h3>
-<div id="activityList"><p class="small">No activity</p></div>
-</div>
-
-<div class="card" style="background:#f0fdf4;border:2px solid #22c55e;text-align:center">
-<h3>📱 Customer WhatsApp</h3>
-<p class="small">All support goes to your number</p>
-<button class="btn btn-green" onclick="window.open('https://wa.me/256795143386','_blank')" style="width:100%">Open WhatsApp 0795143386</button>
-<p class="small" style="margin-top:8px">VIP payments: MTN 0795143386 Ezra Twinamatsiko</p>
-</div>
-</div>
-
-<script>
-var ADMIN_PASS="Ezol2025";
-var isAdmin=false;
-function loginAdmin(){
-  var p=document.getElementById('adminPass').value;
-  if(p===ADMIN_PASS){ isAdmin=true; document.getElementById('adminContent').style.display='block'; document.getElementById('loginStatus').innerText='✅ Logged in as Owner'; loadData(); }
-  else{ alert('Wrong password! Default is Ezol2025'); }
-}
-function loadData(){
-  var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
-  var balance=parseInt(localStorage.getItem('ezol_balance')||0);
-  var withdraws=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
-  document.getElementById('totalUsers').innerText=user?1:0;
-  document.getElementById('totalBal').innerText=balance;
-  document.getElementById('withdrawCount').innerText=withdraws.length;
-  var usersBox=document.getElementById('usersList');
-  if(user){ usersBox.innerHTML='<div class="item"><div><b>'+(user.name||'Boss')+'</b><br><span class="small">'+user.phone+'</span></div><div><span class="small">'+balance+' UGX</span></div></div>'; }
-  var wBox=document.getElementById('withdrawsList');
-  if(withdraws.length>0){
-    wBox.innerHTML='';
-    withdraws.slice().reverse().forEach((w,i)=>{
-      var div=document.createElement('div'); div.className='item';
-      div.innerHTML='<div><b>'+w.phone+'</b><br><span class="small">'+w.amount+' UGX • '+(new Date(w.time).toLocaleString())+'</span></div><div><button class="btn btn-green" onclick="approveWithdraw('+i+')">Approve</button></div>';
-      wBox.appendChild(div);
-    });
-  }
-  setInterval(()=>{ document.getElementById('online').innerText=new Date().toLocaleTimeString()+' Live'; },1000);
-}
-function approveWithdraw(idx){
-  if(confirm('Approve this withdrawal? Make sure you sent money via MoMo 0795143386')){
-    var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
-    list.splice(list.length-1-idx,1);
-    localStorage.setItem('ezol_real_withdraws',JSON.stringify(list));
-    loadData();
-    alert('Approved! User notified.');
-  }
-}
-function clearWithdraws(){ if(confirm('Clear all withdrawal requests?')){ localStorage.removeItem('ezol_real_withdraws'); loadData(); } }
-</script>
-</body>
-</html>
+<div class="card" style="border:2px solid #f59e0b">
+<h3>💎 VIP Requests - Approve</h3>
+<div id="vipList"><p class="small">No VIP requests.
