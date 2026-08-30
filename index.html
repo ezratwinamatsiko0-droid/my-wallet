@@ -1,1 +1,169 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Ezol Wallet - Secure Login</title><style>*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}body{background:#f5f7ff;padding-bottom:80px}.header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;padding:22px;text-align:center;border-radius:0 0 24px 24px}.balance{background:#fff;margin:-30px 15px 15px;padding:20px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);text-align:center}.btn{background:#4f46e5;color:#fff;border:none;padding:13px 18px;border-radius:12px;width:100%;font-weight:700;font-size:15px;margin-top:10px;cursor:pointer}.card{background:#fff;margin:12px 15px;padding:16px;border-radius:14px;box-shadow:0 3px 10px rgba(0,0,0,.05)}input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:7px 0}.refBox{background:#ede9fe;border:1px dashed #7c3aed;padding:12px;border-radius:10px;margin-top:12px;word-break:break-all;font-size:13px}.proofRow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eee;font-size:13px}.badge{padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700}.paid{background:#dcfce7;color:#16a34a}.pending{background:#fef9c3;color:#ca8a04}.waFloat{position:fixed;bottom:18px;right:18px;background:#25D366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:999;text-decoration:none}.waPulse{animation:pulse 2s infinite}@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.7)}70%{box-shadow:0 0 0 12px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}.tabs{display:flex;gap:8px;margin-bottom:12px}.tab{flex:1;padding:10px;border-radius:10px;border:1px solid #4f46e5;background:#fff;color:#4f46e5;font-weight:700;cursor:pointer}.tab.active{background:#4f46e5;color:#fff}</style></head><body><a href="https://wa.me/256795143386?text=Hello%20Ezol%20Wallet%20Support" class="waFloat waPulse" target="_blank">💬</a><div class="header"><h2>Ezol Wallet</h2><p>Secure Login - Trusted by 5,200+ Ugandans</p></div><div class="balance" id="loggedOut"><div class="tabs"><button class="tab active" id="regTab" onclick="showReg()">Register</button><button class="tab" id="logTab" onclick="showLogin()">Login</button></div><div id="regForm"><h3>Welcome! Get 500 UGX BONUS!</h3><input id="phone" placeholder="07XXXXXXXX - Phone"><input id="name" placeholder="Full Name"><input id="password" type="password" placeholder="Create Password (6+ characters)"><input id="refInput" placeholder="Referral Code (Optional)"><button class="btn" onclick="register()">Register & Get 500 UGX</button><p id="refMsg" style="color:green;font-size:12px;margin-top:8px"></p></div><div id="loginForm" style="display:none"><h3>Welcome Back! Login</h3><input id="loginPhone" placeholder="07XXXXXXXX"><input id="loginPass" type="password" placeholder="Your Password"><button class="btn" onclick="login()">Login</button><p style="font-size:12px;margin-top:10px;color:#666">Forgot password? Chat support on WhatsApp</p></div></div><div class="balance" id="loggedIn" style="display:none"><p>Hi <b id="uName"></b> - <span id="uPhone"></span></p><h1><span id="bal">0</span> UGX</h1><div style="display:flex;gap:10px;margin-top:12px"><button class="btn" style="background:#10b981" onclick="withdraw()">Withdraw</button><button class="btn" style="background:#111" onclick="logout()">Logout</button></div><div class="refBox"><b>Your Invite Link (Earn 2000 per friend):</b><div id="myLink" style="margin-top:6px;font-weight:800;color:#4f46e5"></div><button class="btn" style="background:#7c3aed" onclick="shareLink()">Share on WhatsApp</button><p style="margin-top:8px">Invited: <b id="invCount">0</b> - Earned: <b id="refEarn">0</b> UGX</p></div></div><div class="card" style="background:linear-gradient(135deg,#fffbeb,#fef3c7);border:2px solid #f59e0b"><h3>💎 VIP - Earn 5x More!</h3><p style="font-size:14px;margin:8px 0">Pay 15k once → Get 5k DAILY for 30 days = 150k total! Send to <b>0795143386</b></p><a href="vip.html" style="display:block;background:#f59e0b;color:#fff;text-align:center;padding:12px;border-radius:10px;font-weight:800;text-decoration:none;margin-top:8px">👉 Upgrade to VIP Now</a></div><div class="card"><h3>How to Earn</h3><p style="font-size:14px;line-height:1.7">1. Register = 500 UGX<br>2. Daily Checkin = 1000 UGX (VIP 5000)<br>3. Invite Friend = 2000 UGX each!</p><button class="btn" onclick="dailyCheckin()">Daily Check-in (+1000)</button></div><div class="card" style="background:#f0fdf4;border:2px solid #22c55e"><h3>💬 Customer Service - Live on WhatsApp</h3><p style="font-size:13px;margin:6px 0">Need help? Withdraw issue? VIP not approved? Chat us now!</p><a href="https://wa.me/256795143386?text=Hello%20Ezol%20Support%2C%20my%20number%20is%20" target="_blank" style="display:block;background:#25D366;color:#fff;text-align:center;padding:13px;border-radius:10px;font-weight:800;text-decoration:none;margin-top:8px">📱 Chat on WhatsApp - 0795143386</a></div><div class="card"><h3>✅ Live Withdrawal Proofs - PAID TODAY</h3><div id="proofList">Loading live proofs...</div></div><script type="module">import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";import{getFirestore,doc,setDoc,getDoc,collection,onSnapshot,query,orderBy,limit,addDoc,serverTimestamp,updateDoc,increment}from"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";const firebaseConfig={apiKey:"AIzaSyB05b_o2tjLSXm4tuo-R6JULwFffy5eo",authDomain:"ezol-wallet.firebaseapp.com",projectId:"ezol-wallet",storageBucket:"ezol-wallet.firebasestorage.app",messagingSenderId:"33518327685",appId:"1:33518327685:web:a932ecbbba8501cd2c96ec"};const app=initializeApp(firebaseConfig);const db=getFirestore(app);let currentPhone=localStorage.getItem('ezol_phone');const $=id=>document.getElementById(id);window.showReg=()=>{$('regForm').style.display='block';$('loginForm').style.display='none';$('regTab').classList.add('active');$('logTab').classList.remove('active')};window.showLogin=()=>{$('regForm').style.display='none';$('loginForm').style.display='block';$('logTab').classList.add('active');$('regTab').classList.remove('active')};function getRefFromUrl(){const p=new URLSearchParams(window.location.search);return p.get('ref')}const urlRef=getRefFromUrl();if(urlRef){setTimeout(()=>{const el=$('refInput');if(el)el.value=urlRef;const m=$('refMsg');if(m)m.innerText='Referred by '+urlRef},600)}async function loadUser(){if(!currentPhone)return;const snap=await getDoc(doc(db,"users",currentPhone));if(snap.exists()){const d=snap.data();$('loggedOut').style.display='none';$('loggedIn').style.display='block';$('uName').innerText=d.name;$('uPhone').innerText=d.phone;$('bal').innerText=(d.balance||0).toLocaleString();const link=window.location.origin+window.location.pathname+'?ref='+d.phone;$('myLink').innerText=link;$('invCount').innerText=d.invites||0;$('refEarn').innerText=((d.invites||0)*2000).toLocaleString()}}window.register=async()=>{const phone=$('phone').value.trim();const name=$('name').value.trim();const pass=$('password').value.trim();let ref=$('refInput').value.trim()||urlRef;if(phone.length<10||!name||pass.length<6)return alert('Enter phone, name & password 6+ chars');const userRef=doc(db,"users",phone);const snap=await getDoc(userRef);if(snap.exists())return alert('Phone already registered! Please Login');let bonus=500;if(ref){const refSnap=await getDoc(doc(db,"users",ref));if(refSnap.exists()){bonus=2500;await updateDoc(doc(db,"users",ref),{balance:increment(2000),invites:increment(1)});await addDoc(collection(db,"proofs"),{phone:ref.slice(0,4)+'****'+ref.slice(-4),amount:2000,msg:"referral PAID",createdAt:serverTimestamp()})}}await setDoc(userRef,{phone,name,password:pass,balance:bonus,invites:0,createdAt:serverTimestamp(),referredBy:ref||null});await addDoc(collection(db,"proofs"),{phone:phone.slice(0,4)+'****'+phone.slice(-4),amount:bonus,msg:"joined bonus",createdAt:serverTimestamp()});currentPhone=phone;localStorage.setItem('ezol_phone',phone);alert(bonus+' UGX Added! Welcome '+name);loadUser()};window.login=async()=>{const phone=$('loginPhone').value.trim();const pass=$('loginPass').value.trim();if(!phone||!pass)return alert('Enter phone & password');const snap=await getDoc(doc(db,"users",phone));if(!snap.exists())return alert('User not found! Register first');const data=snap.data();if(data.password!==pass)return alert('Wrong password! Chat support if forgot');currentPhone=phone;localStorage.setItem('ezol_phone',phone);loadUser();alert('Welcome back '+data.name)};window.withdraw=async()=>{const snap=await getDoc(doc(db,"users",currentPhone));const bal=snap.data().balance||0;if(bal<20000)return alert('Min 20000');const amount=prompt('Enter Amount:');if(!amount||isNaN(amount)||Number(amount)>bal||Number(amount)<20000)return alert('Invalid');await updateDoc(doc(db,"users",currentPhone),{balance:increment(-Number(amount))});await addDoc(collection(db,"withdrawals"),{phone:currentPhone,name:snap.data().name,amount:Number(amount),status:"pending",createdAt:serverTimestamp()});await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:Number(amount),msg:"withdraw request",createdAt:serverTimestamp()});alert('Withdraw sent!');loadUser()};window.dailyCheckin=async()=>{if(!currentPhone)return alert('Register first');const userRef=doc(db,"users",currentPhone);const userSnap=await getDoc(userRef);const data=userSnap.data();const last=data.lastCheckin?(data.lastCheckin.toDate?data.lastCheckin.toDate():new Date(data.lastCheckin)):null;if(last){const diff=Date.now()-last.getTime();if(diff<24*60*60*1000){const hrs=Math.ceil((24*60*60*1000-diff)/3600000);return alert('Back in '+hrs+' hrs')}}let inc=data.isVIP?5000:1000;await updateDoc(userRef,{balance:increment(inc),lastCheckin:serverTimestamp()});await addDoc(collection(db,"proofs"),{phone:currentPhone.slice(0,4)+'****'+currentPhone.slice(-4),amount:inc,msg:data.isVIP?"VIP daily PAID":"daily PAID",createdAt:serverTimestamp()});alert('+'+inc+' Added!');loadUser()};window.shareLink=()=>{const link=$('myLink').innerText;const txt=encodeURIComponent('Join Ezol Wallet! '+link);window.open('https://wa.me/?text='+txt,'_blank')};window.logout=()=>{localStorage.removeItem('ezol_phone');location.reload()};function liveProofs(){const q=query(collection(db,"withdrawals"),orderBy("createdAt","desc"),limit(20));onSnapshot(q,snap=>{const list=$('proofList');list.innerHTML='';if(snap.empty){list.innerHTML='<p style="font-size:13px;color:#666">No withdrawals yet - Be first!</p>';return}snap.forEach(d=>{const v=d.data();const status=v.status||'pending';const badge=status=='paid'?'<span class="badge paid">PAID</span>':'<span class="badge pending">PENDING</span>';list.innerHTML+=`<div class="proofRow"><div><b>${v.phone.slice(0,4)}****${v.phone.slice(-4)}</b><br><small>${v.name||''} - ${status}</small></div><div style="text-align:right"><b>${v.amount} UGX</b><br>${badge}</div></div>`})})}liveProofs();if(currentPhone)loadUser();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ezol Wallet - Uganda's #1 Earn Platform</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f0f4f8;padding:0 0 90px 0}
+.header{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;padding:14px;text-align:center;font-weight:bold;font-size:18px}
+.top-card{background:#fff;margin:10px;border-radius:15px;padding:15px;box-shadow:0 2px 8px rgba(0,0,0,0.06);text-align:center}
+.balance{background:#fff;margin:10px;border-radius:15px;padding:12px;text-align:center}
+.invite-card{background:#eef2ff;margin:10px;border-radius:15px;padding:12px;text-align:center;border:2px dashed #4f46e5}
+.vip-card{background:#fffbe6;margin:10px;border-radius:15px;padding:12px;border:2px solid #f59e0b}
+.vip-item{border:1px solid #f59e0b;border-radius:12px;padding:10px;margin-top:10px;background:#fff}
+.btn{width:100%;padding:12px;border:none;border-radius:10px;font-weight:bold;font-size:15px;cursor:pointer;margin-top:8px}
+.btn-green{background:#22c55e;color:#fff}
+.btn-black{background:#111;color:#fff}
+.btn-orange{background:#f59e0b;color:#fff}
+.btn-blue{background:#4f46e5;color:#fff}
+.btn-purple{background:#7c3aed;color:#fff}
+.btn-pink{background:#ec4899;color:#fff}
+.card{background:#fff;margin:10px;border-radius:15px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
+.small{font-size:13px;color:#666;margin-top:4px}
+.float-whatsapp{position:fixed;bottom:20px;right:20px;width:60px;height:60px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(0,0,0,0.3);z-index:999;cursor:pointer;font-size:28px;color:#fff;border:none}
+#registerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px}
+.reg-box{background:#fff;width:100%;max-width:380px;border-radius:20px;padding:22px;text-align:center}
+.reg-box input{width:100%;padding:13px;margin-top:10px;border-radius:10px;border:1px solid #ddd;font-size:15px}
+</style>
+</head>
+<body>
+
+<div id="registerModal">
+<div class="reg-box">
+<h2 style="color:#4f46e5">💰 Ezol Wallet</h2>
+<p class="small">Secure Login - Trusted by 5,200+ Ugandans</p>
+<p class="small" style="color:#16a34a">Referred by: <b id="refDisplay">0795143386</b></p>
+<input id="regName" placeholder="Full Names">
+<input id="regPhone" placeholder="Phone e.g. 0783228690" type="tel">
+<input id="regPass" placeholder="Create Password" type="password">
+<button class="btn btn-blue" onclick="doRegister()">Create Account & Get 500 UGX Bonus</button>
+<p class="small" style="margin-top:10px"><a href="#" onclick="doLogin(); return false;">Already have account? Login</a></p>
+<p class="small">MTN: 0795143386 | Support: 0762950427</p>
+</div>
+</div>
+
+<div class="header">Ezol Wallet<br><span style="font-size:13px;font-weight:normal">Secure Login - Trusted by 5,200+ Ugandans</span></div>
+
+<div class="top-card">
+<p>Hi <span id="userPhoneTop">0783228690</span> - <span id="userNameTop">0783228690</span></p>
+<h2 style="margin:6px 0"><span id="balance">500</span> UGX</h2>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button class="btn btn-green" style="margin:0" onclick="withdraw()">Withdraw</button>
+<button class="btn btn-black" style="margin:0" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<div class="invite-card">
+<p><b>Your Invite Link (Earn 2000 per friend):</b></p>
+<p style="font-size:12px;color:#4f46e5;word-break:break-all;margin-top:6px;font-weight:bold" id="refLinkText">https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref=0783228690</p>
+<input id="refLink" style="position:absolute;left:-9999px" readonly>
+<button class="btn" style="background:#7c3aed;color:#fff" onclick="copyLink()">Share on WhatsApp</button>
+<p class="small" style="margin-top:8px">Invited: <b><span id="refCount">0</span></b> - Earned: <b><span id="refEarn">0</span> UGX</b></p>
+</div>
+
+<div class="vip-card">
+<h3>💎 VIP - Earn 5x to 50x More!</h3>
+<p class="small">All payments to MTN MoMo <b>0795143386 - Ezra Twinamatsiko</b></p>
+
+<div class="vip-item">
+<b>VIP 1 - 15,000 UGX</b><br><span class="small">Get 5,000 daily x 30 days = 150,000 UGX</span>
+<button class="btn btn-orange" onclick="buyVIP(1,15000)">👉 Buy VIP 1 - 15k</button>
+</div>
+
+<div class="vip-item" style="border-color:#4f46e5;background:#eef2ff">
+<b>VIP 2 - 30,000 UGX 🔥 Popular</b><br><span class="small">Get 12,000 daily x 30 days = 360,000 UGX</span>
+<button class="btn btn-blue" onclick="buyVIP(2,30000)">👉 Buy VIP 2 - 30k</button>
+</div>
+
+<div class="vip-item" style="border-color:#22c55e;background:#f0fdf4">
+<b>VIP 3 - 60,000 UGX 💰 Best Value</b><br><span class="small">Get 25,000 daily x 30 days = 750,000 UGX</span>
+<button class="btn btn-green" onclick="buyVIP(3,60000)">👉 Buy VIP 3 - 60k</button>
+</div>
+
+<div class="vip-item" style="border-color:#ec4899;background:#fdf2f8">
+<b>VIP 4 - 100,000 UGX 👑 King</b><br><span class="small">Get 50,000 daily x 30 days = 1,500,000 UGX</span>
+<button class="btn btn-pink" onclick="buyVIP(4,100000)">👉 Buy VIP 4 - 100k</button>
+</div>
+
+<p class="small" style="margin-top:8px">After payment chat 0762950427 for activation</p>
+</div>
+
+<div class="card">
+<h3>How to Earn</h3>
+<p class="small">1. Register = 500 UGX</p>
+<p class="small">2. Daily Checkin = 1000 UGX (VIP 5000-50000)</p>
+<p class="small">3. Invite Friend = 2000 UGX each!</p>
+<button class="btn btn-blue" style="background:#4f46e5" onclick="dailyCheck()">Daily Check-in (+<span id="checkAmount">1000</span>)</button>
+</div>
+
+<div class="card" style="background:#f0fdf4;border:2px solid #22c55e">
+<h3>💬 Customer Service - Live on WhatsApp</h3>
+<p class="small">Need help? Withdraw issue? VIP not approved? Chat us now!</p>
+<button class="btn btn-green" onclick="openWhatsApp()">📱 Chat on WhatsApp - 0762950427</button>
+</div>
+
+<div class="card">
+<h3>✅ Live Withdrawal Proofs - PAID TODAY</h3>
+<p class="small">0733***8090 - 75,000 UGX Paid</p>
+<p class="small">0795***3386 - VIP Member - paid 150k</p>
+</div>
+
+<button class="float-whatsapp" onclick="openWhatsApp()">💬</button>
+
+<script>
+var VIP_NUMBER="0795143386";
+var SUPPORT="0762950427";
+var MIN_WITHDRAW=20000;
+var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
+var balance=parseInt(localStorage.getItem('ezol_balance')||500);
+var vipLevel=parseInt(localStorage.getItem('ezol_vip_level')||0);
+var lastCheck=localStorage.getItem('ezol_last_check');
+var refCount=parseInt(localStorage.getItem('ezol_ref_count')||0);
+
+function checkAuth(){
+  var ref=new URLSearchParams(window.location.search).get('ref')||VIP_NUMBER;
+  document.getElementById('refDisplay').innerText=ref;
+  if(!user){ document.getElementById('registerModal').style.display='flex'; }
+  else{
+    document.getElementById('registerModal').style.display='none';
+    document.getElementById('userPhoneTop').innerText=user.phone;
+    document.getElementById('userNameTop').innerText=user.name;
+    document.getElementById('refLinkText').innerText="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
+    document.getElementById('refLink').value="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
+  }
+}
+checkAuth();
+document.getElementById('balance').innerText=balance;
+document.getElementById('refCount').innerText=refCount;
+document.getElementById('refEarn').innerText=refCount*2000;
+var dailyAmount=1000; if(vipLevel==1) dailyAmount=5000; if(vipLevel==2) dailyAmount=12000; if(vipLevel==3) dailyAmount=25000; if(vipLevel==4) dailyAmount=50000;
+document.getElementById('checkAmount').innerText=dailyAmount;
+if(!user){ document.getElementById('refLink').value="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+VIP_NUMBER; document.getElementById('refLinkText').innerText="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+VIP_NUMBER; }
+
+function doRegister(){
+  var name=document.getElementById('regName').value.trim();
+  var phone=document.getElementById('regPhone').value.trim();
+  var pass=document.getElementById('regPass').value.trim();
+  if(name.length<3){ alert("Enter full names"); return; }
+  if(phone.length<10){ alert("Enter valid phone"); return; }
+  if(pass.length<4){ alert("Password min 4"); return; }
+  user={name:name, phone:phone, password:pass};
+  localStorage.setItem('ezol_user', JSON.stringify(user));
+  localStorage.setItem('ezol_balance','500');
+  balance=500;
+  alert("Welcome "+name+"! 500 UGX bonus!");
+  checkAuth();
+  document.getElementById('balance').innerText=500;
+}
+function doLogin(){ var phone=prompt("Phone:"); var pass=prompt("Password:"); var saved=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(saved && saved.phone==phone && saved.password==pass){ user=saved; checkAuth(); alert("Welcome back "+saved.name);} else alert("No account on this device. Register."); }
+function logout(){ if(confirm("Logout?")){ localStorage.removeItem('ezol_user'); location.reload(); } }
+function dailyCheck(){ var today=new Date().toDateString(); if(lastCheck===today){ alert("Already checked today!"); return; } balance+=dailyAmount; localStorage.setItem('ezol_balance',balance); localStorage.setItem('ezol_last_check',today); lastCheck=today; document.getElementById('balance').innerText=balance; alert("+"+dailyAmount+" UGX"); }
+function copyLink(){ navigator.clipboard.writeText(document.getElementById('refLink').value); window.open("https://wa.me/?text="+encodeURIComponent("Join Ezol & earn 2000 per invite! "+document.getElementById('refLink').value),"_blank"); }
+function openWhatsApp(){ var p=user?user.phone:''; window.open("https://wa.me/256762950427?text=Hello%20Ezol%20Support%20my%20phone%20is%20"+p,"_blank"); }
+function buyVIP(l,a){ var p=user?user.phone:''; var n=user?user.name:''; var msg="Hello Support I am "+n+" phone "+p+" I want VIP "+l+" "+a+" UGX sent to 0795143386 activate"; if(confirm("Send "+a+" to MTN 0795143386 Ezra Twinamatsiko?")) window.open("https://wa.me/256762950427?text="+encodeURIComponent(msg),"_blank"); }
+function withdraw(){ if(balance<MIN_WITHDRAW){ alert("Min 20k. Balance "+balance+". Invite friends!"); return; } var num=prompt("MoMo number:",user?user.phone:''); if(num){ alert("Withdrawal "+balance+" to "+num+" requested. Chat 0762950427"); balance=0; localStorage.setItem('ezol_balance',balance); document.getElementById('balance').innerText=balance; } }
+</script>
+</body>
+</html>
