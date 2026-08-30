@@ -16,26 +16,22 @@ body{background:#f6f8f5;padding-bottom:90px}
 .hero-img{width:100%;height:160px;background:linear-gradient(135deg,#eef2ff,#f5f7ff);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:60px}
 .btn-row{display:flex;gap:12px;margin:14px 16px}
 .btn-pill{flex:1;padding:14px;border:none;border-radius:100px;font-weight:800;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-green{background:#16a34a;color:#fff}
-.btn-orange{background:#f97316;color:#fff}
+.btn-green{background:#16a34a;color:#fff}.btn-orange{background:#f97316;color:#fff}
 .hot-title{margin:18px 16px 10px 16px;font-weight:800;font-size:14px}
 .product-card{margin:0 16px 14px 16px;background:#eef6ee;border-radius:20px;padding:12px;display:flex;gap:12px;border:1px solid #d1e7d1}
 .prod-img{width:80px;height:80px;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
-.prod-right{flex:1}
-.prod-head{display:flex;justify-content:space-between;align-items:center}
+.prod-right{flex:1}.prod-head{display:flex;justify-content:space-between;align-items:center}
 .prod-name{background:#16a34a;color:#fff;padding:5px 12px;border-radius:0 20px 20px 0;font-weight:800;font-size:12px;margin-left:-12px;padding-left:18px}
 .prod-percent{background:#16a34a;color:#fff;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:800}
 .prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;font-size:11px;color:#6b7280}
 .prod-grid b{color:#111;font-size:12px;display:block}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;display:flex;justify-content:space-around;padding:8px 0;z-index:999}
 .nav-item{text-align:center;font-size:11px;color:#9ca3af;cursor:pointer;padding:4px 8px;flex:1}
-.nav-item.active{color:#16a34a;font-weight:700}
-.nav-item span{display:block;font-size:20px;margin-bottom:2px}
+.nav-item.active{color:#16a34a;font-weight:700}.nav-item span{display:block;font-size:20px;margin-bottom:2px}
 .card{background:#fff;margin:12px 16px;padding:14px;border-radius:16px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
 .btn-full{width:100%;padding:13px;border:none;border-radius:12px;font-weight:700;margin-top:8px;cursor:pointer}
 input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;background:#f9fafb}
-.tab{display:none}
-.tab.active{display:block}
+.tab{display:none}.tab.active{display:block}
 .my-badge{background:linear-gradient(135deg,#0f172a,#1e3a8a 50%,#16a34a);color:#fff;border-radius:22px;padding:20px;margin:12px 16px;text-align:center}
 .my-avatar{width:64px;height:64px;background:#fff;color:#0f172a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;margin:0 auto 10px auto}
 .float-headset{position:fixed;bottom:80px;right:16px;width:52px;height:52px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;box-shadow:0 6px 16px rgba(22,163,74,.4);z-index:998;cursor:pointer}
@@ -50,7 +46,6 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <div style="font-size:11px"><span class="live-dot"></span> <span id="onlineTop">5,248</span> online • Live</div>
 </div>
 
-<!-- HOME -->
 <div id="homeTab" class="tab active">
 <div class="hero-card">
 <div class="hero-img">💰<div style="font-size:14px;margin-left:12px;text-align:left"><b style="font-size:16px">EZOL SMART WALLET</b><br><span style="font-size:11px;color:#6b7280">Daily Income up to 50,000 UGX</span><br><span style="font-size:11px;background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:100px"><span id="onlineHero">134</span> earning now</span></div></div>
@@ -61,14 +56,13 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 </div>
 </div>
 <div class="btn-row">
-<button class="btn-pill btn-green" onclick="switchTab('product')"><span>◻</span> Recharge</button>
-<button class="btn-pill btn-orange" onclick="switchTab('wallet')"><span>✈</span> Withdraw</button>
+<button class="btn-pill btn-green" onclick="switchTab('product')">◻ Recharge</button>
+<button class="btn-pill btn-orange" onclick="switchTab('wallet')">✈ Withdraw</button>
 </div>
 <div class="card" style="border:2px solid #22c55e"><h4>🔴 Live - <span id="liveUsers">134</span> Online Earning</h4><div id="liveActivity" style="margin-top:8px"></div></div>
 <div class="card"><h4>📈 Daily Check-in - FIXED per user</h4><p style="font-size:11px;color:#6b7280">VIP <span id="vipLevelHome">0</span> - Daily <span id="checkAmountHome">1000</span> UGX</p><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="dailyCheck()">Check-in +<span id="checkAmount2Home">1000</span></button><p style="font-size:10px;color:#9ca3af;margin-top:6px" id="lastCheckText"></p></div>
 </div>
 
-<!-- PRODUCT -->
 <div id="productTab" class="tab">
 <div class="hot-title">HOT PRODUCTS • <span id="liveUsersProd">134</span> Online • MTN 0795143386</div>
 <div class="product-card"><div class="prod-img">💼</div><div class="prod-right"><div class="prod-head"><div class="prod-name">EZOL ORDINARY-1</div><div class="prod-percent">400%</div></div><div class="prod-grid"><div>Total Income<br><b>90,000 UGX</b></div><div>Day Income<br><b>3,000 UGX</b></div><div>Cycles<br><b style="color:#16a34a">30</b></div><div>Price<br><b style="color:#16a34a">15,000 UGX</b></div></div><button class="btn-full" style="background:#16a34a;color:#fff;margin-top:8px" onclick="buyVIP(1,15000)">Buy 15,000 - Daily 5k</button></div></div>
@@ -77,20 +71,17 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <div class="product-card" style="background:#fce7f3;border-color:#ec4899"><div class="prod-img">👑</div><div class="prod-right"><div class="prod-head"><div class="prod-name" style="background:#ec4899">EZOL KING-4</div><div class="prod-percent" style="background:#ec4899">1500%</div></div><div class="prod-grid"><div>Total Income<br><b>1,500,000 UGX</b></div><div>Day Income<br><b>50,000 UGX</b></div><div>Cycles<br><b style="color:#16a34a">30</b></div><div>Price<br><b style="color:#16a34a">100,000 UGX</b></div></div><button class="btn-full" style="background:linear-gradient(135deg,#ec4899,#be185d);color:#fff" onclick="buyVIP(4,100000)">👑 Buy 100,000 - 50k Daily</button></div></div>
 </div>
 
-<!-- SHARE -->
 <div id="shareTab" class="tab">
 <div class="card" style="text-align:center;background:linear-gradient(135deg,#eef2ff,#e0e7ff);border:2px dashed #7c3aed"><h3>🔗 Invite & Earn 2000 UGX</h3><p style="font-size:11px;color:#6b7280;margin-top:6px">Share to WhatsApp, Facebook - Get 2000 per friend</p><div style="background:#fff;padding:10px;border-radius:10px;margin-top:10px;word-break:break-all;font-size:12px;font-weight:700;color:#4f46e5" id="refLinkText"></div><input id="refLink" style="position:absolute;left:-9999px"><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="copyLink()">Share on WhatsApp</button><button class="btn-full" style="background:#fff;border:1px solid #ddd" onclick="navigator.clipboard.writeText(document.getElementById('refLink').value);alert('Copied!')">Copy Link</button><p style="font-size:12px;margin-top:10px;color:#6b7280">Invited: <b><span id="refCount">0</span></b> • Earned: <b><span id="refEarn">0</span> UGX</b> • Online: <b id="onlineFriends">0</b></p></div>
 <div class="card"><h4>📊 My Referrals - Live</h4><div id="referralList" style="margin-top:8px;font-size:12px;color:#6b7280;text-align:center">No referrals yet - Share now!</div></div>
 </div>
 
-<!-- WALLET -->
 <div id="walletTab" class="tab">
 <div class="card" style="text-align:center;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff"><p style="font-size:11px;opacity:.7">WALLET BALANCE</p><h1 style="margin:10px 0"><span id="balanceWallet">0</span> UGX</h1><p style="font-size:11px;opacity:.7">VIP <span id="vipShowWallet">0</span> • Daily <span id="dailyEarnWallet">1000</span> UGX • <span id="pendingTextWallet" style="color:#fbbf24"></span></p><div style="display:flex;gap:10px;margin-top:14px"><button class="btn-full" style="background:#16a34a;color:#fff;margin:0" onclick="switchTab('product')">Recharge</button><button class="btn-full" style="background:#f97316;color:#fff;margin:0" onclick="withdraw()">Withdraw</button></div></div>
 <div class="card" style="background:#f0fdf4;border:2px solid #22c55e"><h4>✅ Withdrawal Proofs</h4><div id="realWithdraws" style="margin-top:8px"></div></div>
 <div class="card"><h4>💳 Withdraw Info</h4><p style="font-size:12px;color:#6b7280;margin-top:6px">Min: 20,000 UGX<br>MTN MoMo: 0795143386 Ezra Twinamatsiko<br>Admin approves within 5 mins • <span id="onlineWallet">134</span> online withdrawing now</p></div>
 </div>
 
-<!-- MY -->
 <div id="myTab" class="tab">
 <div class="my-badge">
 <div class="my-avatar" id="myAvatar">E</div>
@@ -98,13 +89,12 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 <p style="font-size:12px;opacity:.8" id="myPhone">0783228690</p>
 <p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,.2);display:inline-block;padding:4px 12px;border-radius:100px">VIP <span id="vipShowMy">0</span> • Balance <span id="balanceMy">0</span> UGX • <span id="onlineMy">134</span> online</p>
 </div>
-<div class="card"><h4>⚙️ Settings - Change Number & Password</h4><input id="setName" placeholder="New Name"><input id="setPhone" placeholder="New Phone e.g. 0795143386"><input id="setPass" type="password" placeholder="New Password"><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="saveSettings()">Save Changes</button><button class="btn-full" style="background:#fff;border:1px solid #ddd" onclick="changePhone()">Change MoMo Number for Withdraw</button></div>
-<div class="card"><h4>🔐 Account</h4><button class="btn-full" style="background:#111;color:#fff" onclick="logout()">Logout</button><button class="btn-full" style="background:#fff;border:1px solid #ef4444;color:#ef4444" onclick="if(confirm('Reset all data?')){localStorage.clear();location.reload()}">Reset All Data</button><p style="font-size:10px;color:#9ca3af;margin-top:8px;text-align:center">Ezol Wallet • MTN 0795143386 • 5,248+ users • v6 AUTO</p></div>
+<div class="card"><h4>⚙️ Settings</h4><input id="setName" placeholder="New Name"><input id="setPhone" placeholder="New Phone"><input id="setPass" type="password" placeholder="New Password"><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="saveSettings()">Save Changes</button></div>
+<div class="card"><h4>🔐 Account</h4><button class="btn-full" style="background:#111;color:#fff" onclick="logout()">Logout</button><p style="font-size:10px;color:#9ca3af;margin-top:8px;text-align:center">Ezol Wallet • v6.1 LIVE SYNC</p></div>
 <div class="card" style="text-align:center"><button class="btn-full" style="background:#22c55e;color:#fff" onclick="openWhatsApp()">📱 Chat Support 0795143386</button></div>
 </div>
 
 <div class="float-headset" onclick="openWhatsApp()">🎧</div>
-
 <div class="bottom-nav">
 <div class="nav-item active" id="navHome" onclick="switchTab('home')"><span>🏠</span>Home</div>
 <div class="nav-item" id="navProduct" onclick="switchTab('product')"><span>📦</span>Product</div>
@@ -117,9 +107,9 @@ input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6p
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, serverTimestamp, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// >>> REPLACE WITH YOUR FIREBASE CONFIG <<<
+// >>> YOUR FIREBASE CONFIG - SAME AS ADMIN <<<
 const firebaseConfig = {
   apiKey: "AIzaSyC-your-key-here",
   authDomain: "ezol-wallet.firebaseapp.com",
@@ -142,179 +132,107 @@ window.switchTab=function(t){
  document.getElementById(t+'Tab').classList.add('active');
  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
  document.getElementById('nav'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('active');
- window.scrollTo(0,0);
 }
+
+function syncBalances(){
+ document.getElementById('balance').innerText=balance.toLocaleString();
+ document.getElementById('balanceWallet').innerText=balance.toLocaleString();
+ document.getElementById('balanceMy').innerText=balance.toLocaleString();
+ document.getElementById('vipShow').innerText=vipLevel;
+ document.getElementById('vipShowWallet').innerText=vipLevel;
+ document.getElementById('vipShowMy').innerText=vipLevel;
+ document.getElementById('vipLevelHome').innerText=vipLevel;
+ var daily=[1000,5000,12000,25000,50000][vipLevel]||1000;
+ document.getElementById('checkAmountHome').innerText=daily;
+ document.getElementById('checkAmount2Home').innerText=daily;
+ document.getElementById('dailyEarnWallet').innerText=daily;
+ document.getElementById('refCount').innerText=refCount;
+ document.getElementById('refEarn').innerText=refCount*2000;
+}
+syncBalances();
+
 function checkAuth(){
  var ref=new URLSearchParams(window.location.search).get('ref')||VIP_NUMBER;
  document.getElementById('refDisplay').innerText=ref;
- if(!user){ document.getElementById('registerModal').style.display='flex'; }
- else{
+ if(!user){
+  document.getElementById('registerModal').style.display='flex';
+ } else {
   document.getElementById('registerModal').style.display='none';
-  document.getElementById('userInfoHome').innerText=(user.name||'Undefined')+' • '+user.phone;
-  document.getElementById('myName').innerText=user.name||'Undefined';
-  document.getElementById('myPhone').innerText=user.phone||'0783228690';
+  document.getElementById('userInfoHome').innerText=(user.name||'')+' • '+user.phone;
+  document.getElementById('myName').innerText=user.name||'';
+  document.getElementById('myPhone').innerText=user.phone||'';
   document.getElementById('myAvatar').innerText=(user.name||'E')[0].toUpperCase();
-  document.getElementById('setName').value=user.name||''; document.getElementById('setPhone').value=user.phone||'';
+  document.getElementById('setName').value=user.name||'';
+  document.getElementById('setPhone').value=user.phone||'';
   document.getElementById('refLinkText').innerText="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
   document.getElementById('refLink').value="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
+
+  // LIVE SYNC - FIXES 500 vs 50k BUG
+  onSnapshot(doc(db,"users",user.phone), (snap)=>{
+    if(snap.exists()){
+      const live = snap.data();
+      let changed=false;
+      if(live.vipLevel!==undefined && live.vipLevel!==vipLevel){ vipLevel=live.vipLevel; localStorage.setItem('ezol_vip_level',vipLevel); changed=true; }
+      if(live.balance!==undefined && live.balance!==balance){ balance=live.balance; localStorage.setItem('ezol_balance',balance); changed=true; }
+      if(changed){ syncBalances();
+        document.getElementById('lastCheckText').innerText="✅ LIVE UPDATE from admin! VIP "+vipLevel+" Bal "+balance;
+      }
+    }
+  });
+
   var phoneKey="ezol_last_check_"+user.phone;
   var last=localStorage.getItem(phoneKey);
   if(last){ document.getElementById('lastCheckText').innerText="Last check: "+last; }
  }
 }
 checkAuth();
-function syncBalances(){
- document.getElementById('balance').innerText=balance;
- document.getElementById('balanceWallet').innerText=balance;
- document.getElementById('balanceMy').innerText=balance;
- document.getElementById('vipShow').innerText=vipLevel;
- document.getElementById('vipShowWallet').innerText=vipLevel;
- document.getElementById('vipShowMy').innerText=vipLevel;
- document.getElementById('vipLevelHome').innerText=vipLevel;
- document.getElementById('refCount').innerText=refCount;
- document.getElementById('refEarn').innerText=refCount*2000;
- var dailyAmount=[1000,5000,12000,25000,50000][vipLevel]||1000;
- document.getElementById('checkAmountHome').innerText=dailyAmount;
- document.getElementById('checkAmount2Home').innerText=dailyAmount;
- document.getElementById('dailyEarnWallet').innerText=dailyAmount;
-}
-syncBalances();
 
-var base=5248; var onlineNow=134;
-function updateOnline(){
- onlineNow+=Math.floor(Math.random()*5)-2;
- if(onlineNow<110) onlineNow=110; if(onlineNow>195) onlineNow=195;
- document.getElementById('liveUsers').innerText=onlineNow;
- document.getElementById('liveUsersProd').innerText=onlineNow;
- document.getElementById('onlineMy').innerText=onlineNow;
- document.getElementById('onlineWallet').innerText=onlineNow;
- document.getElementById('onlineFriends').innerText=Math.floor(onlineNow/10);
- document.getElementById('onlineTop').innerText=base.toLocaleString();
- document.getElementById('onlineModal').innerText=base.toLocaleString();
- document.getElementById('onlineHero').innerText=onlineNow;
-}
-updateOnline(); setInterval(updateOnline,3000);
-
+// Online fake
+var onlineNow=134; function updateOnline(){ onlineNow+=Math.floor(Math.random()*5)-2; if(onlineNow<110)onlineNow=110; if(onlineNow>195)onlineNow=195; ['liveUsers','liveUsersProd','onlineMy','onlineWallet'].forEach(id=>{let e=document.getElementById(id); if(e) e.innerText=onlineNow;}); document.getElementById('onlineFriends').innerText=Math.floor(onlineNow/10); document.getElementById('onlineHero').innerText=onlineNow; } updateOnline(); setInterval(updateOnline,3000);
 var phones=["07**","0783","0701","0754","0772"]; var acts=["earned 5000","bought ORDINARY-2 🔥","withdraw 25k ✓","earned 12k"];
-function addRandom(){
- var box=document.getElementById('liveActivity');
- var ph=phones[Math.floor(Math.random()*phones.length)]+'***'+Math.floor(1000+Math.random()*8000);
- var ac=acts[Math.floor(Math.random()*acts.length)];
- var d=document.createElement('div'); d.style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:12px";
- d.innerHTML='<span>🟢 '+ph+' '+ac+'</span><span style="color:#6b7280">'+Math.floor(1+Math.random()*9)+'m ago</span>';
- box.prepend(d); if(box.children.length>6) box.lastChild.remove();
-}
-for(let i=0;i<5;i++) addRandom(); setInterval(addRandom,3500);
-
-function loadRealWithdraws(){
- var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
- var box=document.getElementById('realWithdraws');
- if(list.length==0){ box.innerHTML='<p style="font-size:11px;color:#6b7280;text-align:center">No withdrawals yet</p>'; return; }
- box.innerHTML=''; list.slice(-5).reverse().forEach(w=>{
-  var div=document.createElement('div'); div.style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:12px";
-  div.innerHTML='<span>💸 '+w.phone+' - '+w.amount+' UGX</span><span style="color:#f59e0b;font-weight:700">'+w.status+'</span>';
-  box.appendChild(div);
- });
-}
-loadRealWithdraws();
+function addRandom(){ var box=document.getElementById('liveActivity'); if(!box) return; var ph=phones[Math.floor(Math.random()*phones.length)]+'***'+Math.floor(1000+Math.random()*8000); var ac=acts[Math.floor(Math.random()*acts.length)]; var d=document.createElement('div'); d.style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:12px"; d.innerHTML='<span>🟢 '+ph+' '+ac+'</span><span style="color:#6b7280">'+Math.floor(1+Math.random()*9)+'m ago</span>'; box.prepend(d); if(box.children.length>6) box.lastChild.remove(); } for(let i=0;i<5;i++) addRandom(); setInterval(addRandom,3500);
 
 window.doRegister=async function(){
- var n=document.getElementById('regName').value.trim();
- var p=document.getElementById('regPhone').value.trim();
- var pa=document.getElementById('regPass').value.trim();
- if(n.length<3){alert("Names");return;} if(p.length<10){alert("Phone");return;} if(pa.length<4){alert("Pass min 4");return;}
+ var n=document.getElementById('regName').value.trim(); var p=document.getElementById('regPhone').value.trim(); var pa=document.getElementById('regPass').value.trim();
+ if(n.length<3||p.length<10||pa.length<4){alert("Fill all");return;}
  user={name:n,phone:p,password:pa,balance:500,vipLevel:0};
- localStorage.setItem('ezol_user',JSON.stringify(user));
- localStorage.setItem('ezol_balance','500');
- // Save to all_users list for local admin
- let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]');
- if(!all.find(x=>x.phone==p)){ all.push(user); localStorage.setItem('ezol_all_users',JSON.stringify(all)); }
- // AUTO SAVE TO FIREBASE - This makes it appear in admin automatically
- try{
-   await setDoc(doc(db,"users",p),{
-     name:n, phone:p, password:pa, balance:500, vipLevel:0,
-     refBy: document.getElementById('refDisplay').innerText,
-     createdAt: serverTimestamp()
-   });
- }catch(e){ console.log("Firebase save failed",e); }
- alert("Welcome "+n+"! You are now visible in CEO ADMIN automatically.");
- location.reload();
+ localStorage.setItem('ezol_user',JSON.stringify(user)); localStorage.setItem('ezol_balance','500'); localStorage.setItem('ezol_vip_level','0');
+ try{ await setDoc(doc(db,"users",p),{name:n,phone:p,password:pa,balance:500,vipLevel:0,refBy:document.getElementById('refDisplay').innerText,createdAt:serverTimestamp()}); }catch(e){ console.log(e); }
+ alert("Welcome "+n+"! Visible in ADMIN auto."); location.reload();
 }
-
 window.doLogin=async function(){
- var ph=prompt("Phone:"); var pa=prompt("Password:");
- try{
-   const snap=await getDoc(doc(db,"users",ph));
-   if(snap.exists() && snap.data().password==pa){
-     user=snap.data(); localStorage.setItem('ezol_user',JSON.stringify(user));
-     localStorage.setItem('ezol_balance',user.balance||0);
-     localStorage.setItem('ezol_vip_level',user.vipLevel||0);
-     location.reload(); return;
-   }
- }catch(e){}
- var s=JSON.parse(localStorage.getItem('ezol_user')||'null');
- if(s&&s.phone==ph&&s.password==pa){ user=s; location.reload(); } else alert("No account - check password or register");
+ var ph=prompt("Phone:"); var pa=prompt("Password:"); if(!ph) return;
+ try{ const snap=await getDoc(doc(db,"users",ph)); if(snap.exists() && snap.data().password==pa){ user=snap.data(); localStorage.setItem('ezol_user',JSON.stringify(user)); localStorage.setItem('ezol_balance',user.balance||0); localStorage.setItem('ezol_vip_level',user.vipLevel||0); location.reload(); return; } }catch(e){}
+ var s=JSON.parse(localStorage.getItem('ezol_user')||'null'); if(s&&s.phone==ph&&s.password==pa){ location.reload(); } else alert("Wrong pass or no account");
 }
-window.logout=function(){ if(confirm("Logout?")){ localStorage.removeItem('ezol_user'); location.reload(); } }
-window.saveSettings=async function(){
- var n=document.getElementById('setName').value.trim(); var p=document.getElementById('setPhone').value.trim(); var pa=document.getElementById('setPass').value.trim();
- if(n) user.name=n; if(p) user.phone=p; if(pa.length>=4) user.password=pa;
- localStorage.setItem('ezol_user',JSON.stringify(user));
- try{ await setDoc(doc(db,"users",user.phone),user,{merge:true}); }catch(e){}
- alert("Saved! New: "+user.name+" "+user.phone); location.reload();
-}
-window.changePhone=function(){ var np=prompt("New MoMo number for withdraw:",user?user.phone:''); if(np){ user.phone=np; localStorage.setItem('ezol_user',JSON.stringify(user)); alert("MoMo changed to "+np); location.reload(); } }
-
-// FIXED DAILY CHECK - PER USER
-window.dailyCheck=function(){
- if(!user){ alert("Please register first"); return; }
- var phoneKey = "ezol_last_check_" + user.phone;
- var t = new Date().toDateString();
- var last = localStorage.getItem(phoneKey);
- if(last === t){
-   alert("⏰ You already checked today ("+t+"). Come back tomorrow!");
-   return;
- }
+window.logout=function(){ localStorage.removeItem('ezol_user'); location.reload(); }
+window.saveSettings=async function(){ var n=document.getElementById('setName').value.trim(); var p=document.getElementById('setPhone').value.trim(); var pa=document.getElementById('setPass').value.trim(); if(n) user.name=n; if(p) user.phone=p; if(pa.length>=4) user.password=pa; localStorage.setItem('ezol_user',JSON.stringify(user)); try{ await setDoc(doc(db,"users",user.phone),user,{merge:true}); }catch(e){} alert("Saved"); location.reload(); }
+window.dailyCheck=async function(){
+ if(!user) return;
+ var key="ezol_last_check_"+user.phone; var t=new Date().toDateString();
+ if(localStorage.getItem(key)===t){ alert("Already checked today"); return; }
  var daily=[1000,5000,12000,25000,50000][vipLevel]||1000;
- balance+=daily;
- localStorage.setItem('ezol_balance',balance);
- localStorage.setItem(phoneKey,t);
- localStorage.setItem('ezol_last_check',t);
+ balance+=daily; localStorage.setItem('ezol_balance',balance); localStorage.setItem(key,t);
  syncBalances();
- document.getElementById('lastCheckText').innerText="Last check: "+t+" - Success!";
- alert("✅ +"+daily+" UGX added! New Balance: "+balance+" UGX");
+ try{ await updateDoc(doc(db,"users",user.phone),{balance:balance}); }catch(e){}
+ alert("✅ +"+daily+" UGX - New: "+balance);
 }
-
-window.copyLink=function(){ navigator.clipboard.writeText(document.getElementById('refLink').value); window.open("https://wa.me/?text="+encodeURIComponent("💰 Join Ezol Wallet "+onlineNow+" online! "+document.getElementById('refLink').value),"_blank"); }
-window.openWhatsApp=function(){ var p=user?user.phone:''; window.open("https://wa.me/256795143386?text=Hello%20Ezol%20my%20phone%20"+p+" VIP "+vipLevel+" Bal "+balance,"_blank"); }
 window.buyVIP=async function(l,a){
- var p=user?user.phone:''; var n=user?user.name:'';
- var msg="Hello Ezra I am "+n+" phone "+p+" want Product "+l+" sent "+a+" to MTN 0795143386 TxID:";
- var tx=prompt("Enter MoMo Transaction ID after sending "+a+" UGX to 0795143386:");
- if(!tx){ alert("You must enter TxID"); return; }
- try{
-   await addDoc(collection(db,"vip_requests"),{phone:p,name:n,level:l,amount:a,tx:tx,status:"pending",time:serverTimestamp()});
-   // also save locally for old admin
-   let vips=JSON.parse(localStorage.getItem('ezol_vip_requests')||'[]');
-   vips.push({phone:p,name:n,level:l,amount:a,tx:tx,status:"pending"});
-   localStorage.setItem('ezol_vip_requests',JSON.stringify(vips));
- }catch(e){}
- window.open("https://wa.me/256795143386?text="+encodeURIComponent(msg+" "+tx),"_blank");
- alert("VIP request sent! Tx: "+tx+" - Admin will approve soon");
+ var msg="Hello Ezra I am "+user.name+" phone "+user.phone+" want VIP "+l+" sent "+a;
+ var tx=prompt("Enter TxID after sending "+a+" to 0795143386:");
+ if(!tx) return;
+ try{ await addDoc(collection(db,"vip_requests"),{phone:user.phone,name:user.name,level:l,amount:a,tx:tx,status:"pending",time:serverTimestamp()}); }catch(e){}
+ window.open("https://wa.me/256795143386?text="+encodeURIComponent(msg+" Tx "+tx),"_blank");
 }
 window.withdraw=async function(){
- if(balance<20000){ alert("Min 20k - Balance "+balance); return; }
- var num=prompt("MoMo number to receive "+balance+":",user?user.phone:'');
- if(!num) return;
- try{
-   await addDoc(collection(db,"withdraw_requests"),{phone:user.phone,momo:num,amount:balance,status:"pending",time:serverTimestamp()});
- }catch(e){}
- var hidden=num.slice(0,2)+'***'+num.slice(-4);
- var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
- list.push({phone:hidden,fullPhone:num,amount:balance,time:Date.now(),status:'pending'});
- localStorage.setItem('ezol_real_withdraws',JSON.stringify(list));
- localStorage.setItem('ezol_balance',0); balance=0; syncBalances(); loadRealWithdraws(); alert("Withdraw "+list[list.length-1].amount+" PENDING! Sent to admin automatically.");
+ if(balance<20000){ alert("Min 20k"); return; }
+ var num=prompt("MoMo number:",user.phone); if(!num) return;
+ try{ await addDoc(collection(db,"withdraw_requests"),{phone:user.phone,momo:num,amount:balance,status:"pending",time:serverTimestamp()}); }catch(e){}
+ localStorage.setItem('ezol_balance',0); balance=0; syncBalances();
+ alert("Withdraw request sent AUTO to admin!");
 }
+window.copyLink=function(){ navigator.clipboard.writeText(document.getElementById('refLink').value); window.open("https://wa.me/?text="+encodeURIComponent("Join Ezol "+document.getElementById('refLink').value),"_blank"); }
+window.openWhatsApp=function(){ window.open("https://wa.me/256795143386?text=Hello Ezol "+(user?user.phone:''),"_blank"); }
 </script>
 </body>
 </html>
