@@ -70,4 +70,21 @@ function buyVIP(l,a){ var p=user?user.phone:''; var n=user?user.name:''; var msg
 function withdraw(){
   if(balance<MIN_WITHDRAW){ alert("Min 20k. Balance "+balance); return; }
   var pending=JSON.parse(localStorage.getItem('ezol_pending_withdraw')||'null');
-  if(pending){ alert("Pending "+pending
+  if(pending){ alert("Pending "+pending.amount+" UGX waiting for admin 0795143386 approval!"); return; }
+  var num=prompt("MoMo number to receive "+balance+":",user?user.phone:'');
+  if(num){
+    var hidden=num.slice(0,2)+'***'+num.slice(-4);
+    var list=JSON.parse(localStorage.getItem('ezol_real_withdraws')||'[]');
+    list.push({phone:hidden,fullPhone:num,amount:balance,time:Date.now(),status:'pending'});
+    localStorage.setItem('ezol_real_withdraws',JSON.stringify(list));
+    localStorage.setItem('ezol_pending_withdraw',JSON.stringify({phone:hidden,fullPhone:num,amount:balance,time:Date.now()}));
+    loadRealWithdraws();
+    addActivity(hidden+' requested '+balance);
+    alert("Requested "+balance+" to "+num+" - PENDING! Balance stays until Admin @ezol256 approves. Contact 0795143386");
+    document.getElementById('balance').innerText=balance;
+    document.getElementById('pendingText').innerText='⏳ Pending '+balance+' UGX';
+  }
+}
+</script>
+</body>
+</html>
