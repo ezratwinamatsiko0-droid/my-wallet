@@ -24,20 +24,20 @@ body{background:#f0f4f8;padding:10px 10px 80px}
 </head>
 <body>
 
-<div class="top-bar">Referred by <span id="refBy">0762950427</span> | <span class="live-dot"></span> 5,200+ Active Users</div>
+<div class="top-bar">Referred by <span id="refBy">0795143386</span> | <span class="live-dot"></span> 5,200+ Active Users</div>
 
 <div class="balance-card">
 <p>Your Balance</p>
 <h1><span id="balance">500</span> UGX</h1>
-<p style="font-size:13px;opacity:0.9">Withdraw via MTN/Airtel MoMo</p>
+<p style="font-size:13px;opacity:0.9">Withdraw via MTN/Airtel MoMo - Min 20,000 UGX</p>
 <button class="btn" style="background:#fff;color:#4f46e5;margin-top:12px" onclick="withdraw()">Withdraw Now</button>
 </div>
 
 <div class="card vip-card">
 <h3>💎 VIP - Earn 5x More!</h3>
-<p class="small">Pay 15k once → Get 5k DAILY for 30 days = 150k total! Send to <b>0762950427</b></p>
+<p class="small">Pay 15k once → Get 5k DAILY for 30 days = 150k total! Send to <b>0795143386</b></p>
 <button class="btn btn-orange" onclick="window.location.href='vip.html'">👉 Upgrade to VIP Now</button>
-<p class="small">Airtel Money: 0762950427 - Names: Ezra Twinamatsiko</p>
+<p class="small">Airtel Money: 0795143386 - Names: Ezra Twinamatsiko</p>
 </div>
 
 <div class="card">
@@ -63,26 +63,23 @@ body{background:#f0f4f8;padding:10px 10px 80px}
 </div>
 
 <script>
-// Config - UPDATED NUMBER
 const SUPPORT_NUMBER = "0762950427";
-const VIP_AMOUNT = 15000;
+const VIP_NUMBER = "0795143386";
+const MIN_WITHDRAW = 20000;
 
 let balance = parseInt(localStorage.getItem('ezol_balance') || 500);
 let isVIP = localStorage.getItem('ezol_vip') === 'true';
 let lastCheck = localStorage.getItem('ezol_last_check');
-let userPhone = localStorage.getItem('ezol_phone') || SUPPORT_NUMBER;
 
 document.getElementById('balance').innerText = balance;
 document.getElementById('checkAmount').innerText = isVIP ? '5000' : '1000';
-document.getElementById('refBy').innerText = new URLSearchParams(window.location.search).get('ref') || SUPPORT_NUMBER;
-document.getElementById('refLink').value = window.location.origin + window.location.pathname + "?ref=" + SUPPORT_NUMBER;
+document.getElementById('refBy').innerText = new URLSearchParams(window.location.search).get('ref') || VIP_NUMBER;
+document.getElementById('refLink').value = window.location.origin + window.location.pathname + "?ref=" + VIP_NUMBER;
 
-// Fake proofs
 const proofs = [
-  {phone:"0762****0427", amount:"15000", status:"VIP Member - paid"},
-  {phone:"0775****1234", amount:"8000", status:"Withdraw success"},
-  {phone:"0701****5678", amount:"5000", status:"VIP Bonus paid"},
-  {phone:"0782****9012", amount:"12000", status:"Invite bonus paid"},
+  {phone:"0762****0427", amount:"25000", status:"VIP Member - paid"},
+  {phone:"0795****3386", amount:"20000", status:"Withdraw success"},
+  {phone:"0775****1234", amount:"22000", status:"VIP Bonus paid"},
 ];
 let html = "";
 proofs.forEach(p=>{
@@ -92,25 +89,33 @@ document.getElementById('proofs').innerHTML = html;
 
 function dailyCheck(){
   let today = new Date().toDateString();
-  if(lastCheck === today){ alert("Already checked in today! Come back tomorrow."); return; }
+  if(lastCheck === today){ alert("Already checked in today!"); return; }
   let earn = isVIP ? 5000 : 1000;
   balance += earn;
   localStorage.setItem('ezol_balance', balance);
   localStorage.setItem('ezol_last_check', today);
   document.getElementById('balance').innerText = balance;
-  alert("Success! +" + earn + " UGX added!");
+  alert("Success! +" + earn + " UGX");
 }
 function copyLink(){
   navigator.clipboard.writeText(document.getElementById('refLink').value);
-  alert("Referral link copied! Share to earn 2000 UGX per friend.");
+  alert("Link copied!");
 }
 function openWhatsApp(){
-  window.open("https://wa.me/256762950427?text=Hello%20Ezol%20Wallet%20Support%2C%20I%20need%20help", "_blank");
+  window.open("https://wa.me/256762950427?text=Hello%20Ezol%20Support", "_blank");
 }
 function withdraw(){
-  if(balance < 5000){ alert("Minimum withdraw is 5000 UGX. Keep earning!"); return; }
-  let number = prompt("Enter your MoMo number to receive payment:");
-  if(number){ alert("Withdrawal request of " + balance + " UGX sent to " + number + ". You will receive it in 5 minutes. Contact " + SUPPORT_NUMBER + " on WhatsApp if delayed."); balance=0; localStorage.setItem('ezol_balance', balance); document.getElementById('balance').innerText=balance; }
+  if(balance < MIN_WITHDRAW){ 
+    alert("Minimum withdraw is 20,000 UGX. Your balance: " + balance + " UGX. Keep earning! Invite friends to reach faster."); 
+    return; 
+  }
+  let number = prompt("Enter your MoMo number to receive " + balance + " UGX:");
+  if(number){ 
+    alert("Withdrawal request of " + balance + " UGX sent to " + number + ". Contact " + SUPPORT_NUMBER + " on WhatsApp if delayed.");
+    balance=0; 
+    localStorage.setItem('ezol_balance', balance); 
+    document.getElementById('balance').innerText=balance;
+  }
 }
 </script>
 </body>
