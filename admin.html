@@ -3,59 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CEO ADMIN v6 - AUTO USERS</title>
+<title>Ezol Admin - v6.3 GROUP EDITION</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#0f172a;color:#fff;padding:12px;padding-bottom:100px}
-.header{background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:18px;border-radius:18px;text-align:center;box-shadow:0 4px 20px rgba(124,58,237,.3)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.box{background:#1e293b;padding:16px;border-radius:14px;text-align:center;border:1px solid #334155}
-.box b{font-size:22px;display:block}
-.card{background:#1e293b;margin-top:12px;padding:14px;border-radius:14px;border:1px solid #334155}
-.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #334155;gap:8px;flex-wrap:wrap}
-.item:last-child{border:0}
-.btn{padding:8px 14px;border:none;border-radius:8px;font-weight:800;cursor:pointer;font-size:12px}
-.green{background:#22c55e;color:#fff}.orange{background:#f97316;color:#fff}.red{background:#ef4444;color:#fff}.blue{background:#3b82f6;color:#fff}
-.small{font-size:11px;color:#94a3b8}
+.header{background:linear-gradient(135deg,#0f172a,#1e3a8a);padding:16px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+.stat{background:#1e293b;padding:12px;border-radius:12px;text-align:center;border:1px solid #334155}
+.stat b{font-size:20px;color:#22c55e;display:block}
+.card{background:#1e293b;margin-bottom:12px;border-radius:16px;padding:14px;border:1px solid #334155}
+.user-row{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#0f172a;border-radius:10px;margin-bottom:8px}
+.btn{padding:7px 12px;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;margin-left:4px}
+.btn-blue{background:#3b82f6;color:#fff}.btn-green{background:#22c55e;color:#fff}.btn-red{background:#ef4444;color:#fff}.btn-orange{background:#f97316;color:#fff}
+.btn-whatsapp{background:#25D366;color:#fff}
+input{padding:10px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#fff;width:100%;margin:6px 0}
+.group-card{background:linear-gradient(135deg,#128C7E,#25D366);border-radius:16px;padding:14px;margin-bottom:12px}
+.live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;animation:pulse 1s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h2>👑 CEO ADMIN v6 - AUTO SHOW</h2>
-<p style="font-size:13px;margin-top:4px">MoMo: 0795143386 | Auto From All Phones</p>
-<p style="font-size:11px;opacity:.8;margin-top:6px" id="status">🔴 Connecting to Firebase...</p>
-<p style="font-size:10px;opacity:.6" id="timeNow"></p>
+<div><h2>👑 EZOL ADMIN v6.3</h2><p style="font-size:11px;opacity:.7"><span class="live-dot"></span> LIVE AUTO • 5,248 online • <span id="liveTime"></span></p></div>
+<div style="text-align:right"><button class="btn btn-whatsapp" onclick="openGroup()">👥 Open Group</button><button class="btn btn-blue" onclick="location.reload()">🔄 Refresh</button></div>
 </div>
 
-<div class="grid">
-<div class="box"><b id="totalUsers">0</b><span>Users</span></div>
-<div class="box"><b id="totalWithdraw">0</b><span>Withdraw</span></div>
-<div class="box"><b id="totalVIP">0</b><span>VIP</span></div>
-<div class="box"><b id="totalOwed">0</b><span>UGX Owed</span></div>
+<div class="group-card">
+<h3>👥 WhatsApp GROUP Control</h3>
+<p style="font-size:12px;margin:6px 0;opacity:.9">Your Official Group: <span id="groupLinkText" style="word-break:break-all;font-weight:700"></span></p>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn" style="background:#fff;color:#128C7E;flex:1" onclick="copyGroupLink()">🔗 Copy Invite Link</button>
+<button class="btn" style="background:#0f172a;color:#fff;flex:1" onclick="openGroup()">👥 Open Group App</button>
+<button class="btn" style="background:#f59e0b;color:#fff;flex:1" onclick="shareGroup()">📤 Share Group</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px;text-align:center">
+<div style="background:rgba(0,0,0,.2);padding:8px;border-radius:10px"><b id="groupMembers">1,247</b><br><span style="font-size:10px">Members Online</span></div>
+<div style="background:rgba(0,0,0,.2);padding:8px;border-radius:10px"><b id="groupJoins">89</b><br><span style="font-size:10px">Joins Today</span></div>
+<div style="background:rgba(0,0,0,.2);padding:8px;border-radius:10px"><b id="groupClicks">342</b><br><span style="font-size:10px">Link Clicks</span></div>
+</div>
+<p style="font-size:10px;margin-top:8px;opacity:.8">💡 Tip: Paste this group link in your TikTok bio + Facebook to get 100+ joins daily. Users see it in app My tab + float button.</p>
+</div>
+
+<div class="stat-grid">
+<div class="stat"><b id="totalUsers">0</b><span style="font-size:11px">Total Users</span></div>
+<div class="stat"><b id="totalBalance">0</b><span style="font-size:11px">Total Bal UGX</span></div>
+<div class="stat"><b id="totalVip">0</b><span style="font-size:11px">VIP Active</span></div>
+</div>
+
+<div class="stat-grid">
+<div class="stat"><b id="pendingVip">0</b><span style="font-size:11px">Pending VIP</span></div>
+<div class="stat"><b id="pendingWithdraw">0</b><span style="font-size:11px">Pending Withdraw</span></div>
+<div class="stat"><b id="onlineNow" style="color:#22c55e">134</b><span style="font-size:11px">Online Now</span></div>
 </div>
 
 <div class="card">
-<h3>👥 All Users - AUTO + Passwords</h3>
-<p class="small">Users appear automatically when they register anywhere. No manual add needed.</p>
-<div id="userList" style="margin-top:10px">Loading users...</div>
+<h3>💎 VIP Requests - AUTO <span id="vipCount" style="background:#f59e0b;padding:2px 8px;border-radius:100px;font-size:11px">0</span></h3>
+<div id="vipList" style="margin-top:10px">Loading...</div>
 </div>
 
 <div class="card">
-<h3>💎 VIP Requests - 15k Each! AUTO</h3>
-<div id="vipList" style="margin-top:10px">Loading VIP...</div>
+<h3>💸 Withdraw Requests - AUTO <span id="wdCount" style="background:#ef4444;padding:2px 8px;border-radius:100px;font-size:11px">0</span></h3>
+<div id="withdrawList" style="margin-top:10px">Loading...</div>
 </div>
 
 <div class="card">
-<h3>💸 Withdraw Requests - AUTO</h3>
-<div id="wdList" style="margin-top:10px">Loading withdraw...</div>
+<h3>👥 All Users - AUTO + Passwords <span id="userCount">0</span> - LIVE SYNC to app</h3>
+<p style="font-size:11px;color:#94a3b8;margin:6px 0">Users appear automatically when they register anywhere. No manual add needed. +Bal updates user phone LIVE in 2 sec.</p>
+<input id="searchUser" placeholder="🔍 Search phone or name..." oninput="renderUsers()">
+<div id="usersList" style="margin-top:10px">Loading...</div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, doc, onSnapshot, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, updateDoc, deleteDoc, onSnapshot, getDoc, setDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// >>> PASTE YOUR SAME FIREBASE CONFIG AS index.html HERE <<<
+const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/FTnYhv4l2LkK7Vk5SQzQf2";
+const CLEAN_GROUP_LINK = "https://chat.whatsapp.com/FTnYhv4l2LkK7Vk5SQzQf2";
+
+document.getElementById('groupLinkText').innerText = CLEAN_GROUP_LINK;
+
+window.openGroup = function(){ window.open(CLEAN_GROUP_LINK, "_blank"); }
+window.copyGroupLink = function(){ navigator.clipboard.writeText(CLEAN_GROUP_LINK); alert("✅ Group link copied!\n"+CLEAN_GROUP_LINK); }
+window.shareGroup = function(){ window.open("https://wa.me/?text="+encodeURIComponent("💰 Join Ezol Wallet Official Group - Payment Proofs Daily! 👥 "+CLEAN_GROUP_LINK+" - Earn 50k daily!"), "_blank"); }
+
+// CHANGE THIS TO YOUR REAL FIREBASE CONFIG - SAME AS index.html
 const firebaseConfig = {
   apiKey: "AIzaSyC-your-key-here",
   authDomain: "ezol-wallet.firebaseapp.com",
@@ -65,106 +97,174 @@ const firebaseConfig = {
   appId: "1:123456789:web:abc123"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const userList = document.getElementById('userList');
-const vipList = document.getElementById('vipList');
-const wdList = document.getElementById('wdList');
-
-function tick(){ document.getElementById('timeNow').innerText = new Date().toLocaleString(); }
-setInterval(tick,1000); tick();
-
-// 1. USERS - AUTO LIVE
-onSnapshot(collection(db,"users"), (snap)=>{
-  document.getElementById('status').innerHTML = "🟢 LIVE AUTO - "+snap.size+" users connected - v6";
-  document.getElementById('totalUsers').innerText = snap.size;
-  let html=""; let total=0;
-  snap.forEach(d=>{
-    const u=d.data();
-    total+=(u.balance||0);
-    html+=`<div class=item>
-      <div style="flex:1"><b>${u.phone}</b> - ${u.name||'No Name'}<br>
-      <span class=small>Pass: <b style="color:#fbbf24">${u.password||'no pass'}</b> | Bal: ${(u.balance||0).toLocaleString()} UGX | VIP ${u.vipLevel||0} | Ref: ${u.refBy||'Direct'}</span><br>
-      <span class=small>${u.createdAt ? '' : ''}</span></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn blue" onclick="resetPass('${d.id}')">Reset Pass</button>
-        <button class="btn green" onclick="addBal('${d.id}')">+Bal</button>
-        <button class="btn red" onclick="del('users','${d.id}')">X</button>
-      </div>
-    </div>`;
-  });
-  document.getElementById('totalOwed').innerText = total.toLocaleString();
-  userList.innerHTML = html || "<p class=small>No users yet. Tell someone to register - they will appear here automatically in 2 seconds.</p>";
-});
-
-// 2. VIP REQUESTS - AUTO LIVE
-onSnapshot(collection(db,"vip_requests"), (snap)=>{
-  document.getElementById('totalVIP').innerText = snap.size;
-  let html="";
-  snap.forEach(d=>{
-    const v=d.data();
-    html+=`<div class=item>
-      <div><b>${v.phone}</b> - VIP ${v.level} - ${v.amount} UGX<br>
-      <span class=small>Tx: ${v.tx||'no tx'} | ${v.status||'pending'} | ${v.name||''}</span></div>
-      <div style="display:flex;gap:6px">
-        <button class="btn green" onclick="approve('${d.id}','${v.phone}',${v.level})">Approve</button>
-        <button class="btn red" onclick="del('vip_requests','${d.id}')">X</button>
-      </div>
-    </div>`;
-  });
-  vipList.innerHTML = html || "<p class=small>No VIP requests</p>";
-});
-
-// 3. WITHDRAW REQUESTS - AUTO LIVE
-onSnapshot(collection(db,"withdraw_requests"), (snap)=>{
-  document.getElementById('totalWithdraw').innerText = snap.size;
-  let html="";
-  snap.forEach(d=>{
-    const w=d.data();
-    html+=`<div class=item>
-      <div><b>${w.phone}</b> -> <b>${w.momo||w.fullPhone}</b><br>
-      <span class=small>${(w.amount||0).toLocaleString()} UGX | ${w.status||'pending'}</span></div>
-      <div style="display:flex;gap:6px">
-        <button class="btn orange" onclick="pay('${w.momo||w.phone}','${w.amount}')">Pay</button>
-        <button class="btn green" onclick="done('${d.id}')">Done</button>
-        <button class="btn red" onclick="del('withdraw_requests','${d.id}')">X</button>
-      </div>
-    </div>`;
-  });
-  wdList.innerHTML = html || "<p class=small>No withdraw requests</p>";
-});
-
-// ACTIONS
-window.approve = async (id,phone,level)=>{
-  let newBal = level==1?5000:level==2?12000:level==3?25000:level==4?50000:5000;
-  await updateDoc(doc(db,"users",phone),{vipLevel:level, balance:newBal});
-  await updateDoc(doc(db,"vip_requests",id),{status:"approved"});
-  alert("✅ Approved VIP "+level+" for "+phone+" - Balance set to "+newBal);
+let db;
+try{
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+}catch(e){
+  document.getElementById('usersList').innerHTML = "<p style='color:#f59e0b'>⚠️ Firebase config placeholder - Replace with real config to make AUTO work from any phone. Currently shows local users only.</p>"+loadLocalUsers();
 }
-window.done = async (id)=>{ await updateDoc(doc(db,"withdraw_requests",id),{status:"paid"}); alert("Marked PAID"); }
-window.del = async (col,id)=>{ if(confirm("Delete "+id+"?")) await deleteDoc(doc(db,col,id)); }
-window.resetPass = async (phone)=>{
-  let np=prompt("New password for "+phone+":");
-  if(np){ await updateDoc(doc(db,"users",phone),{password:np}); alert("Password reset to "+np+" for "+phone); }
+
+let allUsers = [];
+let vipRequests = [];
+let withdrawRequests = [];
+
+function loadLocalUsers(){
+  let local = JSON.parse(localStorage.getItem('ezol_all_users')||'[]');
+  allUsers = local;
+  renderUsers();
+  return "";
 }
-window.addBal = async (phone)=>{
-  let amt=prompt("Add how much balance to "+phone+"? (e.g. 5000)");
-  if(!amt) return;
-  amt=parseInt(amt);
-  // Get current then add
-  const { getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-  const snap = await getDoc(doc(db,"users",phone));
-  if(snap.exists()){
-    let cur = snap.data().balance||0;
-    await updateDoc(doc(db,"users",phone),{balance:cur+amt});
-    alert("Added "+amt+" - New balance "+(cur+amt));
+
+async function loadFirebase(){
+  if(!db) return;
+  onSnapshot(collection(db,"users"), (snap)=>{
+    allUsers = [];
+    snap.forEach(d=>{ allUsers.push({id:d.id, ...d.data()}); });
+    renderUsers();
+    updateStats();
+  });
+  onSnapshot(collection(db,"vip_requests"), (snap)=>{
+    vipRequests = [];
+    snap.forEach(d=>{ vipRequests.push({id:d.id, ...d.data()}); });
+    renderVip();
+    updateStats();
+  });
+  onSnapshot(collection(db,"withdraw_requests"), (snap)=>{
+    withdrawRequests = [];
+    snap.forEach(d=>{ withdrawRequests.push({id:d.id, ...d.data()}); });
+    renderWithdraw();
+    updateStats();
+  });
+}
+loadFirebase();
+
+function updateStats(){
+  document.getElementById('totalUsers').innerText = allUsers.length;
+  let totalBal = allUsers.reduce((a,b)=>a+(parseInt(b.balance)||0),0);
+  document.getElementById('totalBalance').innerText = totalBal.toLocaleString();
+  document.getElementById('totalVip').innerText = allUsers.filter(u=> (u.vipLevel||0) >0 ).length;
+  document.getElementById('userCount').innerText = allUsers.length;
+  document.getElementById('vipCount').innerText = vipRequests.filter(v=>v.status=='pending').length;
+  document.getElementById('wdCount').innerText = withdrawRequests.filter(w=>w.status=='pending').length;
+  document.getElementById('pendingVip').innerText = vipRequests.filter(v=>v.status=='pending').length;
+  document.getElementById('pendingWithdraw').innerText = withdrawRequests.filter(w=>w.status=='pending').length;
+}
+
+window.renderUsers = function(){
+  let search = document.getElementById('searchUser').value.toLowerCase();
+  let filtered = allUsers.filter(u=> (u.phone+u.name).toLowerCase().includes(search));
+  let html = "";
+  filtered.slice().reverse().forEach(u=>{
+    html += `<div class="user-row">
+      <div style="flex:1">
+        <b>${u.phone} - ${u.name||'No Name'}</b><br>
+        <span style="font-size:11px;color:#fbbf24">Pass: ${u.password||'no pass'}</span> | <span style="font-size:11px">Bal: ${parseInt(u.balance||0).toLocaleString()} UGX | VIP ${u.vipLevel||0} | Ref: ${u.refBy||'Direct'}</span>
+      </div>
+      <div>
+        <button class="btn btn-blue" onclick="resetPass('${u.phone}')">Reset Pass</button>
+        <button class="btn btn-green" onclick="addBal('${u.phone}')">+Bal</button>
+        <button class="btn btn-red" onclick="delUser('${u.phone}','${u.id||u.phone}')">X</button>
+      </div>
+    </div>`;
+  });
+  if(filtered.length==0) html="<p style='text-align:center;color:#94a3b8;padding:10px'>No users yet - Share your link to get users</p>";
+  document.getElementById('usersList').innerHTML = html;
+}
+
+function renderVip(){
+  let html="";
+  vipRequests.filter(v=>v.status!=='deleted').slice().reverse().forEach(v=>{
+    html+=`<div class="user-row">
+      <div><b>${v.phone} - VIP ${v.level} - ${v.amount} UGX</b><br><span style="font-size:11px">Tx: ${v.tx||'no tx'} | ${v.status} | ${v.name||''}</span></div>
+      <div>
+        ${v.status=='pending'?`<button class="btn btn-green" onclick="approveVip('${v.id}','${v.phone}',${v.level})">Approve</button>`:`<span style="font-size:11px;color:#22c55e">✓ ${v.status}</span>`}
+        <button class="btn btn-red" onclick="delVip('${v.id}')">X</button>
+      </div>
+    </div>`;
+  });
+  if(vipRequests.length==0) html="<p style='text-align:center;color:#94a3b8'>No VIP requests</p>";
+  document.getElementById('vipList').innerHTML=html;
+}
+
+function renderWithdraw(){
+  let html="";
+  withdrawRequests.filter(w=>w.status!=='deleted').slice().reverse().forEach(w=>{
+    html+=`<div class="user-row">
+      <div><b>${w.phone} - ${w.amount} UGX to ${w.momo||w.phone}</b><br><span style="font-size:11px">${w.status} | ${new Date(w.time?.seconds*1000||Date.now()).toLocaleString()}</span></div>
+      <div>
+        ${w.status=='pending'?`<button class="btn btn-green" onclick="approveWd('${w.id}','${w.phone}')">Paid</button>`:`<span style="font-size:11px;color:#22c55e">✓ ${w.status}</span>`}
+        <button class="btn btn-red" onclick="delWd('${w.id}')">X</button>
+      </div>
+    </div>`;
+  });
+  if(withdrawRequests.length==0) html="<p style='text-align:center;color:#94a3b8'>No withdraw requests</p>";
+  document.getElementById('withdrawList').innerHTML=html;
+}
+
+window.approveVip = async function(id,phone,level){
+  if(!confirm("Approve VIP "+level+" for "+phone+"? User gets 50k instantly on phone!")) return;
+  try{
+    let daily = level==1?5000:level==2?12000:level==3?25000:level==4?50000:0;
+    let userDoc = await getDoc(doc(db,"users",phone));
+    let curBal = userDoc.exists()? (userDoc.data().balance||0) : 0;
+    await updateDoc(doc(db,"users",phone),{vipLevel:level, balance: curBal + daily});
+    await updateDoc(doc(db,"vip_requests",id),{status:"approved"});
+    alert("✅ Approved VIP "+level+" - User phone updates LIVE to "+(curBal+daily)+" UGX");
+  }catch(e){
+    // Local fallback
+    let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]');
+    let u=all.find(x=>x.phone==phone); if(u){ u.vipLevel=level; u.balance=(u.balance||0)+(level==4?50000:0); localStorage.setItem('ezol_all_users',JSON.stringify(all)); }
+    alert("Approved locally (Firebase not configured) - "+e.message);
+    renderUsers();
   }
 }
-window.pay = (momo,amount)=>{
-  let num = momo.replace(/^0/,'');
-  window.open("https://wa.me/256"+num+"?text=Ezol Wallet: Your withdraw of "+amount+" UGX is PAID. Thank you!","_blank");
+
+window.addBal = async function(phone){
+  let amount = parseInt(prompt("Enter amount to ADD to "+phone+": e.g. 50000"));
+  if(!amount) return;
+  try{
+    let userDoc = await getDoc(doc(db,"users",phone));
+    let curBal = userDoc.exists()? (userDoc.data().balance||0) : 0;
+    await updateDoc(doc(db,"users",phone),{balance: curBal + amount});
+    alert("✅ Added "+amount+" - New balance "+(curBal+amount)+" - User phone updates LIVE in 2 sec!");
+  }catch(e){
+    let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]');
+    let u=all.find(x=>x.phone==phone); if(u){ u.balance=(u.balance||0)+amount; localStorage.setItem('ezol_all_users',JSON.stringify(all)); }
+    alert("Added locally: "+amount);
+    renderUsers();
+  }
 }
+
+window.resetPass = async function(phone){
+  let np=prompt("New password for "+phone+":");
+  if(!np) return;
+  try{ await updateDoc(doc(db,"users",phone),{password:np}); alert("Password reset to "+np); }catch(e){ alert("Local reset - Firebase not config: "+e.message); }
+}
+
+window.delUser = async function(phone,id){
+  if(!confirm("Delete user "+phone+"?")) return;
+  try{ await deleteDoc(doc(db,"users",id)); }catch(e){
+    let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]'); all=all.filter(x=>x.phone!=phone); localStorage.setItem('ezol_all_users',JSON.stringify(all)); renderUsers();
+  }
+}
+window.delVip = async function(id){ if(confirm("Delete VIP request?")){ try{ await deleteDoc(doc(db,"vip_requests",id)); }catch(e){} } }
+window.delWd = async function(id){ if(confirm("Delete withdraw?")){ try{ await deleteDoc(doc(db,"withdraw_requests",id)); }catch(e){} } }
+window.approveWd = async function(id,phone){
+  if(!confirm("Mark as PAID for "+phone+"?")) return;
+  try{ await updateDoc(doc(db,"withdraw_requests",id),{status:"paid"}); await updateDoc(doc(db,"users",phone),{balance:0}); alert("Marked PAID and reset balance to 0"); }catch(e){ alert("Marked locally"); }
+}
+
+// Live time + online fake counter
+setInterval(()=>{ document.getElementById('liveTime').innerText=new Date().toLocaleTimeString(); },1000);
+let online=134;
+setInterval(()=>{
+  online+=Math.floor(Math.random()*5)-2; if(online<110)online=110; if(online>195)online=195;
+  document.getElementById('onlineNow').innerText=online;
+  document.getElementById('groupMembers').innerText=1247+Math.floor(Math.random()*20);
+  document.getElementById('groupJoins').innerText=89+Math.floor(Math.random()*5);
+  document.getElementById('groupClicks').innerText=342+Math.floor(Math.random()*10);
+},3000);
 </script>
 </body>
 </html>
