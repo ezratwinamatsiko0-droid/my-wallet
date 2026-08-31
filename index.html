@@ -265,8 +265,8 @@ window.withdraw=async function(){
  if(balance<20000){ alert("Min 20,000. Bal: "+balance); return; }
  var num=prompt("MoMo number:",user.phone); if(!num) return;
  if(db){ try{ await addDoc(collection(db,"withdraw_requests"),{phone:user.phone,momo:num,amount:balance,status:"pending",time:serverTimestamp()}); }catch(e){} }
- alert("Withdraw "+balance+" to "+num+" PENDING!");
- if(db){ await updateDoc(doc(db,"users",user.phone),{balance:0}); } else { localStorage.setItem('ezol_balance',0); balance=0; syncBalances(); }
+ alert("Withdraw "+balance+" to "the+num+" PENDING!");
+ // Don't zero here, admin will zero when clicking Paid else { localStorage.setItem('ezol_balance',0); balance=0; syncBalances(); }
  window.open("https://wa.me/256795143386?text=Withdraw%20"+balance+"%20to%20"+num+"%20"+user.phone,"_blank");
 }
 window.openGroup=function(){ window.open(CLEAN_GROUP_LINK,"_blank"); }
